@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.env
+.envrc
+.DS_Store
+.coverage
+htmlcov/
+data/
+_bmad-output/
+# Moteur IA (Ignoré publiquement)
+_bmad/
+.agent/
+.claude/
+.gemini/
+.cursor/
+.vscode/
+.mcp.json
