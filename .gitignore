@@ -9,3 +9,9 @@ pixi.lock
 .pixi/
 data/
 _bmad-output/
+
+.venv_conda
+venv
+.venv
+__pycache__
+.ipynb_checkpoints
