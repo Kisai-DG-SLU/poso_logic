@@ -1,0 +1,11 @@
+[workspace]
+authors = ["Damien GUESDON <kisai.dg.slu@gmail.com>"]
+channels = ["conda-forge"]
+name = "poso_logic"
+platforms = ["osx-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "3.10.*"

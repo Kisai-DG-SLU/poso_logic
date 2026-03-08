@@ -5,13 +5,7 @@ __pycache__/
 .DS_Store
 .coverage
 htmlcov/
+pixi.lock
+.pixi/
 data/
 _bmad-output/
-# Moteur IA (Ignoré publiquement)
-_bmad/
-.agent/
-.claude/
-.gemini/
-.cursor/
-.vscode/
-.mcp.json
