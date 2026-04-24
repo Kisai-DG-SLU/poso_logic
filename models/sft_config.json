@@ -1,0 +1,24 @@
+{
+  "model_name": "Qwen/Qwen2.5-1.5B-Instruct",
+  "max_seq_length": 2048,
+  "per_device_batch_size": 4,
+  "gradient_accumulation_steps": 4,
+  "learning_rate": 0.0002,
+  "num_train_epochs": 3,
+  "warmup_ratio": 0.1,
+  "lora_r": 16,
+  "lora_alpha": 32,
+  "lora_dropout": 0.05,
+  "target_modules": [
+    "q_proj",
+    "k_proj",
+    "v_proj",
+    "o_proj",
+    "gate_proj",
+    "up_proj",
+    "down_proj"
+  ],
+  "logging_steps": 25,
+  "save_steps": 200,
+  "eval_steps": 200
+}
