@@ -13,8 +13,8 @@ MODEL_DIR = Path("/mnt/prod/models")
 def get_dpo_config():
     """Configuration DPO"""
     return {
-        "model_name": "Qwen/Qwen2.5-1.5B-Instruct",
-        "ref_model_name": "Qwen/Qwen2.5-1.5B-Instruct",
+        "model_name": "Qwen/Qwen3-1.7B",
+        "ref_model_name": "Qwen/Qwen3-1.7B",
         "max_seq_length": 2048,
         "per_device_batch_size": 2,
         "gradient_accumulation_steps": 4,

@@ -12,21 +12,22 @@ DATA_DIR = Path("/mnt/prod/data")
 RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
 
-def download_frenchmedmcqa():
-    """Télécharge FrenchMedMCQA - dataset français"""
-    print("Téléchargement FrenchMedMCQA...")
-    ds = load_dataset("qanastek/FrenchMedMCQA")
-    ds.save_to_disk(str(RAW_DIR / "frenchmedmcqa"))
-    print(f"  → {ds}")
-    return ds
-
-def download_mediqa():
-    """Télécharge MediQA - dataset anglais"""
-    print("Téléchargement MediQA...")
-    ds = load_dataset("bigbio/mediqa_qa")
-    ds.save_to_disk(str(RAW_DIR / "mediqa_qa"))
-    print(f"  → {ds}")
-    return ds
+def download_frenchmedical():
+    """Télécharge alternatives médicales françaises"""
+    print("Téléchargement datasets médicaux français...")
+    
+    alternatives = [
+        ("illiade/medical_qa_french", "french_qa"),
+    ]
+    
+    for ds_id, name in alternatives:
+        try:
+            print(f"  → {ds_id}...")
+            ds = load_dataset(ds_id)
+            ds.save_to_disk(str(RAW_DIR / name))
+            print(f"    → {len(ds.get('train', ds))} exemples")
+        except Exception as e:
+            print(f"    → Erreur: {e}")
 
 def download_medquad():
     """Télécharge MedQuAD - dataset anglais"""
@@ -57,8 +58,7 @@ def download_all():
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     
     datasets = {
-        "frenchmedmcqa": download_frenchmedmcqa,
-        "mediqa": download_mediqa,
+        "french_medical": download_frenchmedical,
         "medquad": download_medquad,
         "ultramedical": download_ultramedical,
         "ultramedical_preference": download_ultramedical_preference,

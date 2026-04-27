@@ -2,12 +2,17 @@ name: CI/CD Triage Medical CHSA
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+env:
+  MODEL_NAME: Qwen/Qwen3-1.7B
+  HF_TOKEN: ${{ secrets.HF_TOKEN }}
 
 jobs:
-  test:
+  data-prep:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,29 +22,115 @@ jobs:
         with:
           python-version: '3.10'
       
-      - name: Install dependencies
-        run: |
-          pip install fastapi uvicorn pydantic
+      - name: Install pixi
+        run: pip install pixi
       
-      - name: Run API tests
-        run: |
-          echo "Tests unitaires à implémenter"
-          
-  build:
-    runs-on: ubuntu-latest
-    needs: test
+      - name: Download datasets
+        run: pixi run download
+      
+      - name: Anonymize datasets
+        run: pixi run anonymize-fast
+      
+      - name: Create SFT/DPO datasets
+        run: pixi run create-sft
+      
+      - name: Upload processed data
+        uses: actions/upload-artifact@v4
+        with:
+          name: processed-data
+          path: data/processed/
+          retention-days: 7
+
+  train-sft:
+    runs-on: linux
+    container: nvidia/cuda:12.4.0-devel-ubuntu22.04
+    needs: data-prep
     steps:
       - uses: actions/checkout@v4
       
-      - name: Build Docker image
+      - name: Install pixi
+        run: pip install pixi
+      
+      - name: Download processed data
+        uses: actions/download-artifact@v4
+        with:
+          name: processed-data
+          path: data/processed/
+      
+      - name: Fine-tune SFT
+        run: pixi run train-sft
+        env:
+          CUDA_VISIBLE_DEVICES: "0"
+      
+      - name: Upload model checkpoints
+        uses: actions/upload-artifact@v4
+        with:
+          name: sft-checkpoints
+          path: models/checkpoints/
+          retention-days: 30
+
+  train-dpo:
+    runs-on: linux
+    container: nvidia/cuda:12.4.0-devel-ubuntu22.04
+    needs: train-sft
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install pixi
+        run: pip install pixi
+      
+      - name: Download checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          name: sft-checkpoints
+          path: models/checkpoints/
+      
+      - name: Fine-tune DPO
+        run: pixi run train-dpo
+        env:
+          CUDA_VISIBLE_DEVICES: "0"
+      
+      - name: Upload final model
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-model
+          path: models/sft_final/
+          retention-days: 30
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: train-dpo
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download model
+        uses: actions/download-artifact@v4
+        with:
+          name: final-model
+          path: models/
+      
+      - name: Deploy to cloud
         run: |
-          docker build -t triage-chsa:${{ github.sha }} .
-          
-      - name: Run container
+          echo "Déploiement vLLM - À configurer avec credentials cloud"
+          echo "Endpoint: ${{ secrets.CLOUD_ENDPOINT }}"
+      
+      - name: Health check
+        run: curl -f https://api.chsa.fr/health || exit 1
+
+  test:
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Run integration tests
+        run: |
+          echo "Tests d'intégration du modèle"
+          echo "curl -X POST https://api.chsa.fr/triage -d '{\"symptoms\": [\"douleur thoracique\"]}'"
+      
+      - name: Run API tests
         run: |
           docker run -d -p 8000:8000 triage-chsa:${{ github.sha }}
-          
-      - name: Health check
-        run: |
-          sleep 5
-          curl http://localhost:8000/health
+          sleep 10
+          curl -f http://localhost:8000/health || exit 1

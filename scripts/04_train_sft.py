@@ -5,6 +5,12 @@ Fine-tuning SFT LoRA complet - À exécuter sur machine avec GPU
 """
 
 import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+
+import sys
+sys.path.insert(0, "/mnt/prod/scripts")
+import cuda_preload
+
 import torch
 from datasets import load_from_disk, load_dataset
 from transformers import (
@@ -90,7 +96,7 @@ def train_sft(model_name=None, config_path=None):
         config = json.load(f)
     
     if model_name is None:
-        model_name = config.get("model_name", "Qwen/Qwen2.5-1.5B-Instruct")
+        model_name = config.get("model_name", "Qwen/Qwen3-1.7B")
     
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     

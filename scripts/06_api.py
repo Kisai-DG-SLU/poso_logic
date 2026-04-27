@@ -76,7 +76,7 @@ async def generate(request: dict):
     
     return {
         "response": "[Intégration vLLM requise]",
-        "model": "Qwen2.5-1.5B-CHSA",
+        "model": "Qwen3-1.7B-CHSA",
         "status": "demo"
     }
 
