@@ -7,6 +7,9 @@ Fine-tuning SFT LoRA complet - À exécuter sur machine avec GPU
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
+import accelerate
+print(f"Accelerate version: {accelerate.__version__}")
+
 import sys
 sys.path.insert(0, "/mnt/prod/scripts")
 import cuda_preload
@@ -70,20 +73,18 @@ def setup_lora(model, config):
     
     return model
 
-def load_sft_data():
-    """Charge le dataset SFT"""
+def load_sft_data(tokenizer):
+    """Charge et tokenise le dataset SFT"""
     print("Chargement dataset SFT...")
     ds = load_from_disk(str(PROCESSED_DIR / "sft_dataset"))
     
     def format_chat(example):
         instruction = example.get("instruction", "")
         response = example.get("response", "")
-        
-        return {
-            "text": f"<|im_start|>user\n{instruction}<|im_end|>\n<|im_start|>assistant\n{response}<|im_end|>"
-        }
+        text = f"<|im_start|>user\n{instruction}<|im_end|>\n<|im_start|>assistant\n{response}<|im_end|>"
+        return tokenizer(text, truncation=True, max_length=2048)
     
-    ds = ds.map(format_chat, remove_columns=ds.column_names)
+    ds = ds.map(format_chat, remove_columns=["instruction", "response", "source", "language"])
     return ds
 
 def train_sft(model_name=None, config_path=None):
@@ -103,7 +104,7 @@ def train_sft(model_name=None, config_path=None):
     model, tokenizer = setup_model(model_name)
     model = setup_lora(model, config)
     
-    train_ds = load_sft_data()
+    train_ds = load_sft_data(tokenizer)
     
     data_collator = DataCollatorForLanguageModeling(
         tokenizer=tokenizer,
@@ -131,7 +132,7 @@ def train_sft(model_name=None, config_path=None):
         train_dataset=train_ds["train"],
         eval_dataset=train_ds.get("validation"),
         data_collator=data_collator,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
     )
     
     print("Démarrage entraînement SFT...")

@@ -8,9 +8,14 @@ import os
 def preload_cuda():
     """Preload libcuda.so.1 before torch initialization"""
     try:
-        cuda_path = "/usr/local/nvidia/lib64/libcuda.so.1"
-        if os.path.exists(cuda_path):
-            ctypes.CDLL(cuda_path)
+        cuda_paths = [
+            "/usr/lib/x86_64-linux-gnu/libcuda.so.1",
+            "/usr/local/nvidia/lib64/libcuda.so.1",
+        ]
+        for cuda_path in cuda_paths:
+            if os.path.exists(cuda_path):
+                ctypes.CDLL(cuda_path)
+                break
     except Exception:
         pass
 

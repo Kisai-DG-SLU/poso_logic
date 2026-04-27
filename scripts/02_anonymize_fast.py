@@ -29,7 +29,8 @@ ANONYMIZER_CONFIG = {
 
 ANALYZER_ENTITIES = ["PERSON", "PHONE_NUMBER", "EMAIL_ADDRESS", "LOCATION", "DATE_TIME", "US_SSN", "CREDIT_CARD", "IP_ADDRESS"]
 
-MAX_SAMPLES_PER_DATASET = 10000
+MAX_SAMPLES_PER_DATASET_EN = 10000
+MAX_SAMPLES_PER_DATASET_FR = 50000
 
 class Anonymizer:
     def __init__(self):
@@ -62,10 +63,12 @@ class Anonymizer:
         
         return results
 
-def anonymize_dataset_streaming(dataset, name, language="en", max_samples=MAX_SAMPLES_PER_DATASET):
+def anonymize_dataset_streaming(dataset, name, language="en", max_samples=None):
     """Anonymisation avec sampling intelligent"""
     anonymizer = Anonymizer()
     
+    if max_samples is None:
+        max_samples = len(dataset)
     total = min(len(dataset), max_samples)
     print(f"\n{name}: anonymisation de {total} exemples (sur {len(dataset)})")
     
@@ -93,13 +96,16 @@ def process_all_datasets():
     anonymizer = Anonymizer()
     
     datasets_config = [
-        ("medquad", "en"),
-        ("ultramedical", "en"),
-        ("ultramedical_preference", "en"),
-        ("french_qa", "fr"),
+        ("medquad", "en", MAX_SAMPLES_PER_DATASET_EN),
+        ("ultramedical", "en", MAX_SAMPLES_PER_DATASET_EN),
+        ("ultramedical_preference", "en", MAX_SAMPLES_PER_DATASET_EN),
+        ("mediqal_mcqu", "fr", MAX_SAMPLES_PER_DATASET_FR),
+        ("mediqal_mcqm", "fr", MAX_SAMPLES_PER_DATASET_FR),
+        ("mediqal_oeq", "fr", MAX_SAMPLES_PER_DATASET_FR),
+        ("frbmedqa", "fr", MAX_SAMPLES_PER_DATASET_FR),
     ]
     
-    for name, lang in datasets_config:
+    for name, lang, max_samples in datasets_config:
         input_path = RAW_DIR / name
         
         if not input_path.exists():
@@ -112,7 +118,7 @@ def process_all_datasets():
         split_name = "train" if "train" in ds else list(ds.keys())[0]
         split_data = ds[split_name]
         
-        texts = anonymize_dataset_streaming(split_data, name, lang)
+        texts = anonymize_dataset_streaming(split_data, name, lang, max_samples)
         
         output_path = PROCESSED_DIR / f"{name}_anon"
         ds_anon = Dataset.from_dict({

@@ -16,18 +16,45 @@ def download_frenchmedical():
     """Télécharge alternatives médicales françaises"""
     print("Téléchargement datasets médicaux français...")
     
-    alternatives = [
-        ("illiade/medical_qa_french", "french_qa"),
-    ]
+    try:
+        print("  → ANR-MALADES/MediQAl (MCQU - 32k questions FR)...")
+        ds = load_dataset("ANR-MALADES/MediQAl", "mcqu")
+        ds.save_to_disk(str(RAW_DIR / "mediqal_mcqu"))
+        print(f"    → {len(ds['train'])} exemples train")
+    except Exception as e:
+        print(f"    → Erreur MediQAl MCQU: {e}")
     
-    for ds_id, name in alternatives:
-        try:
-            print(f"  → {ds_id}...")
-            ds = load_dataset(ds_id)
-            ds.save_to_disk(str(RAW_DIR / name))
-            print(f"    → {len(ds.get('train', ds))} exemples")
-        except Exception as e:
-            print(f"    → Erreur: {e}")
+    try:
+        print("  → ANR-MALADES/MediQAl (MCQM)...")
+        ds = load_dataset("ANR-MALADES/MediQAl", "mcqm")
+        ds.save_to_disk(str(RAW_DIR / "mediqal_mcqm"))
+        print(f"    → {len(ds['train'])} exemples train")
+    except Exception as e:
+        print(f"    → Erreur MediQAl MCQM: {e}")
+    
+    try:
+        print("  → ANR-MALADES/MediQAl (OEQ)...")
+        ds = load_dataset("ANR-MALADES/MediQAl", "oeq")
+        ds.save_to_disk(str(RAW_DIR / "mediqal_oeq"))
+        print(f"    → {len(ds['test'])} exemples")
+    except Exception as e:
+        print(f"    → Erreur MediQAl OEQ: {e}")
+    
+    try:
+        print("  → qanastek/FrenchMedMCQA (3,105 questions)...")
+        ds = load_dataset("qanastek/FrenchMedMCQA")
+        ds.save_to_disk(str(RAW_DIR / "frenchmedmcqa"))
+        print(f"    → {len(ds['train'])} exemples")
+    except Exception as e:
+        print(f"    → Erreur FrenchMedMCQA: {e}")
+    
+    try:
+        print("  → abdellahennajari/FrBMedQA (41k biomedical FR)...")
+        ds = load_dataset("abdellahennajari/FrBMedQA")
+        ds.save_to_disk(str(RAW_DIR / "frbmedqa"))
+        print(f"    → {len(ds['train'])} exemples")
+    except Exception as e:
+        print(f"    → Erreur FrBMedQA: {e}")
 
 def download_medquad():
     """Télécharge MedQuAD - dataset anglais"""
