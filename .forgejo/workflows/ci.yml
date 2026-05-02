@@ -49,7 +49,7 @@ jobs:
           pytest tests/ -v || echo "Pas de tests unitaires encore"
   
   verify-model:
-    runs-on: [self-hosted, gpu]
+    runs-on: [self-hosted, gpu, okd]
     needs: lint-and-test
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
