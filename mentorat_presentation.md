@@ -107,7 +107,6 @@ config = {
 2. **Moyen terme** :
    - Comprendre pourquoi mon modèle met autant de temps
    - Étudier les techniques d'optimisation (DeepSpeed, FSDP)
-   - Tester sur un GPU plus puissant (A100 si possible)
 
 3. **Pour le rapport technique** :
    - Expliquer mes choix de config (pourquoi j'ai opté pour ce setup)
@@ -136,7 +135,4 @@ Je suis en pleine phase d'apprentissage. Je ne maîtrise pas encore les notions 
 
 Mon setup GPU A2 16GB n'est probablement pas optimal, mais il me force à comprendre la gestion mémoire et l'optimisation. Je suis en train de faire tourner l'entraînement (48h !) tout en documentant ce que j'apprends.
 
-**Ma question au mentor** : Est-ce que ma compréhension de DPO est correcte ? Et surtout, comment je peux mieux appréhender ces concepts techniques qui me semblent encore abstraits ?
-
 ---
-*Document rédigé pendant l'entraînement DPO (step ~6000/24604, Loss: 3.59, ETA: 34h restantes)*

@@ -1,0 +1,47 @@
+Question: Je suis un homme de 45 ans et j'ai une douleur thoracique qui irradie dans le bras gauche depuis 30 minutes. C'est une sensation d'oppression. J'ai aussi des sueurs. Que dois-je faire?
+Chargement du modèle Qwen/Qwen3-1.7B...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.30it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.60it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.26it/s]
+
+=== Réponse du modèle Base ===
+ Et comment puis-je me protéger en cas d'attaque cérébral?
+
+Pourquoi les médicaments comme le nitroglycérine, le propranolol, et le metoprolol sont-ils prescrits pour un mal de tête, mais pas pour un mal de cœur?
+
+Quel est le rôle de la médiation dans les déchets de mémoire?
+
+Pourquoi la mémoire est-elle affectée par le stress?
+
+Quel est le rôle de la mélatonine dans le cycle du sommeil?
+
+Quel est le rôle de la vitamine B12 dans la production de la mélatonine?
+
+Pourquoi les personnes âgées de plus de 70 ans ont-elles des difficultés à se souvenir?
+
+Quel est le rôle de la mélatonine dans la régulation du cycle du sommeil?
+
+Quelle est la fonction de la mélatonine dans le corps?
+
+Quel est le rôle de la vitamine B12 dans la régulation du cycle du sommeur?
+
+Quel est le rôle de la vitamine B12 dans la production de la mélatonine?
+
+Quel est le rôle de la vitamine B1
+
+Chargement du modèle /mnt/prod/models/checkpoints/sft_final...
+Erreur avec le modèle SFT: 'list' object has no attribute 'keys'
+Chargement du modèle /mnt/prod/models/checkpoints/dpo_final/final...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.34it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.69it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.34it/s]
+
+=== Réponse du modèle DPO ===
+ Quel est le diagnostic possible?
+
+Bonjour, je suis un homme de 45 ans, et j'ai une douleur thoracique qui irradie dans le bras gauche depuis 30 minutes. C'est une sensation d'oppression. J'ai aussi des sueurs. Quel est le diagnostic possible?
+
+Bonjour, je suis un homme de 45 ans, et j'ai une douleur thoracique qui irradie dans le bras gauche depuis 30 minutes. C'est une sensation d'oppression. J'ai aussi des sueurs. Quel est le diagnostic possible?
+
+Bonjour, je suis un homme de 45 ans, et j'ai une douleur thoracique qui irradie dans le bras gauche depuis 30 minutes. C'est une sensation d'oppression. J'ai aussi des sueurs. Quel est le diagnostic possible?
+
+Bonjour, je suis un homme de 45 ans, et j'ai une douleur thoracique qui irradie dans le bras gauche depuis 30 minutes. C'est une sensation d'oppression. J'ai aussi des sueurs. Quel est le diagnostic possible?
+
+Bonjour, je suis un homme de 45 ans, et j'ai une dou
+

@@ -1,0 +1,40 @@
+
+=== SCRIPT DPO - VERSION FINALE ===
+
+=== Configuration DPO ===
+Modèle SFT: /mnt/prod/models/checkpoints/sft_final
+Modèle référence: Qwen/Qwen3-1.7B
+Beta: 0.1
+Learning rate: 1e-05
+Batch size: 1
+Gradient accumulation: 32
+Longueur max de séquence: 384
+Nombre maximum d'étapes: 50
+LoRA r: 8, alpha: 16
+Device: cuda
+Mémoire GPU totale: 14.74 GB
+
+1. Chargement tokenizer...
+
+2. Chargement du modèle policy...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.24it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  2.24it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  2.00it/s]
+/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/peft/mapping_func.py:72: UserWarning: You are trying to modify a model with PEFT for a second time. If you want to reload the model with a different config, make sure to call `.unload()` before.
+  warnings.warn(
+/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/peft/tuners/tuners_utils.py:302: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+
+3. Configuration LoRA...
+trainable params: 8,716,288 || all params: 1,729,291,264 || trainable%: 0.5040
+
+4. Chargement du modèle référence...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.25it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.49it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.17it/s]
+Mémoire GPU: 6.44 GB allouée / 8.76 GB réservée
+
+5. Chargement dataset depuis /mnt/prod/data/processed/dpo_dataset...
+
+Statistiques datasets:
+- Train: 196835 exemples
+- Eval: 100 exemples
+
+=== DÉBUT ENTRAÎNEMENT DPO ===
+Training:   0%|          | 0/50 [00:00<?, ?it/s]Training:   2%|▏         | 1/50 [00:06<05:03,  6.20s/it]Training:   4%|▍         | 2/50 [00:12<04:48,  6.02s/it]Training:   6%|▌         | 3/50 [00:17<04:37,  5.91s/it]Training:   8%|▊         | 4/50 [00:23<04:29,  5.85s/it]Training:  10%|█         | 5/50 [00:29<04:23,  5.86s/it]Training:  12%|█▏        | 6/50 [00:35<04:18,  5.88s/it]Training:  14%|█▍        | 7/50 [00:41<04:13,  5.91s/it]Training:  16%|█▌        | 8/50 [00:47<04:06,  5.87s/it]Training:  18%|█▊        | 9/50 [00:52<03:59,  5.85s/it]Training:  20%|██        | 10/50 [00:58<03:52,  5.82s/it]Training:  22%|██▏       | 11/50 [01:04<03:47,  5.83s/it]Training:  24%|██▍       | 12/50 [01:10<03:43,  5.87s/it]Training:  26%|██▌       | 13/50 [01:16<03:35,  5.84s/it]Training:  28%|██▊       | 14/50 [01:22<03:31,  5.86s/it]Training:  30%|███       | 15/50 [01:28<03:25,  5.86s/it]Training:  32%|███▏      | 16/50 [01:34<03:20,  5.91s/it]Training:  34%|███▍      | 17/50 [01:40<03:16,  5.96s/it]Training:  36%|███▌      | 18/50 [01:46<03:09,  5.93s/it]

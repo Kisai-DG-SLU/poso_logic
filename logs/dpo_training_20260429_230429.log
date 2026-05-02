@@ -1,0 +1,38 @@
+=== DÉMARRAGE ENTRAÎNEMENT DPO ===
+Date: Wed Apr 29 23:04:29 UTC 2026
+Log: /mnt/prod/logs/dpo_training_20260429_230429.log
+Checkpoint: /mnt/prod/models/checkpoints/dpo_full_run
+=== INFORMATIONS GPU ===
+Wed Apr 29 23:04:29 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.90.07              Driver Version: 550.90.07      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A2                      Off |   00000000:82:00.0 Off |                    0 |
+|  0%   43C    P0              9W /   60W |       1MiB /  15356MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+=== LANCEMENT DE L'ENTRAÎNEMENT ===
+Phase 1: Premières 10000 étapes
+  File "/mnt/prod/scripts/05_train_dpo_robust.py", line 410
+    return train_dataset_full, eval_dataset
+IndentationError: unexpected indent
+Phase 1 terminée avec succès
+  File "/mnt/prod/scripts/05_train_dpo_robust.py", line 410
+    return train_dataset_full, eval_dataset
+IndentationError: unexpected indent
+Phase 2 terminée avec succès
+=== ENTRAÎNEMENT TERMINÉ ===
+Date de fin: Wed Apr 29 23:04:29 UTC 2026
+Résultats copiés dans: /mnt/memory/dpo_20260429_230429

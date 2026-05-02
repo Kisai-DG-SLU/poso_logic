@@ -1,0 +1,29 @@
+=== Configuration DPO ===
+Modèle: Qwen/Qwen3-1.7B
+Beta: 0.1
+Learning rate: 1e-05
+Batch size: 1
+Gradient accumulation: 32
+Longueur max de séquence: 512
+Nombre maximum d'étapes: 5000
+Device: cuda
+
+Chargement tokenizer...
+
+Chargement modèle policy depuis: /mnt/prod/models/checkpoints/sft_final
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.32it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.66it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.31it/s]
+
+Chargement modèle référence...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.30it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.62it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.27it/s]
+Configuration LoRA pour le modèle policy...
+trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030
+Paramètres entraînables: None
+
+Chargement dataset depuis /mnt/prod/data/processed/dpo_dataset_trl...
+
+Statistiques datasets:
+- Train: 196835 exemples
+- Eval: 500 exemples
+
+=== DÉBUT ENTRAÎNEMENT DPO ===
+Training:   0%|          | 0/5000 [00:00<?, ?it/s]Training:   0%|          | 1/5000 [00:47<65:26:17, 47.12s/it]Step 1 | Loss: 0.69141 | Reward Acc: 0.0000:   0%|          | 1/5000 [00:47<65:26:17, 47.12s/it]Step 1 | Loss: 0.69141 | Reward Acc: 0.0000:   0%|          | 2/5000 [01:35<66:23:36, 47.82s/it]Step 2 | Loss: 1.38281 | Reward Acc: 0.0000:   0%|          | 2/5000 [01:35<66:23:36, 47.82s/it]

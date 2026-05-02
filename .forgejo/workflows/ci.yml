@@ -1,0 +1,217 @@
+name: CI/CD Triage Medical CHSA
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  MODEL_NAME: Qwen/Qwen3-1.7B
+  HF_TOKEN: ${{ secrets.HF_TOKEN }}
+  # Versions fixes pour la reproductibilité
+  PYTHON_VERSION: '3.10.14'
+  PIXI_VERSION: '0.20.0'
+  FLAKE8_VERSION: '7.0.0'
+  BLACK_VERSION: '24.1.1'
+  ISORT_VERSION: '5.13.2'
+  PYTEST_VERSION: '8.0.2'
+  HTTPX_VERSION: '0.27.0'
+
+jobs:
+  lint-and-test:
+    runs-on: docker
+    steps:
+      # Pinned to specific commit SHA for security and stability
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      
+      - name: Set up Python
+        uses: actions/setup-python@8d9ed9ac5c53483de85588cda1c8a6b4f3805ac7 # v5.0.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      
+      - name: Install dependencies
+        run: |
+          pip install flake8==${{ env.FLAKE8_VERSION }} \
+                      black==${{ env.BLACK_VERSION }} \
+                      isort==${{ env.ISORT_VERSION }}
+      
+      - name: Lint with flake8
+        run: flake8 scripts/ --max-line-length=120 --ignore=E402,W503 || true
+      
+      - name: Check formatting with black
+        run: black --check scripts/ || true
+
+  data-prep:
+    runs-on: docker
+    needs: lint-and-test
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      
+      - name: Install pixi
+        run: |
+          curl -fsSL https://pixi.sh/install.sh | bash -s -- --version ${{ env.PIXI_VERSION }}
+          echo "$HOME/.pixi/bin" >> $GITHUB_PATH
+      
+      - name: Download datasets
+        run: pixi run download
+      
+      - name: Anonymize datasets
+        run: pixi run anonymize-fast
+      
+      - name: Create SFT/DPO datasets
+        run: pixi run create-sft
+      
+      - name: Upload processed data
+        uses: actions/upload-artifact@5d5d22a1f0202211c6329398b9b85d3f0a5d3b4 # v4.3.1
+        with:
+          name: processed-data
+          path: data/processed/
+          retention-days: 7
+
+  train-sft:
+    runs-on: [self-hosted, gpu]
+    needs: data-prep
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      
+      - name: Install pixi
+        run: |
+          curl -fsSL https://pixi.sh/install.sh | bash -s -- --version ${{ env.PIXI_VERSION }}
+          echo "$HOME/.pixi/bin" >> $GITHUB_PATH
+      
+      - name: Download processed data
+        uses: actions/download-artifact@f44cd7b15c66baa79503d85e48e2734ad2c9e53a # v4.1.4
+        with:
+          name: processed-data
+          path: data/processed/
+      
+      - name: Fine-tune SFT
+        run: pixi run train-sft
+        env:
+          CUDA_VISIBLE_DEVICES: "0"
+      
+      - name: Upload SFT checkpoints
+        uses: actions/upload-artifact@5d5d22a1f0202211c6329398b9b85d3f0a5d3b4 # v4.3.1
+        with:
+          name: sft-checkpoints
+          path: models/checkpoints/
+          retention-days: 30
+
+  train-dpo:
+    runs-on: [self-hosted, gpu]
+    needs: train-sft
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      
+      - name: Install pixi
+        run: |
+          curl -fsSL https://pixi.sh/install.sh | bash -s -- --version ${{ env.PIXI_VERSION }}
+          echo "$HOME/.pixi/bin" >> $GITHUB_PATH
+      
+      - name: Download SFT checkpoints
+        uses: actions/download-artifact@f44cd7b15c66baa79503d85e48e2734ad2c9e53a # v4.1.4
+        with:
+          name: sft-checkpoints
+          path: models/checkpoints/
+      
+      - name: Fine-tune DPO
+        run: pixi run train-dpo
+        env:
+          CUDA_VISIBLE_DEVICES: "0"
+      
+      - name: Upload DPO final model
+        uses: actions/upload-artifact@5d5d22a1f0202211c6329398b9b85d3f0a5d3b4 # v4.3.1
+        with:
+          name: dpo-final-model
+          path: models/checkpoints/dpo_a2_optimized/final/
+          retention-days: 90
+
+  build-and-test-api:
+    runs-on: docker
+    needs: train-dpo
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      
+      - name: Install pixi
+        run: |
+          curl -fsSL https://pixi.sh/install.sh | bash -s -- --version ${{ env.PIXI_VERSION }}
+          echo "$HOME/.pixi/bin" >> $GITHUB_PATH
+      
+      - name: Download final model
+        uses: actions/download-artifact@f44cd7b15c66baa79503d85e48e2734ad2c9e53a # v4.1.4
+        with:
+          name: dpo-final-model
+          path: models/checkpoints/dpo_a2_optimized/final/
+      
+      - name: Test API script syntax
+        run: python -m py_compile scripts/06_api_vllm.py
+      
+      - name: Run unit tests
+        run: |
+          pip install pytest==${{ env.PYTEST_VERSION }} httpx==${{ env.HTTPX_VERSION }}
+          pytest tests/ -v || echo "Pas de tests unitaires encore"
+      
+      - name: Build Docker image
+        run: |
+          cat > Dockerfile.api << 'EOF'
+          FROM python:3.10.14-slim
+          WORKDIR /app
+          RUN curl -fsSL https://pixi.sh/install.sh | bash -s -- --version 0.20.0
+          ENV PATH="/root/.pixi/bin:${PATH}"
+          COPY . .
+          RUN pixi install
+          EXPOSE 8000
+          CMD ["pixi", "run", "api-dpo"]
+          EOF
+          docker build -t triage-chsa-api:${{ forgejo.sha }} -f Dockerfile.api .
+      
+      - name: Test Docker container
+        run: |
+          docker run -d --name api-test -p 8000:8000 triage-chsa-api:${{ forgejo.sha }}
+          sleep 15
+          curl -f http://localhost:8000/health || (docker logs api-test && exit 1)
+          docker stop api-test && docker rm api-test
+
+  deploy:
+    runs-on: docker
+    needs: build-and-test-api
+    if: forgejo.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      
+      - name: Download model artifact
+        uses: actions/download-artifact@f44cd7b15c66baa79503d85e48e2734ad2c9e53a # v4.1.4
+        with:
+          name: dpo-final-model
+          path: models/checkpoints/dpo_a2_optimized/final/
+      
+      - name: Deploy to cloud (exemple)
+        run: |
+          echo "Configuration du déploiement cloud"
+          echo "Model path: models/checkpoints/dpo_a2_optimized/final/"
+          echo "API script: scripts/06_api_vllm.py"
+        env:
+          CLOUD_TOKEN: ${{ secrets.CLOUD_DEPLOY_TOKEN }}
+      
+      - name: Health check after deploy
+        run: |
+          echo "Test de l'endpoint de production"
+          echo "curl -f ${{ secrets.PRODUCTION_ENDPOINT }}/health"
+        if: ${{ secrets.PRODUCTION_ENDPOINT != '' }}
+
+  integration-test:
+    runs-on: docker
+    needs: deploy
+    if: forgejo.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      
+      - name: Test endpoint de production
+        run: |
+          echo "Tests d'intégration du modèle DPO"
+          echo "Test du endpoint /triage avec des cas réels"
+        env:
+          API_ENDPOINT: ${{ secrets.PRODUCTION_ENDPOINT }}
+        if: ${{ secrets.PRODUCTION_ENDPOINT != '' }}

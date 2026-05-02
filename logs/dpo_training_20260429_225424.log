@@ -1,0 +1,51 @@
+2026-04-29 22:56:18,893 - ERROR - 
+Erreur pendant l'entraînement: RuntimeError: DataLoader worker (pid 139941) is killed by signal: Terminated. 
+2026-04-29 22:56:18,894 - ERROR - Traceback (most recent call last):
+  File "/mnt/prod/scripts/05_train_dpo_robust.py", line 648, in train_dpo
+    loss, metrics = compute_loss(
+  File "/mnt/prod/scripts/05_train_dpo_robust.py", line 243, in compute_loss
+    raise e
+  File "/mnt/prod/scripts/05_train_dpo_robust.py", line 179, in compute_loss
+    chosen_policy_output = policy_model(**chosen_tokens)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/peft/peft_model.py", line 1993, in forward
+    return self.base_model(
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 330, in forward
+    return self.model.forward(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 850, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 576, in forward
+    layer_outputs = decoder_layer(
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 286, in forward
+    hidden_states = self.input_layernorm(hidden_states)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 74, in forward
+    variance = hidden_states.pow(2).mean(-1, keepdim=True)
+  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/utils/data/_utils/signal_handling.py", line 73, in handler
+    _error_if_any_worker_fails()
+RuntimeError: DataLoader worker (pid 139941) is killed by signal: Terminated. 
+

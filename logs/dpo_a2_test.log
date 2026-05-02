@@ -1,0 +1,33 @@
+=== Configuration DPO Optimisée pour A2 ===
+model_name: Qwen/Qwen3-1.7B
+max_seq_length: 128
+batch_size: 1
+gradient_accumulation_steps: 8
+learning_rate: 1e-06
+num_train_epochs: 1
+beta: 0.1
+lora_r: 2
+lora_alpha: 8
+lora_dropout: 0.1
+target_modules: ['q_proj', 'v_proj']
+warmup_steps: 100
+save_every_n_steps: 500
+eval_steps: 1000
+max_steps: None
+seed: 42
+fp16: True
+gradient_checkpointing: True
+optim: adamw_torch_fused
+
+Chargement tokenizer...
+Chargement modèles...
+Mémoire avant: GPU: 0.0/0.0GB
+Mémoire après chargement: GPU: 6.4/8.7GB
+trainable params: 401,408 || all params: 1,720,976,384 || trainable%: 0.0233
+
+Chargement dataset...
+Dataset: 196835 exemples
+
+=== DÉBUT ENTRAÎNEMENT OPTIMISÉ ===
+Steps par epoch: 24604
+Temps estimé par epoch: 68.3 heures (si 10s/step)

@@ -1,0 +1,234 @@
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.33it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.67it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.32it/s]
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.29it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.60it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.26it/s]
+Shard 1 Entraînement:   0%|          | 0/5000 [00:00<?, ?it/s]Mémoire GPU: 6.46 GB allouée / 7.62 GB réservée
+Mémoire GPU: 6.69 GB allouée / 7.82 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.72 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.88 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.79 GB allouée / 7.91 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.74 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.74 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.77 GB allouée / 7.90 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.74 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.74 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.79 GB allouée / 7.91 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.73 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.73 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.79 GB allouée / 7.91 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.72 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.72 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.72 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.78 GB allouée / 7.90 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.77 GB allouée / 7.90 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.74 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.78 GB allouée / 7.90 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.79 GB allouée / 7.91 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.77 GB allouée / 7.90 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.74 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.79 GB allouée / 7.91 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.72 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.88 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Shard 1 Entraînement:   0%|          | 1/5000 [03:37<302:23:55, 217.77s/it]E1S1 | Step 1 | Loss: 0.85011 | Acc: 0.0000:   0%|          | 1/5000 [03:37<302:23:55, 217.77s/it]E1S1 | Step 1 | Loss: 0.85011 | Acc: 0.0000:   0%|          | 1/5000 [04:17<357:34:26, 257.50s/it]
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.72 GB allouée / 7.85 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.79 GB allouée / 7.91 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.74 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.87 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.79 GB allouée / 7.91 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.35 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 9.36 GB allouée / 9.42 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.80 GB réservée
+Mémoire GPU: 6.75 GB allouée / 7.88 GB réservée
+Mémoire GPU: 6.52 GB allouée / 7.79 GB réservée
+Mémoire GPU: 6.57 GB allouée / 7.76 GB réservée
+Mémoire GPU: 9.40 GB allouée / 9.45 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.83 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.83 GB réservée
+Mémoire GPU: 9.45 GB allouée / 9.48 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.84 GB allouée / 7.97 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.84 GB allouée / 7.96 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.88 GB allouée / 8.00 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 8.93 GB allouée / 8.97 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.82 GB allouée / 7.94 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 9.45 GB allouée / 9.48 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 9.45 GB allouée / 9.49 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.62 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.82 GB allouée / 7.94 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.88 GB allouée / 8.01 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Mémoire GPU: 6.82 GB allouée / 7.94 GB réservée
+
+⚠️ Signal d'interruption reçu. Arrêt propre à la fin de cette étape...
+Mémoire GPU: 6.61 GB allouée / 7.84 GB réservée
+Evaluating:   0%|          | 0/20 [00:00<?, ?it/s]Evaluating:   5%|▌         | 1/20 [00:02<00:38,  2.05s/it]Evaluating:  10%|█         | 2/20 [00:04<00:38,  2.13s/it]Evaluating:  15%|█▌        | 3/20 [00:06<00:35,  2.08s/it]Evaluating:  20%|██        | 4/20 [00:08<00:34,  2.13s/it]
