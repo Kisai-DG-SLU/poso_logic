@@ -21,7 +21,7 @@ env:
 
 jobs:
   lint-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04:docker://ghcr.io/catthehacker/ubuntu:act-22.04@sha256:5c83511aef1c144edc3bdb6e6cc12aa8c8b0ad4684e549f0f098b369ddc8398
     steps:
       # Pinned to specific commit SHA for security and stability
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -80,7 +80,7 @@ jobs:
           CUDA_VISIBLE_DEVICES: "0"
 
   build-and-test-api:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04:docker://ghcr.io/catthehacker/ubuntu:act-22.04@sha256:5c83511aef1c144edc3bdb6e6cc12aa8c8b0ad4684e549f0f098b369ddc8398
     needs: verify-model
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -115,7 +115,7 @@ jobs:
           docker stop api-test && docker rm api-test
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04:docker://ghcr.io/catthehacker/ubuntu:act-22.04@sha256:5c83511aef1c144edc3bdb6e6cc12aa8c8b0ad4684e549f0f098b369ddc8398
     needs: build-and-test-api
     if: forgejo.ref == 'refs/heads/main'
     steps:
@@ -136,7 +136,7 @@ jobs:
         if: ${{ secrets.PRODUCTION_ENDPOINT != '' }}
 
   integration-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04:docker://ghcr.io/catthehacker/ubuntu:act-22.04@sha256:5c83511aef1c144edc3bdb6e6cc12aa8c8b0ad4684e549f0f098b369ddc8398
     needs: deploy
     if: forgejo.ref == 'refs/heads/main'
     steps:
