@@ -21,7 +21,7 @@ env:
 
 jobs:
   lint-and-test:
-    runs-on: docker
+    runs-on: ubuntu-latest
     steps:
       # Pinned to specific commit SHA for security and stability
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -80,7 +80,7 @@ jobs:
           CUDA_VISIBLE_DEVICES: "0"
 
   build-and-test-api:
-    runs-on: docker
+    runs-on: ubuntu-latest
     needs: verify-model
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -115,7 +115,7 @@ jobs:
           docker stop api-test && docker rm api-test
 
   deploy:
-    runs-on: docker
+    runs-on: ubuntu-latest
     needs: build-and-test-api
     if: forgejo.ref == 'refs/heads/main'
     steps:
@@ -136,7 +136,7 @@ jobs:
         if: ${{ secrets.PRODUCTION_ENDPOINT != '' }}
 
   integration-test:
-    runs-on: docker
+    runs-on: ubuntu-latest
     needs: deploy
     if: forgejo.ref == 'refs/heads/main'
     steps:
