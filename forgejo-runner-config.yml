@@ -1,0 +1,14 @@
+log:
+  level: info
+
+runner:
+  file: /home/sophia/.local/share/forgejo-runner/.runner
+
+cache:
+  enabled: false
+
+container:
+  network: ""
+  privileged: false
+  force_pull: false
+  force_rebuild: false
