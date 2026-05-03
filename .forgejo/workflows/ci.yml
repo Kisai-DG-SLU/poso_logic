@@ -21,7 +21,7 @@ env:
 
 jobs:
   lint-and-test:
-    runs-on: ubuntu-22.04:host
+    runs-on: ubuntu-22.04
     steps:
       # Pinned to specific commit SHA for security and stability
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -49,7 +49,7 @@ jobs:
           pytest tests/ -v || echo "Pas de tests unitaires encore"
   
   verify-model:
-    runs-on: ubuntu-22.04:host
+    runs-on: ubuntu-22.04
     needs: lint-and-test
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -67,7 +67,7 @@ jobs:
           CUDA_VISIBLE_DEVICES: "0"
 
   build-and-test-api:
-    runs-on: ubuntu-22.04:host
+    runs-on: ubuntu-22.04
     needs: verify-model
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
@@ -89,7 +89,7 @@ jobs:
         run: echo "Docker non disponible dans ce runner - skip du docker build"
 
   deploy:
-    runs-on: ubuntu-22.04:host
+    runs-on: ubuntu-22.04
     needs: build-and-test-api
     if: forgejo.ref == 'refs/heads/main'
     steps:
@@ -110,7 +110,7 @@ jobs:
         if: ${{ secrets.PRODUCTION_ENDPOINT != '' }}
 
   integration-test:
-    runs-on: ubuntu-22.04:host
+    runs-on: ubuntu-22.04
     needs: deploy
     if: forgejo.ref == 'refs/heads/main'
     steps:
