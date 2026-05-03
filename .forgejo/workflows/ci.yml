@@ -38,7 +38,7 @@ jobs:
                       isort==${{ env.ISORT_VERSION }}
       
       - name: Lint with flake8
-        run: flake8 scripts/ --max-line-length=120 --ignore=E402,W503 || true
+        run: flake8 scripts/ --max-line-length=120 --ignore=E402,W503,E203 || true
       
       - name: Check formatting with black
         run: black --check scripts/ || true
@@ -54,28 +54,15 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       
-      - name: Install pixi
-        run: |
-          curl -fsSL https://pixi.sh/install.sh | bash -s -- --version ${{ env.PIXI_VERSION }}
-          echo "$HOME/.pixi/bin" >> $GITHUB_PATH
-      
       - name: Verify model checkpoints exist
         run: |
           ls -la models/checkpoints/dpo_a2_optimized/final/
           test -f models/checkpoints/dpo_a2_optimized/final/adapter_model.safetensors
-          echo "Checkpoints DPO trouvés"
+          echo "Checkpoints DPO trouves"
       
       - name: Test model loading
         run: |
-          pixi run python -c "
-          from peft import PeftModel
-          from transformers import AutoModelForCausalLM, AutoTokenizer
-          import torch
-          
-          base_model = AutoModelForCausalLM.from_pretrained('${{ env.MODEL_NAME }}', torch_dtype=torch.bfloat16)
-          model = PeftModel.from_pretrained(base_model, 'models/checkpoints/dpo_a2_optimized/final/')
-          print('Modèle chargé avec succès')
-          "
+          python scripts/verify_model.py
         env:
           CUDA_VISIBLE_DEVICES: "0"
 

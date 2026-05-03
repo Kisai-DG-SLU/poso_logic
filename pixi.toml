@@ -13,6 +13,9 @@ tree = ">=2.3.2,<3"
 watch = ">=4.0.6,<5"
 jupyterlab = ">=4.5.7,<5"
 protobuf = ">=6.33.5,<7"
+flake8 = ">=7.3.0,<8"
+black = ">=26.3.1,<27"
+isort = ">=8.0.1,<9"
 
 [target.linux-64.pypi-dependencies]
 datasets = ">=4.8.4,<5"
