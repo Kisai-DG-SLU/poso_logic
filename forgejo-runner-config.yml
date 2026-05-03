@@ -2,13 +2,22 @@ log:
   level: info
 
 runner:
-  file: /home/sophia/.local/share/forgejo-runner/.runner
+  file: .runner
+  capacity: 1
+  env_file: .env
+  timeout: 3h
+  insecure: false
+  fetch_timeout: 5s
+  fetch_interval: 2s
+  labels:
+    - "ubuntu-22.04:host"
 
 cache:
   enabled: false
 
+host:
+  workdir_parent: /tmp
+
 container:
-  network: ""
-  privileged: false
-  force_pull: false
-  force_rebuild: false
+  network: host
+  force_pull: true
