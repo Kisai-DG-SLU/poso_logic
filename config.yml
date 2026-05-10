@@ -1,0 +1,15 @@
+runner:
+  file: .runner
+  capacity: 1
+  envs: {}
+  env_file: .env
+  timeout: 3h
+  insecure: false
+  retry_max: 1
+  retry_interval: 5s
+
+host:
+  workdir_parent: /mnt/prod
+
+log:
+  level: info
