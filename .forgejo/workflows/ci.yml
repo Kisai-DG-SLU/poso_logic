@@ -16,6 +16,11 @@ jobs:
   lint-and-test:
     runs-on: ubuntu-22.04
     steps:
+      - name: Checkout code
+        run: |
+          git clone --depth 1 https://github-actions:${GITHUB_TOKEN}@forgejo-svc:3000/${GITHUB_REPOSITORY}.git .
+          git checkout ${GITHUB_SHA}
+
       - name: Setup pixi
         run: |
           pixi install --frozen 2>/dev/null || pixi install
@@ -41,6 +46,11 @@ jobs:
     runs-on: ubuntu-22.04
     needs: lint-and-test
     steps:
+      - name: Checkout code
+        run: |
+          git clone --depth 1 https://github-actions:${GITHUB_TOKEN}@forgejo-svc:3000/${GITHUB_REPOSITORY}.git .
+          git checkout ${GITHUB_SHA}
+
       - name: Setup pixi
         run: |
           pixi install --frozen 2>/dev/null || pixi install
@@ -82,6 +92,11 @@ jobs:
     runs-on: ubuntu-22.04
     needs: verify-model
     steps:
+      - name: Checkout code
+        run: |
+          git clone --depth 1 https://github-actions:${GITHUB_TOKEN}@forgejo-svc:3000/${GITHUB_REPOSITORY}.git .
+          git checkout ${GITHUB_SHA}
+
       - name: Setup pixi
         run: |
           pixi install --frozen 2>/dev/null || pixi install
@@ -106,6 +121,11 @@ jobs:
     needs: verify-api
     if: ${{ gitea.ref == 'refs/heads/main' }}
     steps:
+      - name: Checkout code
+        run: |
+          git clone --depth 1 https://github-actions:${GITHUB_TOKEN}@forgejo-svc:3000/${GITHUB_REPOSITORY}.git .
+          git checkout ${GITHUB_SHA}
+
       - name: Setup pixi
         run: |
           pixi install --frozen 2>/dev/null || pixi install
@@ -126,6 +146,11 @@ jobs:
     needs: deploy-check
     if: ${{ gitea.ref == 'refs/heads/main' }}
     steps:
+      - name: Checkout code
+        run: |
+          git clone --depth 1 https://github-actions:${GITHUB_TOKEN}@forgejo-svc:3000/${GITHUB_REPOSITORY}.git .
+          git checkout ${GITHUB_SHA}
+
       - name: Setup pixi
         run: |
           pixi install --frozen 2>/dev/null || pixi install
