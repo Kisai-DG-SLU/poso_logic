@@ -15,7 +15,7 @@ app = FastAPI(
 )
 
 class TriageRequest(BaseModel):
-    symptoms: List[str]
+    symptoms: str
     antecedents: Optional[List[str]] = []
     constantes: Optional[dict] = None
     notes: Optional[str] = ""
@@ -39,7 +39,7 @@ async def evaluate_triage(request: TriageRequest):
     """
     Évalue le niveau de priorité du patient
     """
-    symptoms_text = ", ".join(request.symptoms)
+    symptoms_text = request.symptoms
     
     priority = "medium"
     recommendation = "Consulta tion dans l'heure"
