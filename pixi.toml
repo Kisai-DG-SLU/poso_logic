@@ -1,7 +1,7 @@
 [workspace]
 name = "poso_logic"
 version = "0.1.0"
-description = "Fine-tuning LLM pour agent de triage médical CHSA"
+description = "Fine-tuning LLM pour agent de triage medical CHSA"
 authors = ["Damien GUESDON <kisai.dg.slu@gmail.com>"]
 platforms = ["linux-64"]
 channels = ["conda-forge"]
@@ -16,8 +16,10 @@ protobuf = ">=6.33.5,<7"
 flake8 = ">=7.3.0,<8"
 black = ">=26.3.1,<27"
 isort = ">=8.0.1,<9"
+mlflow = ">=2.14.0,<3"
+matplotlib = ">=3.8.0,<4"
 
-[target.linux-64.pypi-dependencies]
+[target.linux-64.***]
 datasets = ">=4.8.4,<5"
 spacy = ">=3.8.14,<4"
 presidio-analyzer = ">=2.2.360,<3"
@@ -42,3 +44,5 @@ train-sft = "python scripts/04_train_sft.py"
 train-dpo = "python scripts/05_train_dpo.py"
 api = "python scripts/06_api.py"
 api-dpo = "python scripts/06_api_vllm.py"
+evaluate = "python scripts/evaluate_dpo_model.py"
+dashboard = "python scripts/mlflow_tracker.py reconstruct && bash start_mlflow_ui.sh"
