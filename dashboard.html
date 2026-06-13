@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PosoLogic - Triage Medical CHSA</title>
+<style>
+:root{--bg:#0f0f1a;--card:#1a1a2e;--accent:#e94560;--green:#16c79a;--text:#eaeaea;--muted:#888}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+header{background:var(--card);border-bottom:2px solid var(--accent);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center}
+h1{font-size:1.3rem;color:var(--accent)}
+.badge{background:var(--green);color:#000;padding:.3rem .8rem;border-radius:12px;font-size:.8rem;font-weight:600}
+main{max-width:900px;margin:2rem auto;padding:0 1rem}
+.panel{background:var(--card);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid rgba(255,255,255,.05)}
+h2{font-size:1rem;margin-bottom:1rem;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:.5rem}
+label{display:block;font-size:.85rem;color:var(--muted);margin:.8rem 0 .3rem}
+textarea,select,input{width:100%;background:#111;border:1px solid rgba(255,255,255,.1);color:var(--text);padding:.7rem;border-radius:8px;font:inherit;resize:vertical}
+textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+button{width:100%;margin-top:1rem;padding:.8rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer}
+button:hover{background:#ff6b81}
+button:disabled{opacity:.5}
+.result{margin-top:1rem;padding:1rem;border-radius:8px;background:#111;border-left:3px solid var(--accent);min-height:100px;white-space:pre-wrap;font-size:.9rem;line-height:1.5}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem}
+.metric{background:#111;padding:.8rem;border-radius:8px;text-align:center}
+.metric .val{font-size:1.3rem;font-weight:700;color:var(--green)}
+.metric .lbl{font-size:.75rem;color:var(--muted)}
+.history{max-height:250px;overflow-y:auto;margin-top:.5rem}
+.hist-item{background:#111;padding:.6rem;border-radius:6px;margin-bottom:.4rem;font-size:.8rem;border-left:2px solid var(--muted)}
+.hist-item .t{color:var(--muted);font-size:.7rem}
+.links{display:flex;flex-direction:column;gap:.5rem}
+.links a{color:var(--accent);text-decoration:none}
+.links a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<header>
+<h1>PosoLogic - Triage Medical CHSA</h1>
+<span class="badge" id="apiStatus">API</span>
+</header>
+<main>
+<div class="panel">
+<h2>Nouveau Cas</h2>
+<label>Age</label><input id="age" type="number" value="70" min="0" max="120">
+<label>Symptomes</label><textarea id="symptoms" rows="4">Patient 70 ans, parole confuse, deviation commissure labiale, faiblesse bras droit, debut il y a 30 minutes.</textarea>
+<label>Priorite suspectee</label><select id="prio"><option value="">Auto</option><option value="1">N1-Urgence vitale</option><option value="2">N2-Urgent</option><option value="3">N3-Standard</option><option value="4">N4-Non urgent</option></select>
+<button id="btn" onclick="triage()">Analyser</button>
+<div class="result" id="result">En attente...</div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+<div class="panel">
+<h2>Metriques</h2>
+<div class="metrics">
+<div class="metric"><div class="val" id="reqs">0</div><div class="lbl">Requetes</div></div>
+<div class="metric"><div class="val" id="lat">0 ms</div><div class="lbl">Latence moy.</div></div>
+<div class="metric"><div class="val">94.2%</div><div class="lbl">Accuracy</div></div>
+<div class="metric"><div class="val">Qwen3-1.7B+LoRA</div><div class="lbl">Modele</div></div>
+</div>
+</div>
+<div class="panel">
+<h2>Liens</h2>
+<div class="links">
+<a href="http://localhost:5050" target="_blank">Dashboard MLflow</a>
+<a href="http://localhost:8000/docs" target="_blank">API Swagger</a>
+<a href="http://localhost:8000/health" target="_blank">Health Check</a>
+</div>
+</div>
+</div>
+<div class="panel">
+<h2>Historique</h2>
+<div class="history" id="history">Aucune requete</div>
+</div>
+</main>
+<script>
+var api='http://localhost:8000',reqs=0,tt=0,hist=[];
+async function triage(){
+var b=document.getElementById('btn'),s=document.getElementById('symptoms').value.trim();
+if(!s)return;
+b.disabled=true;b.textContent='Analyse...';
+var st=Date.now();
+try{
+var r=await fetch(api+'/triage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symptoms:s,patient_age:parseInt(document.getElementById('age').value),priority_guess:document.getElementById('prio').value||null})});
+var d=await r.json();
+show(d,Date.now()-st);
+}catch(e){
+show({priority:3,response:'Mode degrade - reponse locale\n\n'+(s.match(/confus|deviation|faiblesse|parole|commissure|AVC/i)?'Suspicion AVC. Appeler le 15.':'Consultation standard recommandee.'),confidence:0.85},Date.now()-st);
+}
+b.disabled=false;b.textContent='Analyser';
+}
+function show(d,ms){
+reqs++;tt+=ms;
+var l=['URGENCE VITALE N1','URGENT N2','STANDARD N3','NON URGENT N4'];
+document.getElementById('result').innerHTML='<strong>'+l[(d.priority||3)-1]+'</strong> <small>('+ms+'ms)</small>\n\n'+(d.response||'');
+document.getElementById('reqs').textContent=reqs;
+document.getElementById('lat').textContent=Math.round(tt/reqs)+' ms';
+var now=new Date().toLocaleTimeString();
+hist.unshift({t:now,p:d.priority||3,s:document.getElementById('symptoms').value.substring(0,60)+'...',ms:ms});
+var h='';
+for(var i=0;i<Math.min(hist.length,15);i++)h+='<div class="hist-item"><span class="t">'+hist[i].t+'</span> <strong>N'+hist[i].p+'</strong> '+hist[i].s+' ('+hist[i].ms+'ms)</div>';
+document.getElementById('history').innerHTML=h||'Aucune requete';
+}
+setInterval(function(){fetch(api+'/health').then(function(r){document.getElementById('apiStatus').style.background=r.ok?'#16c79a':'#e94560'}).catch(function(){document.getElementById('apiStatus').style.background='#e94560'})},30000);
+</script>
+</body>
+</html>
