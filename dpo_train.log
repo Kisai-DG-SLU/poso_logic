@@ -1,84 +1,0 @@
-=== Configuration DPO ===
-Modèle: Qwen/Qwen3-1.7B
-Beta: 0.1
-Learning rate: 1e-05
-Batch size: 1
-Gradient accumulation: 16
-Nombre d'exemples d'évaluation: 1000
-Device: cuda
-
-Chargement tokenizer...
-
-Chargement modèle policy depuis: /mnt/prod/models/checkpoints/sft_final
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.35it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.70it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.34it/s]
-
-Chargement modèle référence...
-Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.34it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.68it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:00<00:00,  2.33it/s]
-Configuration LoRA pour le modèle policy...
-trainable params: 17,432,576 || all params: 1,738,007,552 || trainable%: 1.0030
-Paramètres entraînables: None
-
-Chargement dataset depuis /mnt/prod/data/processed/dpo_dataset_trl...
-
-Statistiques datasets:
-- Train: 196835 exemples
-- Eval: 1000 exemples
-
-=== DÉBUT ENTRAÎNEMENT DPO ===
-
-Époque 1/1
-  0%|          | 0/196835 [00:00<?, ?it/s]  0%|          | 1/196835 [00:01<80:58:59,  1.48s/it]  0%|          | 2/196835 [00:02<76:10:21,  1.39s/it]  0%|          | 3/196835 [00:03<61:10:59,  1.12s/it]Traceback (most recent call last):
-  File "/mnt/prod/scripts/05_train_dpo_final_prod.py", line 487, in <module>
-    main()
-  File "/mnt/prod/scripts/05_train_dpo_final_prod.py", line 474, in main
-    config = train_dpo()
-  File "/mnt/prod/scripts/05_train_dpo_final_prod.py", line 334, in train_dpo
-    loss, metrics = compute_loss(
-  File "/mnt/prod/scripts/05_train_dpo_final_prod.py", line 109, in compute_loss
-    rejected_policy_output = policy_model(**rejected_tokens)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/peft/peft_model.py", line 1993, in forward
-    return self.base_model(
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/peft/tuners/tuners_utils.py", line 330, in forward
-    return self.model.forward(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
-    output = func(self, *args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
-    return func(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 850, in forward
-    outputs: BaseModelOutputWithPast = self.model(
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/utils/generic.py", line 965, in wrapper
-    output = func(self, *args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 576, in forward
-    layer_outputs = decoder_layer(
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 305, in forward
-    hidden_states = self.mlp(hidden_states)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 94, in forward
-    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/mnt/prod/.pixi/envs/default/lib/python3.10/site-packages/peft/tuners/lora/layer.py", line 969, in forward
-    result = result + lora_B(lora_A(dropout(x))) * scaling
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 22.00 MiB. GPU 0 has a total capacity of 14.74 GiB of which 1.56 MiB is free. Process 390290 has 14.73 GiB memory in use. Of the allocated memory 14.38 GiB is allocated by PyTorch, and 268.45 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
-  0%|          | 3/196835 [00:04<86:26:00,  1.58s/it]
