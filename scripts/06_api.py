@@ -4,7 +4,7 @@ API FastAPI pour le POC de triage médical
 """
 
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional, List
 import uvicorn
 
@@ -15,10 +15,19 @@ app = FastAPI(
 )
 
 class TriageRequest(BaseModel):
-    symptoms: str
+    symptoms: str | list[str]
     antecedents: Optional[List[str]] = []
     constantes: Optional[dict] = None
     notes: Optional[str] = ""
+
+    @field_validator('symptoms', mode='before')
+    @classmethod
+    def normalize_symptoms(cls, v):
+        if isinstance(v, str):
+            return v
+        if isinstance(v, list):
+            return ", ".join(str(item) for item in v)
+        raise ValueError(f"symptoms must be a string or list of strings, got {type(v)}")
 
 class TriageResponse(BaseModel):
     priority_level: str
