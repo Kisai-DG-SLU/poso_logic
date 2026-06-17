@@ -24,18 +24,19 @@ SFT_CHECKPOINT = MODEL_DIR / "checkpoints" / "sft_final"
 def get_dpo_config():
     return {
         "model_name": "Qwen/Qwen3-1.7B",
-        "max_seq_length": 1024,
-        "per_device_batch_size": 1,
-        "gradient_accumulation_steps": 16,
+        "ref_model_name": "Qwen/Qwen3-1.7B",
+        "max_seq_length": 2048,
+        "per_device_batch_size": 2,
+        "gradient_accumulation_steps": 4,
         "learning_rate": 1e-5,
-        "num_train_epochs": 1,
+        "num_train_epochs": 2,
         "beta": 0.1,
         "lora_r": 16,
         "lora_alpha": 32,
-        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
         "logging_steps": 25,
-        "save_steps": 500,
-        "eval_steps": 500,
+        "save_steps": 200,
+        "eval_steps": 200,
         "output_dir": str(MODEL_DIR / "checkpoints" / "dpo_final"),
     }
 

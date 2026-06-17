@@ -36,7 +36,7 @@ Le projet PosoLogic a pour objectif de spécialiser un modèle de langage compac
 | Usage VRAM (inférence) | 3.4 Go | 3.4 Go |
 | Usage VRAM (entraînement LoRA) | 6.2 Go | 8.1 Go |
 
-L'approche **LoRA** (r=16, alpha=32) a permis de fine-tuner le modèle sur un GPU NVIDIA A2 de 15 Go sans quantification, avec un coût d'entraînement total estimé à moins de 2€ (électricité). Le modèle final démontre une capacité de triage fiable, classant correctement 94% des cas cliniques de test, avec un taux de faux négatifs critiques inférieur à 1%.
+L'approche **LoRA** (r=16, alpha=32) a permis de fine-tuner le modèle sur un GPU NVIDIA A2 de 15 Go sans quantification, avec un coût d'entraînement total estimé à moins de 2€ (électricité). Le modèle final atteint un taux de réponse sécurisée de 99.2%, garantissant que les recommandations dangereuses restent sous 1%. L'exactitude de triage (bon niveau de priorité) est mesurée à 60% sur un échantillon de 5 cas cliniques, avec une amélioration notable du raisonnement clinique après DPO.
 
 ### Choix technologiques justifiés
 
@@ -88,7 +88,7 @@ Un modèle compact (1.7B paramètres) spécialisé par fine-tuning permet une ex
 | Composant | Technologie | Version | Justification |
 |-----------|-------------|---------|---------------|
 | Modèle de base | Qwen3-1.7B | - | Compact, bilingue EN/FR, performances SOTA pour sa taille |
-| Fine-Tuning | LoRA (Unsloth) | PEFT 0.8+ | Optimisation mémoire, rapidité d'entraînement |
+| Fine-Tuning | LoRA (PEFT) | PEFT 0.19+ | Optimisation mémoire, rapidité d'entraînement |
 | Alignement | DPO | TRL 0.11.4 | Préférence optimization sans reward model |
 | Inférence | vLLM | 0.6+ | PagedAttention, continuous batching |
 | Anonymisation | Microsoft Presidio | 2.2 | Détection 14 types d'entités, pseudonymisation |
@@ -493,8 +493,8 @@ Latence < 50ms                   Latence < 30ms                Latence < 20ms
 
 Le projet PosoLogic a démontré la faisabilité technique d'un assistant de triage médical basé sur un LLM compact (1.7B paramètres) spécialisé par fine-tuning. Les résultats obtenus sont encourageants :
 
-- **Performance clinique** : 94% d'exactitude sur le dataset de test, taux de réponse sécurisée de 99.2% après DPO
-- **Efficacité opérationnelle** : inférence en 45ms (P50), throughput de 85 req/s sur un GPU A2
+- **Performance clinique** : 99.2% de taux de réponse sécurisée après DPO, exactitude de triage à 60% sur échantillon de validation
+- **Efficacité opérationnelle** : inférence en 45ms (P50), throughput de 85 req/s possible avec déploiement vLLM
 - **Conformité RGPD** : anonymisation Presidio avec 99.7% de détection
 - **Coût maîtrisé** : entraînement complet pour moins de 1.50€ d'électricité
 

@@ -69,12 +69,16 @@ def create_dpo():
     
     dpo_data = []
     
+    dpo_data = []
+    num_pref_examples = 0
+    
     preference_path = RAW_DIR / "ultramedical_preference"
     if preference_path.exists():
         ds = load_from_disk(str(preference_path))
         train = ds.get("train", ds["train"])
+        num_pref_examples = len(train)
         
-        print(f"  → UltraMedical-Preference: {len(train)} exemples")
+        print(f"  → UltraMedical-Preference: {num_pref_examples} exemples")
         
         for ex in train:
             chosen = str(ex.get("chosen", "")) if ex.get("chosen") else ""
@@ -102,7 +106,8 @@ def create_dpo():
     ]
     
     random.seed(42)
-    for i in range(len(train) if len(train) > 0 else 10000):
+    num_synthetic = max(num_pref_examples, 10000) if num_pref_examples > 0 else 10000
+    for i in range(num_synthetic):
         scenario = random.choice(medical_scenarios_fr)
         dpo_data.append({
             "instruction": f"Patient présente: {scenario[0]}",

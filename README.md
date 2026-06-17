@@ -137,6 +137,9 @@ pixi run train-dpo
 pixi run api
 
 # Lancement API (vLLM)
+pixi run api-vllm
+
+# Lancement API (transformers)
 pixi run api-dpo
 ```
 
@@ -152,11 +155,11 @@ pixi run api-dpo
 
 ### Dashboard MLflow
 ```bash
-# Lancer le dashboard MLflow (métriques d'entraînement, loss curves, hyperparamètres)
+# Lancer le dashboard MLflow (métriques d'entraînement, hyperparamètres)
 cd /mnt/prod && mlflow ui --backend-store-uri file:///mnt/prod/mlruns --host 0.0.0.0 --port 5050
 
-# Reconstruire les runs rétroactivement depuis les logs d'entraînement
-pixi run -e default python scripts/mlflow_tracker.py reconstruct
+# Note : les logs d'entraînement détaillés (loss curves) nécessitent un ré-entraînement
+# avec logging activé. Les valeurs finales sont documentées dans docs/rapport_technique.md
 ```
 
 ### Traçabilité des appels API

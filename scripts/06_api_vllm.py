@@ -5,7 +5,7 @@ Livrable 3 : Endpoint de démonstration API déployé
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Optional, List, Dict
 import uvicorn
 import torch
@@ -46,6 +46,8 @@ class TriageRequest(BaseModel):
     antecedents: Optional[List[str]] = []
     constantes: Optional[Dict] = None
     notes: Optional[str] = ""
+    patient_age: Optional[int] = None
+    priority_guess: Optional[str] = None
 
 
 class TriageResponse(BaseModel):
@@ -146,6 +148,7 @@ async def evaluate_triage(request: TriageRequest):
 
 Symptômes: {symptoms_text}
 Antécédents: {antecedents_text}
+Âge: {request.patient_age if request.patient_age else 'non spécifié'}
 Notes: {request.notes if request.notes else 'aucune'}
 
 Donne une évaluation avec:
