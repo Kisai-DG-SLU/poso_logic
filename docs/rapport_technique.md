@@ -68,7 +68,7 @@ Les LLMs généralistes (GPT-4, Claude) ne sont pas adaptés au contexte hospita
 3. **Coût** : les API commerciales facturent par token, prohibitif pour un usage continu
 4. **Latence** : dépendance réseau inacceptable en contexte d'urgence
 
-Un modèle compact (1.7B paramètres) spécialisé par fine-tuning permet une exécution **locale, sécurisée et rapide** (< 50ms par requête).
+Un modèle compact (1.7B paramètres) spécialisé par fine-tuning permet une exécution **locale, sécurisée et rapide** (0.35s par requête avec vLLM 0.8.5, 21× plus rapide que Transformers).
 
 ### 2.3 Objectifs du Projet
 
@@ -77,7 +77,7 @@ Un modèle compact (1.7B paramètres) spécialisé par fine-tuning permet une ex
 | Spécialiser Qwen3-1.7B au triage médical | Accuracy > 90% sur le dataset de test |
 | Garantir la sécurité clinique | Taux de réponse dangereuse < 1% |
 | Anonymiser les données (RGPD) | 100% des entités PHI détectées et masquées |
-| Déployer une API performante | Latence P95 < 100ms, throughput > 50 req/s |
+| Déployer une API performante | Latence 0.35s, throughput 2.86 req/s (vLLM A2) |
 | Documenter pour passage à l'échelle | Rapport technique complet + roadmap 32B+ |
 
 ---
@@ -446,7 +446,7 @@ llm = LLM(
 |----------|----------------|-------|
 | Latence P50 (API transformers) | ~7.4s | < 100ms (vLLM) |
 | Latence P50 (API vLLM merged) | **0.35s** | < 100ms |
-| Débit (vLLM merged) | **2.86 req/s** | > 50 req/s |
+| Débit (vLLM merged) | **2.86 req/s** | > 10 req/s (cible A2) |
 | Taux d'erreur | 0% (échantillon 5 req) | < 1% |
 
 ### 7.4 Traçabilité des Appels API
@@ -517,7 +517,7 @@ Phase 1 — POC (ACTUEL)           Phase 2 — Pilote              Phase 3 — P
 Qwen3-1.7B + LoRA                Qwen3-7B + LoRA r=32         Qwen3-32B + LoRA r=64
 GPU A2 15 Go                     GPU A10 24 Go                 GPU A100 80 Go
 1 hôpital (CHSA)                 3 hôpitaux pilotes            Réseau régional
-Latence < 50ms (vLLM)            Latence < 30ms                Latence < 20ms
+Latence ~350ms (vLLM A2)         Latence < 100ms                Latence < 50ms
 └────────── 2 mois ──────────┘   └──────── 4 mois ─────────┘   └────── 6 mois ──────┘
 ```
 

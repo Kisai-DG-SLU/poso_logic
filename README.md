@@ -154,9 +154,9 @@ pixi run api-dpo
 ## Livrables
 
 1. **Dataset médical bilingue anonymisé** — `scripts/01_download_datasets.py`, `scripts/02_anonymize.py`, `scripts/03_create_sft_dpo.py`
-2. **Modèle spécialisé Qwen3-1.7B** — `models/checkpoints/sft_final/`, `models/checkpoints/dpo_a2_optimized/`
-3. **Endpoint API de démonstration** — `scripts/06_api_dpo.py`, `Dockerfile`
-4. **Pipeline CI/CD** — `.forgejo/workflows/ci.yml`
+2. **Modèle spécialisé Qwen3-1.7B** — `models/merged_dpo_vllm/` (poids LoRA DPO fusionnés), checkpoints : `models/checkpoints/sft_final/` (SFT), `models/checkpoints/dpo_a2_optimized/` (DPO)
+3. **Endpoint API de démonstration** — `scripts/06_api_vllm.py` (vLLM haute perf), `scripts/06_api_dpo.py` (fallback Transformers), `Dockerfile`
+4. **Pipeline CI/CD** — `.github/workflows/ci.yml`
 5. **Rapport technique** — `docs/rapport_technique.md`
 
 ## Monitoring et Traçabilité

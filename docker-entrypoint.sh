@@ -6,7 +6,7 @@ MODE="${1:-serve}"
 PORT="${PORT:-8000}"
 LOG_DIR="/app/logs"
 MLFLOW_DIR="/app/mlruns"
-MODEL_DIR="/app/models/checkpoints/dpo_final"
+MODEL_DIR="/app/models/merged_dpo"
 
 mkdir -p "$LOG_DIR" "$MLFLOW_DIR"
 
