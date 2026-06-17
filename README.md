@@ -25,13 +25,18 @@ Projet réalisé dans le cadre d'une formation en IA/LLM Engineering.
 
 ### Métriques du modèle
 
-| Métrique | SFT | DPO |
-|----------|-----|-----|
-| Loss finale | 0.42 | 0.31 |
-| Perplexité (validation) | 8.7 | 6.2 |
-| Taux de réponse sécurisée | 94.0% | 99.2% |
-| Latence P50 (ms) | 45ms | 45ms |
-| Score de confiance moyen | 0.82 | 0.87 |
+| Métrique | Valeur |
+|----------|--------|
+| Loss DPO finale | 0.48 (49 checkpoints) |
+| Perplexité | 1.61 |
+| Taux réponse sécurisée | 100% (5/5 cas) |
+| Exactitude triage | 30% (30/100 cas) |
+| Alignement UltraMedical-Preference | 53% (100 prompts test set) |
+| Latence vLLM 0.8.5 | 0.35s/cas (gain 21× vs Transformers) |
+| Latence Transformers | 7.38s/cas |
+| VRAM entraînement SFT | 6.2 Go |
+| VRAM entraînement DPO | 8.1 Go |
+| Coût entraînement total | ~0.50€
 
 ## Environnement requis
 
