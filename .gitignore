@@ -15,3 +15,6 @@ venv
 .venv
 __pycache__
 .ipynb_checkpoints
+# Heavy files - excluded from GitHub mirror
+models/checkpoints/
+models/merged_dpo_vllm/
