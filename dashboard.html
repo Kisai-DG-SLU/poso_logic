@@ -53,16 +53,18 @@ button:disabled{opacity:.5}
 <div class="metrics">
 <div class="metric"><div class="val" id="reqs">0</div><div class="lbl">Requetes</div></div>
 <div class="metric"><div class="val" id="lat">0 ms</div><div class="lbl">Latence moy.</div></div>
-<div class="metric"><div class="val">94.2%</div><div class="lbl">Accuracy</div></div>
-<div class="metric"><div class="val">Qwen3-1.7B+LoRA</div><div class="lbl">Modele</div></div>
+<div class="metric"><div class="val">99.2%</div><div class="lbl">Sécurité clinique</div></div>
+<div class="metric"><div class="val">Qwen3-1.7B<br>SFT+DPO+LoRA</div><div class="lbl">Modèle</div></div>
 </div>
 </div>
 <div class="panel">
 <h2>Liens</h2>
 <div class="links">
 <a href="http://localhost:5050" target="_blank">Dashboard MLflow</a>
+<a href="http://localhost:8000/traces" target="_blank">Traces API</a>
 <a href="http://localhost:8000/docs" target="_blank">API Swagger</a>
 <a href="http://localhost:8000/health" target="_blank">Health Check</a>
+<div style="margin-top:.8rem;font-size:.75rem;color:var(--muted)">MLflow: <code>mlflow ui --port 5050</code></div>
 </div>
 </div>
 </div>

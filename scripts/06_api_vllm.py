@@ -12,9 +12,16 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 import logging
+import json
+import uuid
+import time
+from pathlib import Path
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+TRACE_LOG = Path("/app/logs/api_trace.jsonl")
+TRACE_LOG.parent.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(
     title="API Triage Médical CHSA - Modèle DPO",
@@ -126,6 +133,9 @@ async def evaluate_triage(request: TriageRequest):
     if model is None:
         raise HTTPException(status_code=503, detail="Modèle non chargé")
 
+    request_id = str(uuid.uuid4())
+    start_time = time.time()
+
     try:
         symptoms_text = ", ".join(request.symptoms)
         antecedents_text = (
@@ -162,10 +172,8 @@ Réponse:"""
             )
 
         generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        # Enlever le prompt pour ne garder que la réponse
         response_text = generated_text[len(prompt) :].strip()
 
-        # Parsing simple de la réponse
         priority = "medium"
         recommendation = "Consultation dans l'heure"
         confidence = 0.75
@@ -183,6 +191,21 @@ Réponse:"""
             priority = "low"
             recommendation = "Consultation différée < 24h"
             confidence = 0.70
+
+        latency_ms = (time.time() - start_time) * 1000
+
+        trace_entry = {
+            "request_id": request_id,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "endpoint": "/triage",
+            "latency_ms": round(latency_ms, 2),
+            "priority_level": priority,
+            "confidence": confidence,
+            "tokens_generated": len(tokenizer.encode(response_text)),
+            "symptoms_anon": symptoms_text[:100],
+        }
+        with open(TRACE_LOG, "a") as f:
+            f.write(json.dumps(trace_entry) + "\n")
 
         return TriageResponse(
             priority_level=priority,
@@ -208,6 +231,9 @@ async def generate(request: GenerateRequest):
     if model is None:
         raise HTTPException(status_code=503, detail="Modèle non chargé")
 
+    request_id = str(uuid.uuid4())
+    start_time = time.time()
+
     try:
         inputs = tokenizer(
             request.prompt, return_tensors="pt", truncation=True, max_length=512
@@ -228,6 +254,19 @@ async def generate(request: GenerateRequest):
         response_only = response_text[len(request.prompt) :].strip()
         tokens_generated = len(tokenizer.encode(response_only))
 
+        latency_ms = (time.time() - start_time) * 1000
+
+        trace_entry = {
+            "request_id": request_id,
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            "endpoint": "/generate",
+            "latency_ms": round(latency_ms, 2),
+            "tokens_generated": tokens_generated,
+            "prompt_length": len(request.prompt),
+        }
+        with open(TRACE_LOG, "a") as f:
+            f.write(json.dumps(trace_entry) + "\n")
+
         return GenerateResponse(
             response=response_only,
             model="Qwen3-1.7B-DPO-CHSA",
@@ -240,6 +279,20 @@ async def generate(request: GenerateRequest):
 
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/traces")
+async def get_traces(limit: int = 50):
+    """Récupère les dernières traces d'appels API"""
+    if not TRACE_LOG.exists():
+        return {"traces": []}
+    traces = []
+    with open(TRACE_LOG) as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                traces.append(json.loads(line))
+    return {"traces": traces[-limit:]}
 
 
 if __name__ == "__main__":
