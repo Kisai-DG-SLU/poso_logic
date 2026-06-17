@@ -1,6 +1,7 @@
 # ============================================================
 # PosoLogic — Agent de Triage Médical CHSA
 # Dockerfile de production pour déploiement vLLM + FastAPI
+# vLLM 0.8.5 + torch 2.6.0+cu124 + modèle DPO merged
 # ============================================================
 
 # ---- Stage 1: Builder ----
@@ -20,15 +21,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # vLLM requires newer pip
 RUN pip install --no-cache-dir --upgrade pip setuptools wheel
 
-# Install core dependencies
+# Install core dependencies with CUDA 12.4 extra index
 RUN pip install --no-cache-dir \
-    torch==2.4.0 \
+    torch==2.6.0+cu124 \
+    --extra-index-url https://download.pytorch.org/whl/cu124
+
+RUN pip install --no-cache-dir \
     transformers==4.51.0 \
     peft>=0.8.0 \
     accelerate>=1.0.0
 
-# Install vLLM (CUDA 12.4 compatible)
-RUN pip install --no-cache-dir vllm>=0.6.0
+# Install vLLM 0.8.5 (CUDA 12.4 compatible)
+RUN pip install --no-cache-dir vllm==0.8.5
 
 # ---- Stage 2: Runtime ----
 FROM nvidia/cuda:12.4-runtime-ubuntu22.04
@@ -37,7 +41,8 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     DEBIAN_FRONTEND=noninteractive \
     NVIDIA_VISIBLE_DEVICES=all \
-    NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    NVIDIA_DRIVER_CAPABILITIES=compute,utility \
+    VLLM_USE_V1=0
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.10 \
@@ -72,12 +77,9 @@ RUN pip install --no-cache-dir fastapi uvicorn pydantic
 # MLflow for metrics dashboard
 RUN pip install --no-cache-dir mlflow>=2.14.0 matplotlib>=3.8.0
 
-# Model checkpoints (LoRA adapters)
-# These are ~12 MB each, safe to include in image
-COPY models/dpo_config.json /app/models/dpo_config.json
-COPY models/sft_config.json /app/models/sft_config.json
-COPY models/checkpoints/sft_final/ /app/models/checkpoints/sft_final/
-COPY models/checkpoints/dpo_a2_optimized/final/ /app/models/checkpoints/dpo_final/
+# Modèle DPO merged (poids LoRA fusionnés dans le modèle de base)
+# Généré par scripts/merge_lora_to_vllm.py
+COPY models/merged_dpo_vllm/ /app/models/merged_dpo/
 
 # ---- Health check ----
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \

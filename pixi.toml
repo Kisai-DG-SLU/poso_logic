@@ -4,36 +4,40 @@ version = "0.1.0"
 description = "Fine-tuning LLM pour agent de triage medical CHSA"
 authors = ["Damien GUESDON <kisai.dg.slu@gmail.com>"]
 platforms = ["linux-64"]
-channels = ["conda-forge", "pytorch"]
+channels = ["conda-forge"]
+
+[pypi-options]
+extra-index-urls = ["https://download.pytorch.org/whl/cu124"]
+index-strategy = "unsafe-best-match"
 
 [dependencies]
-python = ">=3.10,<3.13"
-pip = ">=24.0"
+python = ">=3.12,<3.13"
 zellij = ">=0.44.1,<0.45"
 tree = ">=2.3.2,<3"
 watch = ">=4.0.6,<5"
-jupyterlab = ">=4.5.7,<5"
-pytorch = { version = ">=2.0.0,<2.6", channel = "pytorch" }
-mlflow = ">=2.14.0,<3"
-datasets = ">=4.0.0,<5"
-transformers = ">=5.12.1,<6"
-accelerate = ">=1.14.0,<2"
-peft = ">=0.19.1,<0.20"
-trl = ">=0.29.1,<0.30"
-scipy = ">=1.17.1,<2"
-numpy = ">=2.4.6,<3"
-tqdm = ">=4.68.2,<5"
 
 [pypi-dependencies]
+vllm = "==0.8.5"
+torch = "==2.6.0"
+transformers = ">=5.12.1"
+accelerate = ">=1.14.0"
+peft = ">=0.19.1"
+trl = ">=0.29.1"
+datasets = ">=4.0.0"
+mlflow = ">=2.14.0"
+scipy = ">=1.17.1"
+tqdm = ">=4.24.0"
+sentence-transformers = "*"
 flake8 = ">=7.3.0,<8"
 black = ">=26.3.1,<27"
 isort = ">=8.0.1,<9"
 matplotlib = ">=3.8.0,<4"
-spacy = ">=3.8.14,<4"
 presidio-analyzer = ">=2.2.360,<3"
 presidio-anonymizer = ">=2.2.360,<3"
 fastapi = "*"
 uvicorn = "*"
+jupyterlab = ">=4.5.7,<5"
+spacy = ">=3.8.14,<4"
 
 [tasks]
 download = "python scripts/01_download_datasets.py"

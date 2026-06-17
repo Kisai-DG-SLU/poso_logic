@@ -32,12 +32,12 @@ Le projet PosoLogic a pour objectif de spécialiser un modèle de langage compac
 | Loss d'entraînement finale | N/A (log non conservé) | 0.48 (vérifié sur 49 checkpoints) |
 | Perplexité (validation) | N/A | 1.61 (exp(loss)) |
 | Taux de réponse sécurisée | N/A | 100% (échantillon 5 cas) |
-| Exactitude de triage | N/A | 60% (3/5 cas) |
+| Exactitude de triage | N/A | 30% (30/100 cas) |
 | Latence d'inférence (transfomers) | — | ~7.4s/req |
 | Usage VRAM (inférence) | 3.4 Go | 3.4 Go |
 | Usage VRAM (entraînement LoRA) | 6.2 Go | 8.1 Go |
 
-L'approche **LoRA** (r=16, alpha=32) a permis de fine-tuner le modèle sur un GPU NVIDIA A2 de 15 Go sans quantification, avec un coût d'entraînement total estimé à ~0.50€ (électricité). Le modèle final atteint un taux de réponse sécurisée de 100% sur l'échantillon testé. L'exactitude de triage (bon niveau de priorité) est mesurée à 60% sur un échantillon de 5 cas cliniques, avec une amélioration notable du raisonnement clinique après DPO.
+L'approche **LoRA** (r=16, alpha=32) a permis de fine-tuner le modèle sur un GPU NVIDIA A2 de 15 Go sans quantification, avec un coût d'entraînement total estimé à ~0.50€ (électricité). Le modèle final atteint un taux de réponse sécurisée de 100% sur l'échantillon testé. L'exactitude de triage (bon niveau de priorité) est mesurée à 30% sur un échantillon de 100 cas cliniques synthétiques, avec une forte variation selon le niveau de priorité (64.3% pour les urgences vitales, 0% pour les cas différables).
 
 ### Choix technologiques justifiés
 
@@ -91,7 +91,7 @@ Un modèle compact (1.7B paramètres) spécialisé par fine-tuning permet une ex
 | Modèle de base | Qwen3-1.7B | - | Compact, bilingue EN/FR, performances SOTA pour sa taille |
 | Fine-Tuning | LoRA (PEFT) | PEFT 0.19+ | Optimisation mémoire, rapidité d'entraînement |
 | Alignement | DPO | TRL 0.11.4 | Préférence optimization sans reward model |
-| Inférence | vLLM | 0.6+ | PagedAttention, continuous batching (Docker) |
+| Inférence | vLLM | 0.8.5 | PagedAttention, continuous batching, merged model |
 | Inférence (fallback) | Transformers + PEFT | 4.51.0 | Développement sans dépendance vLLM |
 | Anonymisation | Microsoft Presidio | 2.2 | Détection 14 types d'entités, pseudonymisation |
 | Environnement | pixi | 0.67 | Reproductibilité, lock file, pas de dépendances système |
@@ -282,8 +282,38 @@ Le DPO aligne le modèle sur les préférences cliniques sans nécessiter de rew
 - Loss finale : 0.48 (courbe descendante de 0.56 → 0.48)
 - Perplexité : 1.61 (exp(loss))
 - Taux de réponse sécurisée sur échantillon : 100% (5/5 cas sûrs)
-- Exactitude triage : 60% (3/5 cas corrects)
+- Exactitude triage : 30% (30/100 cas corrects)
 - Temps d'entraînement : ~45h sur A2
+
+**Évaluation UltraMedical-Preference (100 prompts test set, vLLM) :**
+
+| Métrique | Valeur |
+|----------|--------|
+| Alignement avec chosen | 53.0% (53/100) |
+| Latence moyenne (vLLM 0.8.5) | 0.35s/cas |
+| Similarité cosinus moyenne (chosen) | 0.78 |
+| Similarité cosinus moyenne (rejected) | 0.77 |
+
+Le modèle DPO merged a été évalué sur 100 prompts du **test split** du dataset UltraMedical-Preference (0 fuite avec le train). La similarité cosinus (all-MiniLM-L6-v2) entre la réponse générée et les réponses *chosen* vs *rejected* montre un alignement de 53% — quasi aléatoire. Cela suggère que le DPO n'a pas significativement déplacé les préférences du modèle sur ce métrique, probablement en raison du gap important entre la tâche DPO (préférences générales médicales) et la tâche cible (triage). Notons que l'inférence vLLM 0.8.5 avec le modèle merged atteint **0.35s/cas** — un gain de 21× vs transformers (7.38s).
+
+**Analyse détaillée — Évaluation sur 100 cas cliniques synthétiques :**
+
+| Métrique | Transformers | vLLM 0.8.5 |
+|----------|-------------|-------------|
+| Accuracy globale | 30.0% (30/100) | 30.0% (30/100) |
+| Latence moyenne | 7.38s/cas | **0.35s/cas** |
+| Débit (req/s) | ~0.14 | **~2.86** |
+
+**Résultats par niveau de priorité :**
+
+| Priorité | Cas | Corrects | Accuracy |
+|----------|-----|----------|----------|
+| max (urgence vitale) | 14 | 9 | 64.3% |
+| high (urgence < 15 min) | 30 | 3 | 10.0% |
+| medium (urgence relative) | 36 | 18 | 50.0% |
+| low (différable) | 20 | 0 | 0.0% |
+
+**Analyse des biais :** le modèle ne prédit **jamais** le niveau "low" — il biase systématiquement vers "medium" (71% des prédictions). Les cas "high" sont très souvent sur-classés en "max" (63% des cas high sont prédits max). La matrice de confusion révèle que le modèle manque de discrimination fine entre les niveaux intermédiaires, probablement car le dataset DPO ne contient pas assez d'exemples contrastés entre "high" et "max" d'une part, et "low" vs "medium" d'autre part. Le raisonnement clinique généré est pertinent, mais le format de sortie n'est pas suffisamment contraint pour produire des niveaux de priorité normalisés — un post-traitement ou un prompt template plus strict est nécessaire.
 
 ### 5.3 Comparaison SFT vs DPO
 
@@ -294,11 +324,13 @@ Le DPO aligne le modèle sur les préférences cliniques sans nécessiter de rew
 | Complexité | + (simple) | ++ (modéré) |
 | Qualité factuelle | Bonne | Bonne |
 | Sécurité clinique | Non mesurée | 100% (5 cas) |
-| Exactitude triage | Non mesurée | 60% (3/5) |
+| Exactitude triage | Non mesurée | 30% (30/100) |
+| Alignement préférences (UltraMedical) | — | 53% (quasi aléatoire) |
 | Perplexité | N/A | 1.61 |
+| Latence inférence | — | 0.35s/cas (vLLM 0.8.5) |
 | Coût entraînement | ~0.20€ | ~0.30€ |
 
-**Conclusion :** le DPO apporte un gain qualitatif notable en sécurité et en pertinence des réponses pour un surcoût modeste.
+**Conclusion :** le DPO apporte un gain qualitatif notable en sécurité pour un surcoût modeste, mais l'alignement sur les préférences UltraMedical reste quasi aléatoire (53%). Le gain de performance vLLM (21×) est le facteur clé pour le déploiement.
 
 ### 5.4 Tableau des Hyperparamètres Finaux
 
@@ -349,7 +381,21 @@ Le DPO aligne le modèle sur les préférences cliniques sans nécessiter de rew
 
 *Basé sur 0.20€/kWh, consommation système ~150W en charge GPU
 
-### 6.4 Recommandations pour Modèles 32B+
+### 6.4 Benchmark Inférence vLLM (merged model)
+
+| Configuration | Latence | Débit | VRAM | Notes |
+|---------------|---------|-------|------|-------|
+| Transformers 4.51.0 (FP16) | 7.38s/cas | 0.14 req/s | 3.4 Go | Fallback dev |
+| vLLM 0.8.5 (merged, max_len=1024) | **0.35s/cas** | **2.86 req/s** | ~5 Go | GPU A2, mem_util=0.70 |
+| vLLM 0.8.5 (merged, max_len=2048) | 0.42s/cas | 2.38 req/s | ~7 Go | GPU A2, mem_util=0.85 |
+
+**Gain vLLM vs Transformers : 21× sur la latence**, 20× sur le débit.
+
+### 6.5 Stratégie de Merge LoRA
+
+Pour contourner l'absence de compilation CUDA des kernels LoRA natifs vLLM sur l'environnement A2 (gcc headers CUDA manquants), les poids LoRA DPO ont été fusionnés dans le modèle de base via `merge_and_unload()` (PEFT). Le modèle merged résultant (3.4 Go) est utilisé directement par vLLM sans dépendance LoRA.
+
+### 6.6 Recommandations pour Modèles 32B+
 
 Pour les modèles de taille supérieure (Qwen3-32B, 64 Go VRAM requis en FP16) :
 
@@ -365,9 +411,25 @@ Pour les modèles de taille supérieure (Qwen3-32B, 64 Go VRAM requis en FP16) :
 
 ### 7.1 Endpoint vLLM
 
+Le modèle est déployé en mode **merged** (poids LoRA fusionnés) :
+
 ```bash
-vllm serve Qwen/Qwen3-1.7B --port 8000 --tensor-parallel-size 1 --max-model-len 2048 --gpu-memory-utilization 0.9 --enable-lora --lora-modules "chsa-triage=/models/dpo_final/"
+vllm serve /app/models/merged_dpo --port 8000 --tensor-parallel-size 1 \
+  --max-model-len 1024 --gpu-memory-utilization 0.70 --enforce-eager
 ```
+
+```python
+# Ou via l'API Python avec les monkey-patches nécessaires (vLLM 0.8.5 + CUDA 12.4)
+from vllm import LLM, SamplingParams
+llm = LLM(
+    model="/app/models/merged_dpo",
+    max_model_len=1024,
+    gpu_memory_utilization=0.70,
+    enforce_eager=True,
+)
+```
+
+**Note :** vLLM 0.8.5 nécessite deux monkey-patches sur CUDA 12.4 (plateforme CUDA et tokenizer transformers 5.x), ainsi que `VLLM_USE_V1=0` pour éviter le crash du V1 engine. Voir `scripts/06_api_vllm.py` pour l'implémentation.
 
 ### 7.2 API — Endpoints
 
@@ -383,6 +445,8 @@ vllm serve Qwen/Qwen3-1.7B --port 8000 --tensor-parallel-size 1 --max-model-len 
 | Métrique | Valeur mesurée | Cible |
 |----------|----------------|-------|
 | Latence P50 (API transformers) | ~7.4s | < 100ms (vLLM) |
+| Latence P50 (API vLLM merged) | **0.35s** | < 100ms |
+| Débit (vLLM merged) | **2.86 req/s** | > 50 req/s |
 | Taux d'erreur | 0% (échantillon 5 req) | < 1% |
 
 ### 7.4 Traçabilité des Appels API
@@ -398,25 +462,26 @@ Chaque appel à l'API est logué avec :
 
 Format de log : JSONL, rotation quotidienne, rétention 30 jours.
 
-### 7.5 Dockerfile (multi-stage, CUDA 12.4 + vLLM)
+### 7.5 Dockerfile (multi-stage, CUDA 12.4 + vLLM 0.8.5)
 
 ```dockerfile
 FROM nvidia/cuda:12.4-runtime-ubuntu22.04 AS builder
 RUN apt-get update && apt-get install -y python3.10 python3-pip git
 RUN pip install --upgrade pip setuptools wheel
-RUN pip install torch==2.4.0 transformers==4.51.0 peft>=0.8.0 accelerate>=1.0.0
-RUN pip install vllm>=0.6.0
+RUN pip install torch==2.6.0+cu124 --extra-index-url https://download.pytorch.org/whl/cu124
+RUN pip install transformers==4.51.0 peft>=0.8.0 accelerate>=1.0.0
+RUN pip install vllm==0.8.5
 
 FROM nvidia/cuda:12.4-runtime-ubuntu22.04
+ENV VLLM_USE_V1=0
 RUN useradd --create-home --shell /bin/bash poso && mkdir -p /app
 WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.10/dist-packages/ /usr/local/lib/python3.10/dist-packages/
 COPY --from=builder /usr/local/bin/ /usr/local/bin/
 COPY scripts/06_api_vllm.py /app/api.py
-COPY scripts/06_api_dpo.py /app/api_dpo.py
-COPY models/checkpoints/dpo_a2_optimized/final/ /app/models/checkpoints/dpo_final/
+COPY models/merged_dpo_vllm/ /app/models/merged_dpo/
 COPY docker-entrypoint.sh /app/
-RUN pip install fastapi uvicorn pydantic mlflow presidio-analyzer presidio-anonymizer
+RUN pip install fastapi uvicorn pydantic presidio-analyzer presidio-anonymizer
 HEALTHCHECK CMD curl -sf http://localhost:8000/health || exit 1
 USER poso
 EXPOSE 8000
@@ -490,17 +555,19 @@ Latence < 50ms (vLLM)            Latence < 30ms                Latence < 20ms
 
 Le projet PosoLogic a démontré la faisabilité technique d'un assistant de triage médical basé sur un LLM compact (1.7B paramètres) spécialisé par fine-tuning. Les résultats obtenus sont encourageants :
 
-- **Performance clinique** : 60% d'exactitude de triage sur échantillon de validation (5 cas), taux de réponse sécurisée 100%
-- **Infrastructure** : inférence possible en local via vLLM (Docker) ou fallback transformers, pipeline CI/CD automatisé
+- **Performance clinique** : 30% d'exactitude de triage sur échantillon de validation (100 cas synthétiques), taux de réponse sécurisée 100%
+- **Infrastructure** : inférence vLLM 0.8.5 en local (modèle merged, 0.35s/cas, 21× plus rapide que transformers), pipeline CI/CD automatisé
+- **Stratégie de déploiement** : fusion des poids LoRA DPO dans le modèle de base pour contourner les limitations de compilation CUDA (modèle merged 3.4 Go)
 - **Conformité RGPD** : anonymisation Presidio intégrée au pipeline
 - **Coût maîtrisé** : entraînement complet pour ~0.50€ d'électricité
 
 ### Prochaines étapes immédiates
 
-1. **Validation clinique** : tester le modèle sur 100 dossiers réels anonymisés du CHSA
-2. **Dashboard métriques** : intégrer MLflow pour le suivi continu des performances
-3. **Fine-tuning français** : enrichir le dataset avec des données FrenchMedMCQA supplémentaires
+1. **Amélioration du parsing de priorité** : le modèle génère un raisonnement clinique mais ne structure pas ses réponses en niveaux de priorité normalisés — un post-traitement ou un prompt template plus contraint est nécessaire
+2. **Correction du biais de prédiction** : le modèle ne prédit jamais "low" et sur-prédit "medium" — un rééquilibrage du dataset DPO est requis
+3. **Validation clinique** : tester le modèle sur des dossiers réels anonymisés du CHSA
 4. **Évaluation humaine** : faire évaluer les sorties par 3 médecins urgentistes
+5. **Amélioration alignement DPO** : l'évaluation UltraMedical-Preference (53%) montre que le DPO n'a pas significativement déplacé les préférences — un dataset DPO ciblé triage médical est nécessaire
 
 ### Vision à 12 mois
 
