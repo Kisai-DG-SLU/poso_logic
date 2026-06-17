@@ -54,7 +54,7 @@ Projet réalisé dans le cadre d'une formation en IA/LLM Engineering.
 pixi install
 pixi run -e default python -m pytest tests/ -v
 pixi run -e default python -m py_compile scripts/06_api.py
-pixi run -e default python -m py_compile scripts/06_api_vllm.py
+pixi run -e default python -m py_compile scripts/06_api_dpo.py
 ```
 
 ## Fonctionnalités principales
@@ -68,7 +68,8 @@ pixi run -e default python -m py_compile scripts/06_api_vllm.py
 | Entraînement SFT (LoRA) | ✅ | `scripts/04_train_sft.py` |
 | Entraînement DPO | ✅ | `scripts/05_train_dpo.py` |
 | API FastAPI (simple) | ✅ | `scripts/06_api.py` |
-| API vLLM (haute performance) | ✅ | `scripts/06_api_vllm.py` |
+| API Transformers+DPO (fallback) | ✅ | `scripts/06_api_dpo.py` |
+| API vLLM (haute performance) | ✅ | `scripts/06_api_vllm.py` (nécessite Docker/pip install vllm) |
 | Évaluation du modèle | ✅ | `scripts/evaluate_dpo_model.py` |
 | Dashboard métriques (MLflow) | ✅ | `scripts/mlflow_tracker.py` + `mlflow ui` |
 | Courbes de loss DPO | ✅ | `docs/figures/dpo_loss_curve.png` (49 checkpoints réels) |
@@ -90,6 +91,7 @@ pixi run -e default python -m py_compile scripts/06_api_vllm.py
 │   ├── 04_train_sft.py
 │   ├── 05_train_dpo.py
 │   ├── 06_api.py
+│   ├── 06_api_dpo.py
 │   ├── 06_api_vllm.py
 │   ├── evaluate_dpo_model.py
 │   ├── verify_model.py
@@ -148,7 +150,7 @@ pixi run api-dpo
 
 1. **Dataset médical bilingue anonymisé** — `scripts/01_download_datasets.py`, `scripts/02_anonymize.py`, `scripts/03_create_sft_dpo.py`
 2. **Modèle spécialisé Qwen3-1.7B** — `models/checkpoints/sft_final/`, `models/checkpoints/dpo_a2_optimized/`
-3. **Endpoint API de démonstration** — `scripts/06_api_vllm.py`, `Dockerfile`
+3. **Endpoint API de démonstration** — `scripts/06_api_dpo.py`, `Dockerfile`
 4. **Pipeline CI/CD** — `.forgejo/workflows/ci.yml`
 5. **Rapport technique** — `docs/rapport_technique.md`
 
@@ -183,7 +185,7 @@ docker run -p 5050:5050 posologic:latest mlflow
 pixi install && \
 pixi run -e default python -m pytest tests/ -v && \
 pixi run -e default python -m py_compile scripts/06_api.py && \
-pixi run -e default python -m py_compile scripts/06_api_vllm.py && \
+pixi run -e default python -m py_compile scripts/06_api_dpo.py && \
 echo "[OK] Validation terminee"
 ```
 

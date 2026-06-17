@@ -60,6 +60,7 @@ COPY --from=builder /usr/local/bin/ /usr/local/bin/
 
 # API and scripts
 COPY scripts/06_api_vllm.py /app/api.py
+COPY scripts/06_api_dpo.py /app/api_dpo.py
 COPY scripts/mlflow_tracker.py /app/mlflow_tracker.py
 
 # Anonymisation (Presidio)

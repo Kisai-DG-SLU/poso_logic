@@ -142,7 +142,7 @@ FrenchMedMCQA ──────────────────────
                                                          │                  │
                                                          └────────┬─────────┘
                                                                   ▼
-                                                          06_api_vllm.py
+                                                          06_api_dpo.py
                                                           (FastAPI + vLLM)
                                                                   │
                                                                   ▼
@@ -416,7 +416,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY models/checkpoints/dpo_a2_optimized/final/ /app/model/
-COPY scripts/06_api_vllm.py /app/api.py
+COPY scripts/06_api_dpo.py /app/api.py
 
 EXPOSE 8000
 

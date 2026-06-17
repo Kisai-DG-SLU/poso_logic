@@ -104,7 +104,7 @@ jobs:
       - name: Test API script syntax
         run: |
           echo "=== Compilation des scripts API ==="
-          pixi run -e default python -m py_compile scripts/06_api_vllm.py && echo "[OK] scripts/06_api_vllm.py"
+          pixi run -e default python -m py_compile scripts/06_api_dpo.py && echo "[OK] scripts/06_api_dpo.py"
           pixi run -e default python -m py_compile scripts/06_api.py && echo "[OK] scripts/06_api.py"
 
       - name: Verify Dockerfile template
@@ -134,7 +134,7 @@ jobs:
         run: |
           echo "=== Verification deploy ==="
           echo "Modele: models/checkpoints/dpo_a2_optimized/final/"
-          echo "API script: scripts/06_api_vllm.py"
+          echo "API script: scripts/06_api_dpo.py"
           if [ -f "models/checkpoints/dpo_a2_optimized/final/adapter_model.safetensors" ]; then
             echo "[OK] Checkpoint DPO pret pour deploy"
           else

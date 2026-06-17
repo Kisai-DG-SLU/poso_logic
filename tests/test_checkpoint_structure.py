@@ -26,12 +26,12 @@ def test_adapter_config_valid():
 
 def test_api_script_syntax():
     import py_compile
-    py_compile.compile("scripts/06_api_vllm.py", doraise=True)
+    py_compile.compile("scripts/06_api_dpo.py", doraise=True)
 
 
 def test_api_script_imports():
     import ast
-    with open("scripts/06_api_vllm.py") as f:
+    with open("scripts/06_api_dpo.py") as f:
         tree = ast.parse(f.read())
     imports = [node.names[0].name for node in ast.walk(tree) if isinstance(node, ast.Import)]
     imports += [node.module for node in ast.walk(tree) if isinstance(node, ast.ImportFrom) and node.module]
