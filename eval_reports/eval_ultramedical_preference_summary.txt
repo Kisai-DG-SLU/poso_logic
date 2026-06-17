@@ -1,0 +1,10 @@
+
+=== Evaluation UltraMedical-Preference (vLLM) ===
+Modele: Qwen3-1.7B + DPO (merged)
+Inference: vLLM 0.8.5 on GPU A2 (CUDA 12.4)
+Echantillon: 100 prompts (test set, 0 overlap with train)
+Comparaison: similarite cosinus (all-MiniLM-L6-v2) vs chosen/rejected
+
+Alignement avec chosen: 53/100 = 53.0%
+Latence moyenne: 0.35s/cas
+Latence totale: 34.77s

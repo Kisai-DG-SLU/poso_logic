@@ -1,0 +1,1044 @@
+{
+  "num_cases": 100,
+  "errors": 0,
+  "accuracy_pct": 30.0,
+  "average_latency_s": 7.38,
+  "by_priority": {
+    "medium": {
+      "total": 36,
+      "correct": 18,
+      "pct": 50.0
+    },
+    "high": {
+      "total": 30,
+      "correct": 3,
+      "pct": 10.0
+    },
+    "max": {
+      "total": 14,
+      "correct": 9,
+      "pct": 64.3
+    },
+    "low": {
+      "total": 20,
+      "correct": 0,
+      "pct": 0.0
+    }
+  },
+  "confusion": {
+    "medium→medium": 18,
+    "medium→max": 15,
+    "high→max": 19,
+    "max→max": 9,
+    "max→medium": 5,
+    "high→medium": 8,
+    "medium→high": 2,
+    "low→medium": 19,
+    "high→high": 3,
+    "low→high": 1,
+    "medium→low": 1
+  },
+  "results": [
+    {
+      "case_id": 1,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 8.067,
+      "generated": "Priorité : 3\nRecommandation : Inscris le patient dans le registre d'urgence, réalise une évaluation clinique, évalue la fracture, réalise un examen radiologique, évalue la déformation, évalue la mobil",
+      "instruction": "Enfant 10 ans, chute à vélo, poignet gonflé et douloureux, déformation modérée, Mobilité doigts conservée."
+    },
+    {
+      "case_id": 2,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.229,
+      "generated": "La priorité est **Moyenne**. Le patient présente des symptômes généraux compatibles avec une infection gastro-intestinale aiguë, mais il n'y a pas de signes de gravité immédiate (ex. : hémorragie, cho",
+      "instruction": "Patient 25 ans, diarrhée aqueuse, vomissements, douleur abdominale diffuse, fièvre 38°C, sans signes de gravité."
+    },
+    {
+      "case_id": 3,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.422,
+      "generated": "La convulsion tonicoclonique généralisée est une crise sévère et urgente. L'enfant a des signes de perte de connaissance, ce qui augmente la gravité. Il faut agir immédiatement. La première étape est ",
+      "instruction": "Patient enfant 4 ans, convulsion tonicoclonique généralisée depuis 10 minutes, fièvre 39°C, perte de connaissance."
+    },
+    {
+      "case_id": 4,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 7.323,
+      "generated": "La situation du patient est extrêmement grave et nécessite une attention immédiate. L'enfant a plusieurs signes et symptômes qui indiquent une pathologie métabolique grave, probablement une **insuffis",
+      "instruction": "Enfant 2 ans, fièvre 40°C, purpura extensif, raideur nuque, altération conscience, vomissements."
+    },
+    {
+      "case_id": 5,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 7.07,
+      "generated": "La situation du patient est critique et nécessite une intervention immédiate. L'œdème de Quincke (édème pulmonaire aigu) est un signe clinique de réaction allergique grave, souvent associé à une urtic",
+      "instruction": "Patient 25 ans, œdème de Quincke, stridor, urticaire généralisée, hypotension après injection antibiotique."
+    },
+    {
+      "case_id": 6,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.228,
+      "generated": "Priorité : URGENCE\nRecommandation : Réanimation cardio-pulmonaire, intubation, support de la pression artérielle, débridement des obstructions, surveillance des signes vitaux, soins de base.\nRaisonnem",
+      "instruction": "Patient 60 ans, détresse respiratoire sévère, SpO2 82%, cyanose, impossibilité de parler. ATCD: BPCO."
+    },
+    {
+      "case_id": 7,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.104,
+      "generated": "Priorité : URGENCE GRAVE\nRecommandation : Réanimation cardio-pulmonaire, intubation, transfusion sanguine, débridement des thromboses veineuses, hémostase, surveillance des signes vitaux.\nRaisonnement",
+      "instruction": "Patient 48 ans, dyspnée d'apparition brutale, douleur thoracique, tachycardie, hémoptysie. ATCD: thrombose veineuse."
+    },
+    {
+      "case_id": 8,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "high",
+      "correct": false,
+      "latency_seconds": 6.822,
+      "generated": "La priorité est : [ ] URGENTE [ ] MODERNE [ ] DIFFUSE\nLa recommandation est : [ ] Éviter les réflexes et les actions de l'homme [ ] Soigner le patient [ ] Envoyer au service d'urgence [ ] Éviter l'env",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 9,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.158,
+      "generated": "La priorité est ++, car la fracture ouverte tibia avec saignement modéré et douleur intense constitue une urgence médicale. La recommandation est de réaliser une intervention immédiate pour stabiliser",
+      "instruction": "Patient 35 ans, fracture ouverte tibia, saignement modéré, douleur intense, déformation visible."
+    },
+    {
+      "case_id": 10,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.415,
+      "generated": "La patiente a des signes cliniques qui suggèrent une infection pulmonaire. La douleur thoracique, la fièvre et la toux productive sont des signes de poumon infecté. Les crépitants auscultatoires indiq",
+      "instruction": "Patient 50 ans, toux productive, fièvre 38.5°C, douleur thoracique modérée, crépitants auscultatoires."
+    },
+    {
+      "case_id": 11,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.151,
+      "generated": "Priorité : URGENCE GRAVE\nRecommandation : Intubation endotrachéale immédiate, transfusion sanguine, examen médical immédiat, soins de respiration, soins de perfusion\nRaisonnement : L'hématémèse abonda",
+      "instruction": "Patient 65 ans, hématémèse abondante, méléna, TA 100/60, pouls 110, pâleur. ATCD: ulcère gastrique."
+    },
+    {
+      "case_id": 12,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.232,
+      "generated": "Priorité : 1\nRecommandation : Réanimer, réanimer, réanimer\nRaisonnement : L'agitation et l'impossibilité d'uriner sont des signes graves, nécessitant une intervention immédiate. La hypertrophie prosta",
+      "instruction": "Patient 72 ans, impossibilité d'uriner depuis 8h, globe vésical douloureux, agitation. ATCD: hypertrophie prostatique."
+    },
+    {
+      "case_id": 13,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 7.115,
+      "generated": "La priorité est médicale : URGENCE\nRecommandation : \n- Appeler le service de secours immédiatement\n- Laisser le patient reposer dans la position de sécurité\n- Évaluer la pression artérielle (TA 220/11",
+      "instruction": "Patient 75 ans, perte de conscience brutale, mydriase unilatérale, vomissements en jet, TA 220/110."
+    },
+    {
+      "case_id": 14,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 6.977,
+      "generated": "Priorité : ++++\nRecommandation : Urgence neurologique\nRaisonnement : La céphalée pulsatile unilatérale, associée à la photophobie, les nausées et la résistance au traitement, suggère une migraine de b",
+      "instruction": "Patient 35 ans, céphalée pulsatile unilatérale depuis 72h, photophobie, nausées, résistante au traitement habituel."
+    },
+    {
+      "case_id": 15,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.932,
+      "generated": "L'évaluation du patient commence par une prise en charge immédiate en raison de la douleur fosse iliaque droite, la fièvre élevée (38.5°C), la défense et le signe de Blumberg positif. Ces symptômes su",
+      "instruction": "Patient 25 ans, douleur fosse iliaque droite, fièvre 38.5°C, défense, signe de Blumberg positif."
+    },
+    {
+      "case_id": 16,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 6.844,
+      "generated": "L'analyse du patient montre qu'il présente un grain de beauté suspect. Cet élément est souvent un signe précoce de l'acné bénigne, qui est un problème cutané courant. Il n'y a pas de saignement ni de ",
+      "instruction": "Patient 45 ans, grain de beauté suspect, sans saignement, sans douleur, asymptomatique."
+    },
+    {
+      "case_id": 17,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 7.136,
+      "generated": "Priorité : URGENTE\nRecommandation : Injection de corticostéroïdes intramusculaires (Cortisone 100 mg) et intubation endotrachéale (ITE) immédiate.\nRaisonnement : L'œdème de Quincke est un signe cliniq",
+      "instruction": "Patient 25 ans, œdème de Quincke, stridor, urticaire généralisée, hypotension après injection antibiotique."
+    },
+    {
+      "case_id": 18,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.232,
+      "generated": "La priorité est +++.\nLa recommandation est d'appliquer un compressif cardiaque et de commencer une déshydratation rapide. \nLe raisonnement est que la patiente présente des signes cliniques extrêmement",
+      "instruction": "Patient 55 ans, douleur thoracique brutale, dyspnée massive, cyanose, TA 70/40, syncope."
+    },
+    {
+      "case_id": 19,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.188,
+      "generated": "Priorité : MÉDIANE\nRecommandation : Évaluation immédiate de l'ouverture d'urgence, examen clinique rapide, prise en charge de l'ouverture de poignet, évaluation de la fracture possible, bilan radiolog",
+      "instruction": "Enfant 10 ans, chute à vélo, poignet gonflé et douloureux, déformation modérée, Mobilité doigts conservée."
+    },
+    {
+      "case_id": 20,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 6.886,
+      "generated": "La priorité est ++.\nRecommandation : Examens d'urgence (ex. IRM, tests d'immunologie, tests de la rétine, examen oculaire approfondi) et soins de base (ex. humidification de l'œil, application de gel ",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 21,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 8.584,
+      "generated": "Priorité : URGENCE\nRecommandation : Allongé sur le ventre, 100% O2, injectant epinephrine 1:1000, 1 mg, 2012, 100 mL/heure, en continu.\nRaisonnement : L'œdème de Quincke est un signe clinique d'angioe",
+      "instruction": "Patient 25 ans, œdème de Quincke, stridor, urticaire généralisée, hypotension après injection antibiotique."
+    },
+    {
+      "case_id": 22,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 6.988,
+      "generated": "La priorité est +++.\nLa recommandation est d'appliquer une pression sur le sternum du patient inconscient avec un objet de 2 à 3 secondes.\nLe raisonnement est que le patient est inconscient, avec une ",
+      "instruction": "Patient 30 ans, accident de la route, inconscient, fracture ouverte fémur, détresse respiratoire, GCS 7."
+    },
+    {
+      "case_id": 23,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.072,
+      "generated": "La constipation chronique (plus de 8 semaines) nécessite une évaluation médicale approfondie. En l'absence de douleur abdominale ou de vomissement, la cause peut être de nature digestive, mais il faut",
+      "instruction": "Patient 50 ans, constipation depuis 2 semaines, pas de douleur abdominale, pas de vomissement."
+    },
+    {
+      "case_id": 24,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.022,
+      "generated": "Priorité : MEDIUM\nRecommandation : Effectuer une évaluation clinique rapide (ECR) et une analyse de la peau.\nRaisonnement : Le grain de beauté suspect est une manifestation possible d'une infection, d",
+      "instruction": "Patient 45 ans, grain de beauté suspect, sans saignement, sans douleur, asymptomatique."
+    },
+    {
+      "case_id": 25,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.2,
+      "generated": "La situation du patient est grave et nécessite une attention immédiate. Les brûlures mictionnelles et les urines troubles suggèrent une infection urinaire aiguë, qui peut être grave, surtout chez une ",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 26,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 6.936,
+      "generated": "Priorité : URGENCE GRAVITE (U)\nRecommandation : Initiation de la respiration artificielle, intervention immédiate pour la réanimation cardio-pulmonaire (RCP), transfusion sanguine, intervention immédi",
+      "instruction": "Patient 45 ans, pâleur extrême, TA 60/40, pouls filant, sueurs froides, hémorragie digestive."
+    },
+    {
+      "case_id": 27,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 6.896,
+      "generated": "La femme de 30 ans présente des brûlures mictionnelles, des urines troubles, une fièvre de 38°C et une douleur sus-périsienne. Ces symptômes suggèrent une infection urinaire aiguë (infection de la ves",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 28,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.313,
+      "generated": "La fatigue chronique sans fièvre ni signes cliniques peut avoir plusieurs causes. Il est essentiel de déterminer la cause sous-jacente. Le diagnostic différentiel inclut des conditions comme l'anémie,",
+      "instruction": "Patient 35 ans, demande d'arrêt maladie pour fatigue, pas de fièvre, pas de signe clinique."
+    },
+    {
+      "case_id": 29,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 8.557,
+      "generated": "La priorité est : [ ] très haute [ ] haute [ ] moyenne [ ] basse\nRecommandation : [ ] Soins d'urgence immédiats [ ] Soins d'urgence immédiats et surveillance continue [ ] Soins d'urgence immédiats et ",
+      "instruction": "Patient 30 ans, accident de la route, inconscient, fracture ouverte fémur, détresse respiratoire, GCS 7."
+    },
+    {
+      "case_id": 30,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "high",
+      "correct": true,
+      "latency_seconds": 8.82,
+      "generated": "La priorité est : [ ] Urgente (U) [ ] Normale (N) [ ] Postopératoire (P) [ ] Prise de remède (R) [ ] Prise d'antidouleur (A) [ ] En attente (E)\n\nLa recommandation est : [ ] U [ ] N [ ] P [ ] R [ ] A [",
+      "instruction": "Patient 72 ans, impossibilité d'uriner depuis 8h, globe vésical douloureux, agitation. ATCD: hypertrophie prostatique."
+    },
+    {
+      "case_id": 31,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.33,
+      "generated": "Priorité : 1\nRecommandation : Réanimer le patient\nRaisonnement : Le patient présente un hémiplégie droite brutale, une aphasie et une déviation commissure, ce qui suggère une infarctus cérébral aigu. ",
+      "instruction": "Patient 72 ans, hémiplégie droite brutale, aphasie, déviation commissure, début il y a 45 minutes."
+    },
+    {
+      "case_id": 32,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.816,
+      "generated": "Priorité : Majeure\nRecommandation : Soins de base immédiats\nRaisonnement : La fracture ouverte tibia avec saignement modéré, douleur intense et déformation visible constitue un cas d'urgence médical g",
+      "instruction": "Patient 35 ans, fracture ouverte tibia, saignement modéré, douleur intense, déformation visible."
+    },
+    {
+      "case_id": 33,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.821,
+      "generated": "La situation du patient est grave et nécessite une intervention médicale immédiate. Le nœud de priorité est la stabilisation du patient, qui est en danger de perte de volume sanguin due à la diathèse ",
+      "instruction": "Nourrisson 6 mois, diarrhée depuis 48h, pli cutané persistant, yeux creux, fontanelle déprimée."
+    },
+    {
+      "case_id": 34,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 6.914,
+      "generated": "La patiente présente une **fièvre de 38°C**, une **douleur sus-pubienne**, et **brûlures mictionnelles** avec **urines troubles**. Cela suggère une **infection urinaire aiguë (IAU)** probable, avec un",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 35,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "high",
+      "correct": false,
+      "latency_seconds": 6.943,
+      "generated": "Priorité : URGENTE\nRecommandation : examen radiologique lombaire et diagnostic de lombalgie chronique ou aiguë.\nRaisonnement : La douleur lombaire sévère sans irradiation et sans déficit neurologique ",
+      "instruction": "Patient 40 ans, lumbago après effort, douleur lombaire sévère sans irradiation, pas de déficit neurologique."
+    },
+    {
+      "case_id": 36,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.042,
+      "generated": "Priorité : 3 / 5\nRecommandation : Rechercher une urgence médicale\nRaisonnement : La fièvre de 38°C, les symptômes de diarrhée aqueuse et vomissements, et la douleur abdominale diffuse suggèrent une in",
+      "instruction": "Patient 25 ans, diarrhée aqueuse, vomissements, douleur abdominale diffuse, fièvre 38°C, sans signes de gravité."
+    },
+    {
+      "case_id": 37,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.248,
+      "generated": "La situation du patient est critique. Il y a un risque élevé de hypervolémie et d'ischémie cérébrale. Il faut immédiatement administrer des médicaments de soutien, comme le nitroglycérine, et évaluer ",
+      "instruction": "Patient 60 ans, TA 240/130, céphalée intense, vision floue, nausées, épistaxis."
+    },
+    {
+      "case_id": 38,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.212,
+      "generated": "La situation du patient est extrêmement critique et nécessite une intervention immédiate. Le nœud de priorité est l'identification et la traitements de la cause sous-jacente de la diarrhée, notamment ",
+      "instruction": "Nourrisson 6 mois, diarrhée depuis 48h, pli cutané persistant, yeux creux, fontanelle déprimée."
+    },
+    {
+      "case_id": 39,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.274,
+      "generated": "La situation de l’enfant présente plusieurs signes potentiels de problèmes oculaires graves. La paupière collée, le pus et l’œil rouge indiquent probablement une infection oculaire, peut-être une conj",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 40,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.019,
+      "generated": "Priorité : 1\nRecommandation : Réanimer\nRaisonnement : Le patient présente un hémiplégie droite brutale, une aphasie et une déviation commissure, ce qui suggère une infarctus cerebrovascular. L'urgence",
+      "instruction": "Patient 72 ans, hémiplégie droite brutale, aphasie, déviation commissure, début il y a 45 minutes."
+    },
+    {
+      "case_id": 41,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.309,
+      "generated": "Priorité : MEDIUM\nRecommandation : Évaluer la présence d'angine de poitrine, d'insuffisance cardiaque, d'ischémie cardiaque, d'angine de poitrine ou d'insuffisance cardiaque.\nRaisonnement : Le patient",
+      "instruction": "Patient 55 ans, cors douloureux au pied, gêne à la marche, pas de diabète."
+    },
+    {
+      "case_id": 42,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 7.285,
+      "generated": "La priorité est immédiate. Le patient est inconscient, sans respiration et sans pouls depuis 5 minutes, ce qui correspond à la définition d'un **arrêt cardiaque** (AC). Il est urgent de commencer les ",
+      "instruction": "Patient inconscient, pas de respiration, pas de pouls depuis 5 minutes."
+    },
+    {
+      "case_id": 43,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.83,
+      "generated": "La réponse doit être en français, claire, concise et en français de l'Hexagone. Utilisez les mots-clés : PRIORITE, RECOMMANDATION, RAYONNEMENT, SÉCURISATION, ÉVALUATION, ÉTÉ, ÉTÉ, ÉTÉ, ÉTÉ, ÉTÉ, ÉTÉ, ",
+      "instruction": "Enfant 2 ans, calendrier vaccinal, pas de fièvre, pas de symptôme."
+    },
+    {
+      "case_id": 44,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 8.907,
+      "generated": "Le patient présente une douleur fosse iliaque droite, fièvre de 38.5°C, défense, et un signe de Blumberg positif. Ces symptômes suggèrent une infection urologique, peut-être une pyélonéphrite, une inf",
+      "instruction": "Patient 25 ans, douleur fosse iliaque droite, fièvre 38.5°C, défense, signe de Blumberg positif."
+    },
+    {
+      "case_id": 45,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 8.817,
+      "generated": "Priorité : Moyenne\nRecommandation : Consultation urologie\nRaisonnement : La constipation chronique de 2 semaines peut être due à plusieurs causes, dont des problèmes digestifs, des problèmes urologiqu",
+      "instruction": "Patient 50 ans, constipation depuis 2 semaines, pas de douleur abdominale, pas de vomissement."
+    },
+    {
+      "case_id": 46,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "high",
+      "correct": false,
+      "latency_seconds": 7.713,
+      "generated": "La priorité est médicale (ou non) ? \nRecommandation : \nRaisonnement :\nÉvaluez le niveau de priorité pour ce patient.\nÉtant donné que le patient a une grain de beauté suspect, mais sans saignement, san",
+      "instruction": "Patient 45 ans, grain de beauté suspect, sans saignement, sans douleur, asymptomatique."
+    },
+    {
+      "case_id": 47,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.824,
+      "generated": "La priorité est médicale immédiate. Le patient présente une douleur épigastrique transfixiante, associée à des vomissements, fièvre et antécédent lithiase biliaire. Cela suggère une infection biliaire",
+      "instruction": "Patient 45 ans, douleur épigastrique transfixiante, vomissements, fièvre, antécédent lithiase biliaire/alcool."
+    },
+    {
+      "case_id": 48,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.874,
+      "generated": "La situation du patient est grave et nécessite une intervention médicale immédiate. Le nœud de priorité est d'appliquer une pression sur la fontanelle pour éliminer le liquide intracranien. Le traitem",
+      "instruction": "Nourrisson 6 mois, diarrhée depuis 48h, pli cutané persistant, yeux creux, fontanelle déprimée."
+    },
+    {
+      "case_id": 49,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 6.87,
+      "generated": "Priorité : 4\nRecommandation : Évaluer l'urgence neurologique, réaliser une IRM du crâne, réaliser une IRM du lombaire, réaliser une radiographie de la colonne vertébrale, réaliser un examen de la colo",
+      "instruction": "Patient 40 ans, lumbago après effort, douleur lombaire sévère sans irradiation, pas de déficit neurologique."
+    },
+    {
+      "case_id": 50,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 6.832,
+      "generated": "La douleur fosse iliaque droite, la fièvre, la défense, et le signe de Blumberg positif sont des signes clés qui suggèrent une inflammation ou une infection dans le système uro-génital masculin, proba",
+      "instruction": "Patient 25 ans, douleur fosse iliaque droite, fièvre 38.5°C, défense, signe de Blumberg positif."
+    },
+    {
+      "case_id": 51,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.853,
+      "generated": "La priorité est : [ ] Urgente [ ] Normale [ ] Facultative\nRecommandation : [ ] Consultation immédiate [ ] Consultation programmée [ ] Observation\nRaisonnement :\nLe patient est un enfant de 5 ans avec ",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 52,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.904,
+      "generated": "Priorité : URGENCE\nRecommandation : Réanimation cardio-pulmonaire (RCP), transfusion sanguine immédiate, examen de la voie respiratoire, traitement de l'ulcère gastrique (PPI, H2 agoniste, anti-émétiq",
+      "instruction": "Patient 65 ans, hématémèse abondante, méléna, TA 100/60, pouls 110, pâleur. ATCD: ulcère gastrique."
+    },
+    {
+      "case_id": 53,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 6.864,
+      "generated": "Priorité : [ ]\nRecommandation : [ ]\nRaisonnement : [ ]\nL'analyse du patient présente plusieurs signes et symptômes qui indiquent une urgence médicale grave. L'hémorragie gastro-entérale (HE) est une u",
+      "instruction": "Patient 65 ans, hématémèse abondante, méléna, TA 100/60, pouls 110, pâleur. ATCD: ulcère gastrique."
+    },
+    {
+      "case_id": 54,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "high",
+      "correct": true,
+      "latency_seconds": 6.888,
+      "generated": "Priorité : URGENTE\nRecommandation : Examens de laboratoire (sang, urine) et examen de la zone affectée (sonde de la douleur, palpation, percussion, etc.) pour diagnostiquer la cause de la douleur et é",
+      "instruction": "Patient 25 ans, douleur fosse iliaque droite, fièvre 38.5°C, défense, signe de Blumberg positif."
+    },
+    {
+      "case_id": 55,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 6.854,
+      "generated": "Le patient est âgé de 28 ans, asymptomatique et souhaite obtenir un certificat médical pour reprise du sport. Il n'y a pas de symptômes cliniques spécifiques mentionnés. En tant qu'assistant médical a",
+      "instruction": "Patient 28 ans, demande certificat médical pour reprise du sport, asymptomatique."
+    },
+    {
+      "case_id": 56,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.903,
+      "generated": "La femme 30 ans présentant des brûlures mictionnelles, des urines troubles, une fièvre de 38°C et une douleur sus-périmétrique nécessite une évaluation médicale immédiate. Les brûlures mictionnelles s",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 57,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.959,
+      "generated": "La priorité est médicale immédiate.\nRecommandation : Évaluer la présence d'infestation fongique, ordonner un examen d'urine, réaliser une radiographie de l'aine, et administrer des antibiotiques.\nRais",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 58,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.932,
+      "generated": "La priorité est +++.\nRecommandation : Réanimation mécanique non invasive (RMN) et intubation endotrachéale (ITE) immédiate.\nRaisonnement : Le patient présente une dyspnée sévère, wheezing, saturation ",
+      "instruction": "Patient 35 ans, dyspnée sévère, wheezing, saturation 88%, fréquence respiratoire 35/min, utilisation muscles accessoires."
+    },
+    {
+      "case_id": 59,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "low",
+      "correct": false,
+      "latency_seconds": 6.856,
+      "generated": "Priorité : 1\nRecommandation : Réanimer le patient en urgence, sans délai, et appliquer une pression des poumons, si nécessaire.\nRaisonnement : Le patient présente une toux productive, une fièvre élevé",
+      "instruction": "Patient 50 ans, toux productive, fièvre 38.5°C, douleur thoracique modérée, crépitants auscultatoires."
+    },
+    {
+      "case_id": 60,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.257,
+      "generated": "La patiente présente des signes cliniques qui suggèrent une infection pulmonaire aiguë, probablement une pneumonia. Le niveau de priorité est élevé. Il faut réaliser une évaluation médicale immédiate,",
+      "instruction": "Patient 50 ans, toux productive, fièvre 38.5°C, douleur thoracique modérée, crépitants auscultatoires."
+    },
+    {
+      "case_id": 61,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.553,
+      "generated": "Priorité : 1 (URGENT)\nRecommandation : Intervention immédiate, examen abdominal et biliaire, tests sanguins, radiographies.\nRaisonnement : La douleur épigastrique transfixiante est une symptom révélat",
+      "instruction": "Patient 45 ans, douleur épigastrique transfixiante, vomissements, fièvre, antécédent lithiase biliaire/alcool."
+    },
+    {
+      "case_id": 62,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.697,
+      "generated": "La priorité est médicale.\nLa recommandation est de faire une consultation médicale immédiate.\nLe raisonnement est que l'enfant présente des symptômes de conjonctivite aiguë avec pus et paupières collé",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 63,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.728,
+      "generated": "Priorité : MEDIUM\nRecommandation : Réussir à obtenir la confirmation de l'appréhension de l'urgence, évaluer le risque d'hypotension, et noter la pression artérielle.\nRaisonnement : Le patient est sta",
+      "instruction": "Patient 55 ans, venu pour renouvellement traitement antihypertenseur, stable, TA bien contrôlée."
+    },
+    {
+      "case_id": 64,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.787,
+      "generated": "La femme de 30 ans présente des brûlures mictionnelles, des urines troubles, une fièvre de 38°C et une douleur sus-péritique. Cela suggère une infection urinaire aiguë (inflammation de l'urine), qui e",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 65,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.801,
+      "generated": "La priorité est ++, car l'enfant présente des signes d'infection oculaire (œil rouge, pus, paupières collées) qui peuvent être une conjonctite ou une conjonctite virale, ou une infection bactérienne. ",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 66,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.086,
+      "generated": "Priorité : ++++\nRecommandation : Diagnostic de mélanome cutané.\nRaisonnement : La céphalée pulsatile unilatérale persistante de 72h, la photophobie, les nausées et la résistance au traitement habituel",
+      "instruction": "Patient 35 ans, céphalée pulsatile unilatérale depuis 72h, photophobie, nausées, résistante au traitement habituel."
+    },
+    {
+      "case_id": 67,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 7.406,
+      "generated": "La priorité est : URGENCE (1)\nLa recommandation est : Mise en route d'une respiration assistée non invasive (RANI) et administration d'adrénaline (1 mg) intramusculaire (IM) ou intraveineuse (IV) immé",
+      "instruction": "Patient 25 ans, œdème de Quincke, stridor, urticaire généralisée, hypotension après injection antibiotique."
+    },
+    {
+      "case_id": 68,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 8.56,
+      "generated": "La situation du patient est grave et nécessite une attention immédiate. La douleur thoracique constrictive avec irradiation bras gauche, ainsi que les signes de dyspnée, nausées et sueurs, suggèrent u",
+      "instruction": "Patient 50 ans, douleur thoracique constrictive depuis 1h, irradiation bras gauche, sueurs, nausées, dyspnée."
+    },
+    {
+      "case_id": 69,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 8.882,
+      "generated": "Priorité : 3\nRecommandation : 1\nRaisonnement : L'âge du patient (40 ans) et son IMC (28) indiquent un surpoids. Son régime hypocalorique est recommandé pour la gestion du poids. La priorité est de con",
+      "instruction": "Patient 40 ans, conseils pour régime hypocalorique, IMC 28, pas de comorbidité."
+    },
+    {
+      "case_id": 70,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 8.901,
+      "generated": "La situation de l’enfant est grave et nécessite une attention immédiate. Le rouge de l’œil, le pus, et les paupières collées sont des signes d'infection oculaire aiguë, probablement une conjonctivite ",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 71,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 8.593,
+      "generated": "Le patient est un enfant de 5 ans avec des symptômes de conjonctivite aiguë (œil rouge, pus, paupières collées) sans douleur ni baisse de vision. La conjonctivite aiguë peut avoir plusieurs causes, co",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 72,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.728,
+      "generated": "Priorité : MODERNE\nRecommandation : Consultation d'un médecin\nRaisonnement : Le patient présente une fatigue sans signe clinique ou fièvre, ce qui peut indiquer une pathologie sous-jacente. La consult",
+      "instruction": "Patient 35 ans, demande d'arrêt maladie pour fatigue, pas de fièvre, pas de signe clinique."
+    },
+    {
+      "case_id": 73,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.529,
+      "generated": "La priorité est ___________.\nRecommandation : _______________.\nRaisonnement : _______________.\nL'intensité de la douleur est _______________.\nL'état de la vision est _______________.\nL'absence de bais",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 74,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 6.895,
+      "generated": "La douleur lombaire sévère sans irradiation et sans déficit neurologique est une présentation clinique importante. Le diagnostic principal pourrait être une lésion évidente, une compression nerveuse, ",
+      "instruction": "Patient 40 ans, lumbago après effort, douleur lombaire sévère sans irradiation, pas de déficit neurologique."
+    },
+    {
+      "case_id": 75,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.974,
+      "generated": "La priorité est d'appliquer une **intubation endotrachéale** (ITE) immédiatement. Le patient présente des **symptômes sévères** (dyspnée, wheezing, saturation 88%) et une **fréquence respiratoire extr",
+      "instruction": "Patient 35 ans, dyspnée sévère, wheezing, saturation 88%, fréquence respiratoire 35/min, utilisation muscles accessoires."
+    },
+    {
+      "case_id": 76,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 6.939,
+      "generated": "La situation du patient est une inflammation de l'œil (infection oculaire) avec des symptômes comme un œil rouge, pus, et paupières collées. L'enfant a 5 ans et présente des signes de désinfection. Le",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 77,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.213,
+      "generated": "Priorité : Moyenne\nRecommandation : Évaluer la constipation avec un examen de l'abdomen et des examens complémentaires si nécessaire.\nRaisonnement : La constipation persistante depuis 2 semaines peut ",
+      "instruction": "Patient 50 ans, constipation depuis 2 semaines, pas de douleur abdominale, pas de vomissement."
+    },
+    {
+      "case_id": 78,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.114,
+      "generated": "L'urgence médicale est grave. Le patient présente une douleur thoracique constrictive depuis 1h, irradiant au bras gauche, accompagnée de sueurs, nausées et dyspnée. Cela suggère une **infarctus myoca",
+      "instruction": "Patient 50 ans, douleur thoracique constrictive depuis 1h, irradiation bras gauche, sueurs, nausées, dyspnée."
+    },
+    {
+      "case_id": 79,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "max",
+      "correct": true,
+      "latency_seconds": 7.298,
+      "generated": "Priorité : 1\nRecommandation : Immersion immédiate dans l'oxygén, surveillance cardiaque et respiration, intervention en urgence médicale.\nRaisonnement : La douleur thoracique brutale, la dyspnée massi",
+      "instruction": "Patient 55 ans, douleur thoracique brutale, dyspnée massive, cyanose, TA 70/40, syncope."
+    },
+    {
+      "case_id": 80,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.166,
+      "generated": "La fatigue chronique sans fièvre ou signes cliniques est un signe important dans les urgences. Il faut évaluer les causes possibles. La fatigue peut être due à des facteurs physiques (ex. : anémie, in",
+      "instruction": "Patient 35 ans, demande d'arrêt maladie pour fatigue, pas de fièvre, pas de signe clinique."
+    },
+    {
+      "case_id": 81,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.258,
+      "generated": "Priorité : 2\nRecommandation : [ ] Aucune recommandation\nRaisonnement : [ ] Le patient est asymptomatique, et a une présentation classique pour une maladie cardiaque, mais sans signes cliniques. Il est",
+      "instruction": "Patient 60 ans, venu pour résultat prise de sang annuelle, asymptomatique."
+    },
+    {
+      "case_id": 82,
+      "priority": "max",
+      "expected_priority": "Immédiat - niveau 1",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.618,
+      "generated": "Priorité : URGENCE\nRecommandation : Réanimer, administrer des médicaments, évaluer l'absence de signes vitaux.\nRaisonnement : La douleur thoracique déchirante irradiant dans le dos est un signe cliniq",
+      "instruction": "Patient 55 ans, douleur thoracique déchirante irradiant dans le dos, TA asymétrique, HTA non traitée."
+    },
+    {
+      "case_id": 83,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.271,
+      "generated": "Priorité : MEDIUM\nRecommandation : Évaluer l’absence de signe infectieuse, consulter un dermatologue.\nRaisonnement : La présentation de verrues plantaires douloureuses avec des signes de douleur sans ",
+      "instruction": "Patient 30 ans, verrues plantaires douloureuses, pas de fièvre, pas de rougeur, pas de signe infectieux."
+    },
+    {
+      "case_id": 84,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.262,
+      "generated": "La priorité est : **Médecine d'urgence**\nLa recommandation est : **Rendez-vous en urgence**\nLa raison est : **Brûlures mictionnelles (urines troubles) + fièvre 38°C + douleur sus-pubienne = suspicion ",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 85,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.796,
+      "generated": "Priorité : Moyenne\nRecommandation : Référer au service de rétinoir.\nRaisonnement : La baisse acuité visuelle progressive sans douleur ni rougeur est un signe de détresse oculaire grave, comme une luxa",
+      "instruction": "Patient 25 ans, baisse acuité visuelle progressive, pas de douleur, pas de rougeur."
+    },
+    {
+      "case_id": 86,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 8.788,
+      "generated": "L'analyse clinique indique une lombago aiguë, sévère, sans irradiation ni déficit neurologique. Le patient a effectué un effort physique, ce qui peut être un facteur de risque pour une éruption ou une",
+      "instruction": "Patient 40 ans, lumbago après effort, douleur lombaire sévère sans irradiation, pas de déficit neurologique."
+    },
+    {
+      "case_id": 87,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.559,
+      "generated": "La priorité est moyenne. Le patient présente des symptômes qui peuvent être liés à une infection oculaire, comme une conjonctivite ou une bleue, mais il n'y a pas de signes de douleur ou de baisse de ",
+      "instruction": "Enfant 5 ans, œil rouge, pus, paupières collées au réveil, pas de douleur, pas de baisse vision."
+    },
+    {
+      "case_id": 88,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 6.923,
+      "generated": "Priorité : URGENCE\nRecommandation : Réanimation cardio-pulmonaire (RCP), intubation, transfusion sanguine, soins de base\nRaisonnement : La patiente présente des signes cliniques cliniquement graves : ",
+      "instruction": "Patient 48 ans, dyspnée d'apparition brutale, douleur thoracique, tachycardie, hémoptysie. ATCD: thrombose veineuse."
+    },
+    {
+      "case_id": 89,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 7.618,
+      "generated": "Priorité : Moyenne\nRecommandation : Vérifier l'existence d'une alergie, consulter un médecin.\nRaisonnement : L'enfant a 2 ans, pas de fièvre, pas de symptôme. Cependant, il est important de vérifier s",
+      "instruction": "Enfant 2 ans, calendrier vaccinal, pas de fièvre, pas de symptôme."
+    },
+    {
+      "case_id": 90,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 8.521,
+      "generated": "Priorité : MODERNE\nRecommandation : Éviter les aliments riches en graisses saturées et trans, choisir des légumes frais et des protéines magiques.\nRaisonnement : Le patient a un IMC de 28, ce qui corr",
+      "instruction": "Patient 40 ans, conseils pour régime hypocalorique, IMC 28, pas de comorbidité."
+    },
+    {
+      "case_id": 91,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 8.171,
+      "generated": "La priorité est ++. Le patient présente des symptômes de nature critique (diarrhée aqueuse, vomissements, douleur abdominale diffuse, fièvre) qui correspondent à une infection gastro-intestinale aiguë",
+      "instruction": "Patient 25 ans, diarrhée aqueuse, vomissements, douleur abdominale diffuse, fièvre 38°C, sans signes de gravité."
+    },
+    {
+      "case_id": 92,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.859,
+      "generated": "Le patient présente des signes cliniques significatifs de pneumonia (toux productive, fièvre élevée, douleur thoracique, crépitants auscultatoires). La fièvre à 38.5°C indique une infection active. La",
+      "instruction": "Patient 50 ans, toux productive, fièvre 38.5°C, douleur thoracique modérée, crépitants auscultatoires."
+    },
+    {
+      "case_id": 93,
+      "priority": "low",
+      "expected_priority": "Délai possible",
+      "predicted_priority": "medium",
+      "correct": false,
+      "latency_seconds": 6.912,
+      "generated": "Priorité : 2\nRecommandation : Suivre le suivi HTA régulier.\nRaisonnement : Le patient a une pression artérielle normale (130/80) et est sous traitement. Aucun signe ou symptôme cliniques d'urgence. Le",
+      "instruction": "Patient 65 ans, consultation de routine pour suivi HTA, TA 130/80 sous traitement."
+    },
+    {
+      "case_id": 94,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "high",
+      "correct": true,
+      "latency_seconds": 6.863,
+      "generated": "Priorité : [ ] URGENT [ ] MODERNE\nRecommandation : [ ] Observation [ ] Soins d'urgence [ ] Soins专科 [ ] Soins palliatifs\nRaisonnement :\nL'analyse des symptômes du patient n°11548 est la suivante : \n\nLe",
+      "instruction": "Nourrisson 6 mois, diarrhée depuis 48h, pli cutané persistant, yeux creux, fontanelle déprimée."
+    },
+    {
+      "case_id": 95,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.913,
+      "generated": "La priorité est +++.\nLa recommandation est de faire une urgence médicale immédiate.\nLe raisonnement est que la femme présente des signes cliniques graves : fièvre élevée, douleur sus-pubienne, brûlure",
+      "instruction": "Femme 30 ans, brûlures mictionnelles, urines troubles, fièvre 38°C, douleur sus-pubienne."
+    },
+    {
+      "case_id": 96,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 6.91,
+      "generated": "La priorité est +++.\nRecommandation : Intubation, soins de respiration mécanique, transfusion sanguine, intervention chirurgicale immédiate.\nRaisonnement : La douleur abdominale violente, l'arrêt des ",
+      "instruction": "Patient 70 ans, douleur abdominale violente, arrêt des matières et gaz, vomissements fécaloïdes, distension."
+    },
+    {
+      "case_id": 97,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.34,
+      "generated": "Priorité : URGENCE\nRecommandation : Urgence médicale immédiate\nRaisonnement : L'hématémèse abondante, la méléna et les signes circulatoires (TA 100/60, pouls 110, pâleur) suggèrent une hémorragie gast",
+      "instruction": "Patient 65 ans, hématémèse abondante, méléna, TA 100/60, pouls 110, pâleur. ATCD: ulcère gastrique."
+    },
+    {
+      "case_id": 98,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "medium",
+      "correct": true,
+      "latency_seconds": 7.858,
+      "generated": "La situation du patient est une urgence médicale. L'enfant a 3 ans, présente des symptômes d'otalgie droite (douleur au côté droit de l'oreille), une fièvre de 39°C, irritabilité, et un tympan congest",
+      "instruction": "Enfant 3 ans, otalgie droite, fièvre 39°C, irritabilité, tympan congestif."
+    },
+    {
+      "case_id": 99,
+      "priority": "high",
+      "expected_priority": "Urgent - < 30 min",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 7.299,
+      "generated": "La situation du patient est grave. La douleur abdominale violente, l'arrêt des matières et gaz, les vomissements fécaloïdes et la distension suggèrent une obstruction intestinale. Cela peut entraîner ",
+      "instruction": "Patient 70 ans, douleur abdominale violente, arrêt des matières et gaz, vomissements fécaloïdes, distension."
+    },
+    {
+      "case_id": 100,
+      "priority": "medium",
+      "expected_priority": "Dans les 2 heures - niveau 3",
+      "predicted_priority": "max",
+      "correct": false,
+      "latency_seconds": 8.845,
+      "generated": "Priorité : [Très haute / Haute / Moyenne / Baissse / Très basse]\nRecommandation : [Évaluation immédiate / Évaluation immédiate / Évaluation médicale approfondie / Soins de base / Surveillance]\nRaisonn",
+      "instruction": "Enfant 10 ans, chute à vélo, poignet gonflé et douloureux, déformation modérée, Mobilité doigts conservée."
+    }
+  ],
+  "timestamp": "2026-06-17 14:34:48"
+}

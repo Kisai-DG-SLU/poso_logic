@@ -1,0 +1,18 @@
+Rapport d'évaluation clinique - PosoLogic
+Date: 2026-06-17 14:34:48
+Modèle: Qwen/Qwen3-1.7B + DPO (LoRA)
+Cas évalués: 100
+Accuracy: 30.0%
+Latence moyenne: 7.38s
+Matrice de confusion:
+  high→high: 3
+  high→max: 19
+  high→medium: 8
+  low→high: 1
+  low→medium: 19
+  max→max: 9
+  max→medium: 5
+  medium→high: 2
+  medium→low: 1
+  medium→max: 15
+  medium→medium: 18

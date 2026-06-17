@@ -1,0 +1,715 @@
+{
+  "model": "Qwen3-1.7B + DPO (merged)",
+  "inference": "vLLM 0.8.5 on GPU A2",
+  "dataset": "UltraMedical-Preference (test split)",
+  "num_samples": 100,
+  "alignment_pct": 53.0,
+  "prefers_chosen_count": 53,
+  "average_latency_s": 0.35,
+  "total_latency_s": 34.77,
+  "results": [
+    {
+      "case_id": 1,
+      "prompt_id": "MedQA,9400",
+      "sim_chosen": 0.7353,
+      "sim_rejected": 0.7339,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 2,
+      "prompt_id": "WikiInstruct,16721",
+      "sim_chosen": 0.7961,
+      "sim_rejected": 0.8353,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 3,
+      "prompt_id": "ChatDoctor,33886",
+      "sim_chosen": 0.8092,
+      "sim_rejected": 0.7919,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 4,
+      "prompt_id": "TextBookQA,InternalMed_Harrison_29954",
+      "sim_chosen": 0.7537,
+      "sim_rejected": 0.8135,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 5,
+      "prompt_id": "Medical-Instruct-120k,11276",
+      "sim_chosen": 0.8283,
+      "sim_rejected": 0.7109,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 6,
+      "prompt_id": "MedQuad,7279",
+      "sim_chosen": 0.7732,
+      "sim_rejected": 0.8506,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 7,
+      "prompt_id": "MedQuad,8028",
+      "sim_chosen": 0.7546,
+      "sim_rejected": 0.7758,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 8,
+      "prompt_id": "WikiInstruct,17461",
+      "sim_chosen": 0.8317,
+      "sim_rejected": 0.8313,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 9,
+      "prompt_id": "TextBookQA,Histology_Ross_2398",
+      "sim_chosen": 0.7973,
+      "sim_rejected": 0.8258,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 10,
+      "prompt_id": "WikiInstruct,15451",
+      "sim_chosen": 0.8585,
+      "sim_rejected": 0.8286,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 11,
+      "prompt_id": "PubMedQA,25084165",
+      "sim_chosen": 0.8816,
+      "sim_rejected": 0.8291,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 12,
+      "prompt_id": "TextBookQA,Pathology_Robbins_5027",
+      "sim_chosen": 0.777,
+      "sim_rejected": 0.7481,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 13,
+      "prompt_id": "MedQA-Evol,7517-synthetic-2",
+      "sim_chosen": 0.8511,
+      "sim_rejected": 0.8379,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 14,
+      "prompt_id": "ChatDoctor,35824",
+      "sim_chosen": 0.7482,
+      "sim_rejected": 0.763,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 15,
+      "prompt_id": "MedQA,3163",
+      "sim_chosen": 0.8433,
+      "sim_rejected": 0.8165,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 16,
+      "prompt_id": "MedInstruct-52k,8275",
+      "sim_chosen": 0.7809,
+      "sim_rejected": 0.7661,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 17,
+      "prompt_id": "ChatDoctor,11588",
+      "sim_chosen": 0.8283,
+      "sim_rejected": 0.4936,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 18,
+      "prompt_id": "ChatDoctor,12619",
+      "sim_chosen": 0.5557,
+      "sim_rejected": 0.6178,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 19,
+      "prompt_id": "WikiInstruct,10070",
+      "sim_chosen": 0.8063,
+      "sim_rejected": 0.8527,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 20,
+      "prompt_id": "MedQuad,6385",
+      "sim_chosen": 0.881,
+      "sim_rejected": 0.8755,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 21,
+      "prompt_id": "MedQuad,7642",
+      "sim_chosen": 0.6969,
+      "sim_rejected": 0.7479,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 22,
+      "prompt_id": "MedQA-Evol,3857-synthetic-2",
+      "sim_chosen": 0.8393,
+      "sim_rejected": 0.7498,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 23,
+      "prompt_id": "MedQA,3933",
+      "sim_chosen": 0.7579,
+      "sim_rejected": 0.7972,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 24,
+      "prompt_id": "ChatDoctor,30090",
+      "sim_chosen": 0.612,
+      "sim_rejected": 0.7395,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 25,
+      "prompt_id": "MedQA-Evol,7184-synthetic-2",
+      "sim_chosen": 0.8272,
+      "sim_rejected": 0.8405,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 26,
+      "prompt_id": "MedQuad,12090",
+      "sim_chosen": 0.7936,
+      "sim_rejected": 0.8218,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 27,
+      "prompt_id": "TextBookQA,Surgery_Schwartz_10336",
+      "sim_chosen": 0.8415,
+      "sim_rejected": 0.7896,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 28,
+      "prompt_id": "PubMedQA,22889958",
+      "sim_chosen": 0.7707,
+      "sim_rejected": 0.7907,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 29,
+      "prompt_id": "TextBookQA,Pharmacology_Katzung_4401",
+      "sim_chosen": 0.7769,
+      "sim_rejected": 0.7557,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 30,
+      "prompt_id": "TextBookQA,InternalMed_Harrison_20450",
+      "sim_chosen": 0.8278,
+      "sim_rejected": 0.8319,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 31,
+      "prompt_id": "MedInstruct-52k,5088",
+      "sim_chosen": 0.7324,
+      "sim_rejected": 0.7355,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 32,
+      "prompt_id": "MedQuad,212",
+      "sim_chosen": 0.8291,
+      "sim_rejected": 0.8316,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 33,
+      "prompt_id": "MedMCQA,92936",
+      "sim_chosen": 0.3973,
+      "sim_rejected": 0.5733,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 34,
+      "prompt_id": "MedQA,6545",
+      "sim_chosen": 0.7485,
+      "sim_rejected": 0.738,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 35,
+      "prompt_id": "Medical-Instruct-120k,21753",
+      "sim_chosen": 0.875,
+      "sim_rejected": 0.8475,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 36,
+      "prompt_id": "ChatDoctor,960",
+      "sim_chosen": 0.6394,
+      "sim_rejected": 0.7015,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 37,
+      "prompt_id": "WikiInstruct,1461",
+      "sim_chosen": 0.9075,
+      "sim_rejected": 0.9225,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 38,
+      "prompt_id": "TextBookQA,First_Aid_Step2_570",
+      "sim_chosen": 0.8184,
+      "sim_rejected": 0.8802,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 39,
+      "prompt_id": "TextBookQA,InternalMed_Harrison_4214",
+      "sim_chosen": 0.7981,
+      "sim_rejected": 0.8509,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 40,
+      "prompt_id": "Medical-Instruct-120k,17952",
+      "sim_chosen": 0.6232,
+      "sim_rejected": 0.6528,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 41,
+      "prompt_id": "TextBookQA,Immunology_Janeway_533",
+      "sim_chosen": 0.8218,
+      "sim_rejected": 0.792,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 42,
+      "prompt_id": "WikiInstruct,16984",
+      "sim_chosen": 0.778,
+      "sim_rejected": 0.7421,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 43,
+      "prompt_id": "MedQuad,902",
+      "sim_chosen": 0.785,
+      "sim_rejected": 0.6686,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 44,
+      "prompt_id": "Medical-Instruct-120k,3274",
+      "sim_chosen": 0.4672,
+      "sim_rejected": 0.5611,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 45,
+      "prompt_id": "TextBookQA,Surgery_Schwartz_4729",
+      "sim_chosen": 0.8675,
+      "sim_rejected": 0.8553,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 46,
+      "prompt_id": "WikiInstruct,5867",
+      "sim_chosen": 0.7108,
+      "sim_rejected": 0.6997,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 47,
+      "prompt_id": "MedInstruct-52k,6203",
+      "sim_chosen": 0.8109,
+      "sim_rejected": 0.803,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 48,
+      "prompt_id": "WikiInstruct,16413",
+      "sim_chosen": 0.7401,
+      "sim_rejected": 0.8354,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 49,
+      "prompt_id": "MedInstruct-52k,43389",
+      "sim_chosen": 0.7115,
+      "sim_rejected": 0.6825,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 50,
+      "prompt_id": "Medical-Instruct-120k,6867",
+      "sim_chosen": 0.8317,
+      "sim_rejected": 0.6531,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 51,
+      "prompt_id": "MedQA,3016",
+      "sim_chosen": 0.7734,
+      "sim_rejected": 0.7145,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 52,
+      "prompt_id": "Medical-Instruct-120k,8654",
+      "sim_chosen": 0.8549,
+      "sim_rejected": 0.8188,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 53,
+      "prompt_id": "ChatDoctor,13802",
+      "sim_chosen": 0.724,
+      "sim_rejected": 0.7361,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 54,
+      "prompt_id": "MedMCQA,8792",
+      "sim_chosen": 0.8033,
+      "sim_rejected": 0.8028,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 55,
+      "prompt_id": "MedQA-Evol,2559-synthetic-3",
+      "sim_chosen": 0.802,
+      "sim_rejected": 0.7765,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 56,
+      "prompt_id": "WikiInstruct,1310",
+      "sim_chosen": 0.7536,
+      "sim_rejected": 0.8128,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 57,
+      "prompt_id": "MedInstruct-52k,29165",
+      "sim_chosen": 0.7148,
+      "sim_rejected": 0.7149,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 58,
+      "prompt_id": "ChatDoctor,10136",
+      "sim_chosen": 0.6584,
+      "sim_rejected": 0.744,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 59,
+      "prompt_id": "MedQA-Evol,5065-synthetic-1",
+      "sim_chosen": 0.6672,
+      "sim_rejected": 0.7836,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 60,
+      "prompt_id": "Medical-Instruct-120k,6099",
+      "sim_chosen": 0.8465,
+      "sim_rejected": 0.7773,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 61,
+      "prompt_id": "MedQA,2255",
+      "sim_chosen": 0.9124,
+      "sim_rejected": 0.8358,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 62,
+      "prompt_id": "MedQA,4352",
+      "sim_chosen": 0.5827,
+      "sim_rejected": 0.7358,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 63,
+      "prompt_id": "MedInstruct-52k,36433",
+      "sim_chosen": 0.7689,
+      "sim_rejected": 0.7544,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 64,
+      "prompt_id": "MedQA,8114",
+      "sim_chosen": 0.5954,
+      "sim_rejected": 0.7473,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 65,
+      "prompt_id": "MedQuad,11863",
+      "sim_chosen": 0.8357,
+      "sim_rejected": 0.8768,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 66,
+      "prompt_id": "ChatDoctor,16286",
+      "sim_chosen": 0.6791,
+      "sim_rejected": 0.7379,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 67,
+      "prompt_id": "ChatDoctor,9950",
+      "sim_chosen": 0.5721,
+      "sim_rejected": 0.6229,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 68,
+      "prompt_id": "PubMedQA,19111752",
+      "sim_chosen": 0.8335,
+      "sim_rejected": 0.8074,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 69,
+      "prompt_id": "MedQuad,1695",
+      "sim_chosen": 0.8668,
+      "sim_rejected": 0.8476,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 70,
+      "prompt_id": "Medical-Instruct-120k,10986",
+      "sim_chosen": 0.7047,
+      "sim_rejected": 0.7081,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 71,
+      "prompt_id": "ChatDoctor,18895",
+      "sim_chosen": 0.7909,
+      "sim_rejected": 0.8134,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 72,
+      "prompt_id": "TextBookQA,Neurology_Adams_5354",
+      "sim_chosen": 0.793,
+      "sim_rejected": 0.2751,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 73,
+      "prompt_id": "WikiInstruct,6460",
+      "sim_chosen": 0.8292,
+      "sim_rejected": 0.8218,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 74,
+      "prompt_id": "TextBookQA,InternalMed_Harrison_3204",
+      "sim_chosen": 0.6756,
+      "sim_rejected": 0.736,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 75,
+      "prompt_id": "TextBookQA,Surgery_Schwartz_10434",
+      "sim_chosen": 0.9077,
+      "sim_rejected": 0.8877,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 76,
+      "prompt_id": "MedMCQA,18942",
+      "sim_chosen": 0.7044,
+      "sim_rejected": 0.8396,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 77,
+      "prompt_id": "MedQA,2195",
+      "sim_chosen": 0.8931,
+      "sim_rejected": 0.8733,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 78,
+      "prompt_id": "MedInstruct-52k,42275",
+      "sim_chosen": 0.6671,
+      "sim_rejected": 0.7109,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 79,
+      "prompt_id": "WikiInstruct,11242",
+      "sim_chosen": 0.8011,
+      "sim_rejected": 0.7781,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 80,
+      "prompt_id": "MedInstruct-52k,23121",
+      "sim_chosen": 0.8623,
+      "sim_rejected": 0.8628,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 81,
+      "prompt_id": "MedInstruct-52k,17114",
+      "sim_chosen": 0.8484,
+      "sim_rejected": 0.7901,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 82,
+      "prompt_id": "MedQuad,10418",
+      "sim_chosen": 0.7021,
+      "sim_rejected": 0.7889,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 83,
+      "prompt_id": "PubMedQA,22776877",
+      "sim_chosen": 0.8048,
+      "sim_rejected": 0.788,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 84,
+      "prompt_id": "Medical-Instruct-120k,11131",
+      "sim_chosen": 0.7959,
+      "sim_rejected": 0.8241,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 85,
+      "prompt_id": "PubMedQA,24598051",
+      "sim_chosen": 0.8645,
+      "sim_rejected": 0.8636,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 86,
+      "prompt_id": "ChatDoctor,22474",
+      "sim_chosen": 0.8023,
+      "sim_rejected": 0.7055,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 87,
+      "prompt_id": "MedQA,6241",
+      "sim_chosen": 0.7793,
+      "sim_rejected": 0.6141,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 88,
+      "prompt_id": "PubMedQA,24766737",
+      "sim_chosen": 0.7578,
+      "sim_rejected": 0.8471,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 89,
+      "prompt_id": "WikiInstruct,17856",
+      "sim_chosen": 0.8032,
+      "sim_rejected": 0.7913,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 90,
+      "prompt_id": "MedQA-Evol,8601-synthetic-2",
+      "sim_chosen": 0.7185,
+      "sim_rejected": 0.8085,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 91,
+      "prompt_id": "TextBookQA,Surgery_Schwartz_12763",
+      "sim_chosen": 0.8447,
+      "sim_rejected": 0.7987,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 92,
+      "prompt_id": "WikiInstruct,231",
+      "sim_chosen": 0.6979,
+      "sim_rejected": 0.7388,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 93,
+      "prompt_id": "MedMCQA,11289",
+      "sim_chosen": 0.7511,
+      "sim_rejected": 0.6702,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 94,
+      "prompt_id": "MedInstruct-52k,6951",
+      "sim_chosen": 0.651,
+      "sim_rejected": 0.5841,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 95,
+      "prompt_id": "Medical-Instruct-120k,18662",
+      "sim_chosen": 0.8813,
+      "sim_rejected": 0.8894,
+      "prefers_chosen": false
+    },
+    {
+      "case_id": 96,
+      "prompt_id": "MedQA,7915",
+      "sim_chosen": 0.8558,
+      "sim_rejected": 0.8434,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 97,
+      "prompt_id": "MedQA-Evol,5815-synthetic-3",
+      "sim_chosen": 0.8267,
+      "sim_rejected": 0.7676,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 98,
+      "prompt_id": "MedQuad,10740",
+      "sim_chosen": 0.8639,
+      "sim_rejected": 0.8268,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 99,
+      "prompt_id": "Medical-Instruct-120k,5841",
+      "sim_chosen": 0.7272,
+      "sim_rejected": 0.4871,
+      "prefers_chosen": true
+    },
+    {
+      "case_id": 100,
+      "prompt_id": "ChatDoctor,22273",
+      "sim_chosen": 0.5321,
+      "sim_rejected": 0.4287,
+      "prefers_chosen": true
+    }
+  ],
+  "data_leakage_checked": true,
+  "train_test_overlap": 0,
+  "timestamp": "2026-06-17 17:17:54"
+}
