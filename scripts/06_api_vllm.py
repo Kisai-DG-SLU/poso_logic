@@ -4,6 +4,7 @@ Livrable 3 : Endpoint de démonstration API déployé
 """
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 import uvicorn
@@ -20,6 +21,8 @@ app = FastAPI(
     description="Agent IA de triage médical spécialisé via DPO (Qwen3-1.7B)",
     version="1.0.0",
 )
+
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 # Configuration
 BASE_MODEL = "Qwen/Qwen3-1.7B"
@@ -152,9 +155,9 @@ Réponse:"""
         with torch.no_grad():
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=256,
+                max_new_tokens=200,
                 temperature=0.7,
-                do_sample=True,
+                do_sample=False,
                 pad_token_id=tokenizer.pad_token_id,
             )
 
@@ -166,7 +169,7 @@ Réponse:"""
         priority = "medium"
         recommendation = "Consultation dans l'heure"
         confidence = 0.75
-        reasoning = response_text[:200]
+        reasoning = response_text[:1000]
 
         if "max" in response_text.lower() or "urgence vitale" in response_text.lower():
             priority = "max"
@@ -217,7 +220,7 @@ async def generate(request: GenerateRequest):
                 **inputs,
                 max_new_tokens=request.max_tokens,
                 temperature=request.temperature,
-                do_sample=True,
+                do_sample=False,
                 pad_token_id=tokenizer.pad_token_id,
             )
 

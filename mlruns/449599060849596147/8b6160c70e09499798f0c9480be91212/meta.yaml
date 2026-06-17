@@ -1,0 +1,15 @@
+artifact_uri: /mnt/prod/mlruns/poso_logic_triage_medical/8b6160c70e09499798f0c9480be91212/artifacts
+end_time: 1781650782100
+entry_point_name: ''
+experiment_id: '449599060849596147'
+lifecycle_stage: active
+run_id: 8b6160c70e09499798f0c9480be91212
+run_name: DPO_dpo_training_20260429_231026
+run_uuid: 8b6160c70e09499798f0c9480be91212
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1781650782091
+status: 3
+tags: []
+user_id: sophia

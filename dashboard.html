@@ -20,7 +20,7 @@ textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 button{width:100%;margin-top:1rem;padding:.8rem;background:var(--accent);color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:600;cursor:pointer}
 button:hover{background:#ff6b81}
 button:disabled{opacity:.5}
-.result{margin-top:1rem;padding:1rem;border-radius:8px;background:#111;border-left:3px solid var(--accent);min-height:100px;white-space:pre-wrap;font-size:.9rem;line-height:1.5}
+.result{margin-top:1rem;padding:1rem;border-radius:8px;background:#111;border-left:3px solid var(--accent);min-height:100px;max-height:300px;overflow-y:auto;white-space:pre-wrap;font-size:.9rem;line-height:1.5}
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:1rem}
 .metric{background:#111;padding:.8rem;border-radius:8px;text-align:center}
 .metric .val{font-size:1.3rem;font-weight:700;color:var(--green)}
@@ -79,7 +79,7 @@ if(!s)return;
 b.disabled=true;b.textContent='Analyse...';
 var st=Date.now();
 try{
-var r=await fetch(api+'/triage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symptoms:s,patient_age:parseInt(document.getElementById('age').value),priority_guess:document.getElementById('prio').value||null})});
+var r=await fetch(api+'/triage',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({symptoms:[s],patient_age:parseInt(document.getElementById('age').value),priority_guess:document.getElementById('prio').value||null})});
 var d=await r.json();
 show(d,Date.now()-st);
 }catch(e){
@@ -90,11 +90,11 @@ b.disabled=false;b.textContent='Analyser';
 function show(d,ms){
 reqs++;tt+=ms;
 var l=['URGENCE VITALE N1','URGENT N2','STANDARD N3','NON URGENT N4'];
-document.getElementById('result').innerHTML='<strong>'+l[(d.priority||3)-1]+'</strong> <small>('+ms+'ms)</small>\n\n'+(d.response||'');
+document.getElementById('result').innerHTML='<strong>'+l[({max:1,high:2,medium:3,low:4}[d.priority_level]||3)-1]+'</strong> <small>('+ms+'ms)</small><br><em>'+(d.recommendation||'')+'</em><br><small>'+(d.reasoning||'')+'</small>';
 document.getElementById('reqs').textContent=reqs;
 document.getElementById('lat').textContent=Math.round(tt/reqs)+' ms';
 var now=new Date().toLocaleTimeString();
-hist.unshift({t:now,p:d.priority||3,s:document.getElementById('symptoms').value.substring(0,60)+'...',ms:ms});
+hist.unshift({t:now,p:{max:1,high:2,medium:3,low:4}[d.priority_level]||3,s:document.getElementById('symptoms').value.substring(0,60)+'...',ms:ms});
 var h='';
 for(var i=0;i<Math.min(hist.length,15);i++)h+='<div class="hist-item"><span class="t">'+hist[i].t+'</span> <strong>N'+hist[i].p+'</strong> '+hist[i].s+' ('+hist[i].ms+'ms)</div>';
 document.getElementById('history').innerHTML=h||'Aucune requete';
