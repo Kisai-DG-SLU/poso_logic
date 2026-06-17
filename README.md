@@ -71,6 +71,7 @@ pixi run -e default python -m py_compile scripts/06_api_vllm.py
 | API vLLM (haute performance) | ✅ | `scripts/06_api_vllm.py` |
 | Évaluation du modèle | ✅ | `scripts/evaluate_dpo_model.py` |
 | Dashboard métriques (MLflow) | ✅ | `scripts/mlflow_tracker.py` + `mlflow ui` |
+| Courbes de loss DPO | ✅ | `docs/figures/dpo_loss_curve.png` (49 checkpoints réels) |
 
 ## Structure du projet
 
@@ -136,7 +137,7 @@ pixi run train-dpo
 # Lancement API (simple)
 pixi run api
 
-# Lancement API (vLLM)
+# Lancement API (vLLM - nécessite pip install vllm)
 pixi run api-vllm
 
 # Lancement API (transformers)
