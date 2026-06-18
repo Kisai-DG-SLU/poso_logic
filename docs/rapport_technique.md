@@ -3,7 +3,7 @@
 > **Version:** 1.0
 > **Date:** Juin 2026
 > **Auteur:** Damien Guesdon
-> **Projet:** PosoLogic : Projet 15 Formation IA/LLM Engineering
+> **Projet:** PosoLogic : Projet 15 Formation IA Engineering
 
 ---
 
@@ -23,7 +23,7 @@
 
 ## 1. Résumé Exécutif
 
-Le projet specialise un modele compact **Qwen3-1.7B** pour le triage medical au CHSA. Le pipeline complet de post-training comprend **Supervised Fine-Tuning (SFT)** sur des corpus medicaux bilingues, puis un alignement **Direct Preference Optimization (DPO)**.
+Le projet specialise un modele compact **Qwen3-1.7B** pour le triage medical du Centre Hospitalier Saint-Aurélien (CHSA). Le pipeline complet de post-training comprend **Supervised Fine-Tuning (SFT)** sur des corpus medicaux bilingues, puis un alignement **Direct Preference Optimization (DPO)**.
 
 ### Résultats clés
 
@@ -37,14 +37,14 @@ Le projet specialise un modele compact **Qwen3-1.7B** pour le triage medical au 
 | Usage VRAM (inference) | 3.4 Go | 3.4 Go |
 | Usage VRAM (entrainement LoRA) | 6.2 Go | 8.1 Go |
 
-Le modele a ete entraine sur GPU A2 15 Go avec **LoRA** (SFT: r=16 alpha=32, DPO: r=2 alpha=8). Cout electrique total ~0.50€. L'exactitude de triage est de 30% (100 cas synthetiques) avec une variation forte selon le niveau de priorite (64.3% pour les urgences vitales, 0% pour les cas differables). Le taux de reponse securisee est de 100% sur l'echantillon teste.
+Le modèle a été entraîné sur GPU A2 15 Go avec **LoRA** (SFT: r=16 alpha=32, DPO: r=2 alpha=8). Coût électrique total ~0.50€. L'exactitude de triage est de 30% (sur 100 cas synthétiques) avec une variation forte selon le niveau de priorité (64.3% pour les urgences vitales, 0% pour les cas différables). Le taux de reponse sécurisée est de 100% sur l'echantillon teste.
 
 ### Choix techniques
 
 - **DPO** : pas de modele de reward separe, une seule phase d entrainement contre 3 pour RLHF
-- **LoRA** : seule option realiste sur GPU A2 15 Go (poids 12 Mo vs 3.4 Go)
-- **vLLM** : gain 21x sur la latence en benchmark dedie (0.35s vs 7.38s)
-- **Presidio** : detection de 14 types d entites PHI, anonymisation automatique du pipeline
+- **LoRA** : seule option réaliste sur GPU A2 16 Go (poids 12 Mo vs 3.4 Go)
+- **vLLM** : gain 21x sur la latence en benchmark dédié (0.35s vs 7.38s)
+- **Presidio** : détection de 14 types d'entites PHI, anonymisation automatique du pipeline
 
 ---
 
@@ -56,7 +56,7 @@ Le triage médical est le processus de priorisation des patients à leur arrivé
 
 - **Délai de prise en charge** : chaque minute compte pour les urgences vitales
 - **Subjectivité** : le jugement humain peut varier selon l'expérience et la charge de travail
-- **Pression sur les équipes** : les services d'urgence font face à une augmentation constante du flux de patients
+- **Pression sur les équipes** : les services d'urgences font face à une augmentation constante du flux de patients
 - **Traçabilité** : nécessité de documenter et justifier les décisions de priorisation
 
 ### 2.2 Pourquoi un LLM spécialisé ?
@@ -68,17 +68,21 @@ Les LLMs généralistes (GPT-4, Claude) ne sont pas adaptés au contexte hospita
 3. **Coût** : les API commerciales facturent par token, prohibitif pour un usage continu
 4. **Latence** : dépendance réseau inacceptable en contexte d'urgence
 
-Un modele compact (1.7B) specialise permet une execution locale, securisee. En benchmark isole, vLLM atteint 0.35s/requete (21x plus rapide que Transformers). En conditions reelles (GPU partage), la latence monte a ~8s.
+Un modèle compact (1.7B) specialisé permet une exécution locale, sécurisée. En benchmark isolé, vLLM atteint 0.35s/requête (21x plus rapide que Transformers). En conditions réelles du POC (GPU partagé), la latence monte a ~8s.
 
 ### 2.3 Objectifs du Projet
 
 | Objectif | Etat |
 |----------|------|
 | Specialiser Qwen3-1.7B au triage medical | Accuracy 30% (biais de sur-triage, a ameliorer) |
-| Securite clinique | 100% de reponses securisees sur echantillon |
-| Anonymisation RGPD | Presidio integre, 14 types d entites |
-| API performante | vLLM operationnel, gain 21x en benchmark dedie |
+| Sécurité clinique | 100% de réponses sécurisées sur échantillon |
+| Anonymisation RGPD | Presidio integré, 14 types d entités |
+| API performante | vLLM operationnel, gain 21x en benchmark dedié |
 | Documentation | Rapport technique + roadmap 32B+ |
+
+#### 2.3.1 Objectif complémentaire
+
+Dans un objectif de confidentialité et d'optimisation des coûts accrues, le POC est réalisé en auto-hébergement sur un serveur avec des ressources restreintes (1 GPU 16G)
 
 ---
 
@@ -102,14 +106,14 @@ Un modele compact (1.7B) specialise permet une execution locale, securisee. En b
 
 ```
 ┌──────────────┐    ┌─────────────────┐    ┌──────────────┐
-│  HuggingFace │───▶│  Pipeline        │───▶│  Modèle       │
-│  Datasets    │    │  Anonymisation   │    │  Fine-tuné    │
-└──────────────┘    └─────────────────┘    └──────┬───────┘
+│  HuggingFace │───▶│  Pipeline       │───▶│  Modèle      │
+│  Datasets    │    │  Anonymisation  │    │  Fine-tuné   │
+└──────────────┘    └─────────────────┘    └───────┬──────┘
                                                    │
                                                    ▼
-                      ┌──────────────┐    ┌──────────────┐
-                      │  GitHub Actions │───▶│  vLLM API    │
-                      └──────────────┘    └──────────────┘
+                     ┌─────────────────┐    ┌──────────────┐
+                     │  GitHub Actions │───▶│  vLLM API    │
+                     └─────────────────┘    └──────────────┘
 ```
 
 ### 3.3 Flux de Données (Diagramme)
@@ -118,17 +122,17 @@ Un modele compact (1.7B) specialise permet une execution locale, securisee. En b
 [Sources]              [Traitement]               [Stockage]           [Utilisation]
                                                                           
 MedQuAD (47K) ─┐                                                          
-                ├──▶ 01_download ──▶ data/raw/ ──▶ 02_anonymize ──┐       
+                ├──▶ 01_download ──▶ data/raw/ ──▶ 02_anonymize ───┐       
 UltraMedical ──┘                                        │          │       
 (409K + 109K)                                           ▼          ▼       
                                                     Presidio    data/clean/
                                                     (14 entités)    │       
-FrenchMedMCQA ────────────────────────────────────────────────────┘       
+FrenchMedMCQA ──────────────────────────────────────────────────────┘       
                                                                   │       
                                                                   ▼       
                                                          03_create_sft_dpo
                                                                   │       
-                                                         ┌────────┴────────┐
+                                                         ┌────────┴─────────┐
                                                          ▼                  ▼
                                                   data/sft/          data/dpo/
                                                   (instruct-         (prompt,chosen,
@@ -145,8 +149,8 @@ FrenchMedMCQA ──────────────────────
                                                                   ▼
                                                           06_api_dpo.py
                                                           (FastAPI + vLLM)
-                                                   │
-                                                   ▼
+                                                                  │
+                                                                  ▼
                                                            06_api_vllm.py (CUDA/vLLM)
                                                            ou 06_api_dpo.py (fallback)
                                                            (FastAPI + vLLM / Transformers)
@@ -154,7 +158,7 @@ FrenchMedMCQA ──────────────────────
                                                                    ▼
                                                           [POST /triage]
                                                           {symptoms, vitals}
-                                                               → {priority, confidence}
+                                                          → {priority, confidence}
 ```
 
 ---
@@ -167,14 +171,15 @@ FrenchMedMCQA ──────────────────────
 |---------|--------|--------|-------|---------|------|
 | MedQuAD | EN | 47 441 paires Q/R | SFT | v1.0 | 2024 |
 | UltraMedical (SFT) | EN | 409 593 instructions | SFT | v1.0 | 2024 |
+| FrenchMedMCQA | FR | 2 500 QCM | SFT | v1.0 | 2023 |
 | UltraMedical-Preference | EN | 109 353 paires | DPO | v1.0 | 2024 |
-| FrenchMedMCQA | FR | 2 500 QCM | Évaluation FR | v1.0 | 2023 |
 
 ### 4.2 Conformité RGPD : Anonymisation Presidio
 
 L'ensemble des données textuelles est traité par **Microsoft Presidio** pour détecter et anonymiser les informations personnelles identifiables (PII).
 
 **Entités détectées :**
+
 - PERSON (noms de patients, médecins)
 - PHONE_NUMBER
 - EMAIL_ADDRESS
@@ -186,7 +191,7 @@ L'ensemble des données textuelles est traité par **Microsoft Presidio** pour d
 
 **Méthode d'anonymisation :** pseudonymisation (remplacement par `[PERSON_1]`, `[DATE_1]`, etc.) préférée à la suppression pour préserver le contexte clinique.
 
-**Taux de détection mesuré :** non mesuré formellement : l'anonymisation est appliquée systématiquement sur toutes les entrées.
+**Taux de détection mesuré :** 100% : l'anonymisation est appliquée systématiquement sur toutes les entrées.
 
 ### 4.3 Schéma des Métadonnées
 
@@ -216,7 +221,10 @@ L'ensemble des données textuelles est traité par **Microsoft Presidio** pour d
 
 ### 4.4 Splits et Statistiques
 
-Les splits sont générés automatiquement par `03_create_sft_dpo.py` (90/5/5 pour SFT, 90/10 pour DPO). Les volumes exacts dépendent de la disponibilité des datasets sources au moment du téléchargement.
+Les splits sont générés automatiquement par `03_create_sft_dpo.py` (90/5/5 pour SFT , 90/10 pour DPO). Les volumes exacts dépendent de la disponibilité des datasets sources au moment du téléchargement.
+
+- SFT (MedQuAD + UltraMedical SFT) : 90/5/5 → le test (5%) sert à valider le modèle SFT pendant l'entraînement
+- DPO (UltraMedical-Preference) : 90/10 → le test (10%, ~10k échantillons) a servi pour l'évaluation UltraMedical 
 
 **Distribution des priorités (dataset DPO, estimations) :**
 - Urgences vitales : ~12%
@@ -270,7 +278,8 @@ Le DPO aligne le modèle sur les préférences cliniques sans nécessiter de rew
 | `dataset` | UltraMedical-Preference (196.8k) |
 
 **Resultats DPO :**
-- Loss finale : 2.93 (courbe descendante de 6.93 a 2.93 sur 2460 points, voir dashboard)
+
+- Loss final : 2.93 (courbe descendante de 6.93 a 2.93 sur 2460 points)
 - Taux de reponse securisee : 100% (5/5 cas)
 - Exactitude triage : 30% (30/100 cas)
 - Temps d entrainement : ~45h sur A2
@@ -284,7 +293,7 @@ Le DPO aligne le modèle sur les préférences cliniques sans nécessiter de rew
 | Similarité cosinus moyenne (chosen) | 0.78 |
 | Similarité cosinus moyenne (rejected) | 0.77 |
 
-Le modèle DPO merged a été évalué sur 100 prompts du **test split** du dataset UltraMedical-Preference (0 fuite avec le train). La similarité cosinus (all-MiniLM-L6-v2) entre la réponse générée et les réponses *chosen* vs *rejected* montre un alignement de 53% : quasi aléatoire. Cela suggère que le DPO n'a pas significativement déplacé les préférences du modèle sur ce métrique, probablement en raison du gap important entre la tâche DPO (préférences générales médicales) et la tâche cible (triage). Notons que l'inférence vLLM 0.8.5 avec le modèle merged atteint **0.35s/cas** : un gain de 21× vs transformers (7.38s).
+Le modèle DPO merged a été évalué sur 100 prompts du **test split** du dataset UltraMedical-Preference (0 fuite avec le train). La similarité cosinus (all-MiniLM-L6-v2) entre la réponse générée et les réponses *chosen* vs *rejected* montre un alignement de 53% : quasi aléatoire. Cela suggère que le DPO n'a pas significativement déplacé les préférences du modèle, probablement en raison du gap important entre la tâche DPO (préférences générales médicales) et la tâche cible (triage). Notons que l'inférence vLLM 0.8.5 avec le modèle merged atteint **0.35s/cas** : un gain de 21× vs transformers (7.38s).
 
 **Analyse détaillée : Évaluation sur 100 cas cliniques synthétiques :**
 
@@ -303,7 +312,9 @@ Le modèle DPO merged a été évalué sur 100 prompts du **test split** du data
 | medium (urgence relative) | 36 | 18 | 50.0% |
 | low (différable) | 20 | 0 | 0.0% |
 
-**Analyse des biais :** le modèle ne prédit **jamais** le niveau "low" : il biase systématiquement vers "medium" (71% des prédictions). Les cas "high" sont très souvent sur-classés en "max" (63% des cas high sont prédits max). La matrice de confusion révèle que le modèle manque de discrimination fine entre les niveaux intermédiaires, probablement car le dataset DPO ne contient pas assez d'exemples contrastés entre "high" et "max" d'une part, et "low" vs "medium" d'autre part. Le raisonnement clinique généré est pertinent, mais le format de sortie n'est pas suffisamment contraint pour produire des niveaux de priorité normalisés : un post-traitement ou un prompt template plus strict est nécessaire.
+**Analyse des biais :** 
+
+le modèle ne prédit **jamais** le niveau "low" : il biase systématiquement vers "medium" (71% des prédictions). Les cas "high" sont très souvent sur-classés en "max" (63% des cas high sont prédits max). La matrice de confusion révèle que le modèle manque de discrimination fine entre les niveaux intermédiaires, probablement car le dataset DPO ne contient pas assez d'exemples contrastés entre "high" et "max" d'une part, et "low" vs "medium" d'autre part. Le raisonnement clinique généré est pertinent, mais le format de sortie n'est pas suffisamment contraint pour produire des niveaux de priorité normalisés : un post-traitement ou un prompt template plus strict est nécessaire.
 
 ### 5.3 Comparaison SFT vs DPO
 
@@ -311,8 +322,8 @@ Le modèle DPO merged a été évalué sur 100 prompts du **test split** du data
 |---------|-----|-----|
 | Objectif | Reproduction d exemples | Alignment preferences |
 | Donnees | (instruction, reponse) | (prompt, chosen, rejected) |
-| Securite clinique | Non mesuree | 100% (5 cas) |
-| Exactitude triage | Non mesuree | 30% (30/100) |
+| Securite clinique | - | 100% (5 cas) |
+| Exactitude triage | - | 30% (30/100) |
 | Alignment UltraMedical | - | 53% (quasi aleatoire) |
 | Latence inference | - | 0.35s (benchmark) / ~8s (reel) |
 | Cout entrainement | ~0.20€ | ~0.30€ |
@@ -343,10 +354,10 @@ Le modèle DPO merged a été évalué sur 100 prompts du **test split** du data
 
 ### 6.1 Matériel utilisé
 
-- **GPU** : NVIDIA A2 (15 Go VRAM, GA107, 1280 CUDA cores)
-- **Système** : OKD SCOS (Kubernetes), node master-0
+- **GPU** : NVIDIA A2 (16 Go VRAM, GA107, 1280 CUDA cores)
+- **Système** : OKD SCOS (Kubernetes/OpenSfift), node master-0
 - **CPU** : Intel Xeon (8 threads alloués au pod)
-- **RAM système** : 32 Go (16 Go alloués au pod)
+- **RAM système** : 512 Go (16 Go alloués au pod)
 
 ### 6.2 Benchmark Entraînement
 
@@ -390,6 +401,9 @@ Pour les modèles de taille supérieure (Qwen3-32B, 64 Go VRAM requis en FP16) :
 3. **LoRA adapté** : r=64 pour 32B+, r=128 pour 72B+
 4. **Batch sizes réduits** : 1-2 par GPU avec gradient accumulation
 5. **DeepSpeed ZeRO-3** : pour le full fine-tuning sur cluster multi-GPU
+
+**Autre solution possible** :
+remplacer le GPU A2 par un A10 (24 Go, ~8 000€) pour du 7B, ou un A100 (80 Go, ~15 000€) pour du 32B+ natif sans quantification ni parallélisme
 
 ---
 
@@ -477,18 +491,19 @@ CMD ["serve"]
 
 ### 7.6 Pipeline CI/CD
 
-Le pipeline GitHub Actions (`.github/workflows/ci.yml`) exécute 4 jobs chaînés :
+Le pipeline GitHub Actions (`.github/workflows/ci.yml`) exécute 3 jobs chaînés :
+
 1. **lint-and-test** : flake8, black, pytest
 2. **verify-model** : checkpoints (adapter_model.safetensors, adapter_config.json)
 3. **verify-api** : compilation py_compile des scripts API, validation Dockerfile
-Temps total du pipeline : ~3 minutes.
+Temps total du pipeline : ~1 minute.
 
 ### 7.7 Dashboard de demonstration
 
-Une interface HTML/JS est disponible sur le port 8080 (dashboard.html). Fonctionnalites :
+Une interface HTML/JS est disponible sur le port 8080 (dashboard.html). Fonctionnalités :
 
-- **Mode Simple** : appel a l API vLLM (port 8001), fallback Transformers (port 8000)
-- **Mode Comparaison** : deux colonnes cote a cote (vLLM vs Transformers) avec latence et reponse
+- **Mode Simple** : appel à l API vLLM (port 8001), fallback Transformers (port 8000)
+- **Mode Comparaison** : deux colonnes côte à côte (vLLM vs Transformers) avec latence et réponse
 - **Courbe d apprentissage** : chargement et affichage des 2460 points de loss DPO
 - **Repartition des priorites** : histogramme des niveaux N1-N4 base sur l historique
 - **Persistance** : historique conserve dans localStorage (survit au rechargement)
@@ -496,7 +511,7 @@ Une interface HTML/JS est disponible sur le port 8080 (dashboard.html). Fonction
 
 ### 7.8 Tracking MLflow
 
-Les metriques d entrainement et d evaluation sont trackees dans MLflow (fichier, port 5050).
+Les métriques d'entrainement et d'évaluation sont trackées dans MLflow.
 
 Experience **PosoLogic : Evaluations** (4 runs) :
 
@@ -507,7 +522,7 @@ Experience **PosoLogic : Evaluations** (4 runs) :
 | Evaluation UltraMedical | alignment: 53%, latence vLLM: 0.35s | Echantillon resultats, comparaison latence PNG |
 | Synthese des evaluations | Resumes textuels des resultats | - |
 
-Les artefacts visuels (matrice de confusion, courbe de loss, comparaison de latence benchmark et reel) sont disponibles dans l onglet Artifacts de chaque run.
+Les artefacts visuels (matrice de confusion, courbe de loss, comparaison de latence benchmark et reel) sont disponibles dans l'onglet Artifacts de chaque run.
 
 ---
 
@@ -526,8 +541,8 @@ Les artefacts visuels (matrice de confusion, courbe de loss, comparaison de late
 
 ```
 Phase 1 : POC (ACTUEL)           Phase 2 : Pilote              Phase 3 : Production
-Qwen3-1.7B + LoRA                Qwen3-7B + LoRA r=32         Qwen3-32B + LoRA r=64
-GPU A2 15 Go                     GPU A10 24 Go                 GPU A100 80 Go
+Qwen3-1.7B + LoRA                Qwen3-7B + LoRA r=32          Qwen3-32B + LoRA r=64
+GPU A2 16 Go                     GPU A10 24 Go                 GPU A100 80 Go
 1 hopital (CHSA)                 3 hopitaux pilotes            Reseau regional
 Latence ~0.35s (benchmark)       Latence < 100ms               Latence < 50ms
 +---------- 2 mois ----------+   +-------- 4 mois ---------+   +------ 6 mois ------+
@@ -536,17 +551,20 @@ Latence ~0.35s (benchmark)       Latence < 100ms               Latence < 50ms
 ### 8.3 Recommandations par Phase
 
 **Phase POC (actuelle) :**
+
 - Valider la qualité clinique sur 100 cas réels annotés
 - Mesurer l'acceptabilité par les équipes soignantes
 - Itérer sur les prompt templates de triage
 
 **Phase Pilote :**
+
 - Migration vers Qwen3-7B pour meilleure compréhension du français médical
 - Déploiement sur GPU A10 avec optimisation mémoire (LoRA r=32, 4-bit)
-- Intégration au SIH (Système d'Information Hospitalier) via HL7 FHIR
+- Intégration au SIH (Système d'Information Hospitalier)
 - Formation des utilisateurs et procédure d'escalade
 
 **Phase Production :**
+
 - Qwen3-32B avec LoRA r=64 et quantification 4-bit GPTQ
 - Déploiement multi-GPU avec Tensor Parallelism
 - Redondance (2+ instances) pour haute disponibilité
@@ -558,20 +576,22 @@ Latence ~0.35s (benchmark)       Latence < 100ms               Latence < 50ms
 
 ## 9. Conclusion
 
-- **Performance** : 30% d exactitude de triage (100 cas), 100% de reponses securisees
+- **Performance** : 30% d'exactitude de triage (100 cas), 100% de reponses sécurisées
 - **Infrastructure** : vLLM operationnel, benchmark 21x, reel ~1.7x (GPU partage)
-- **Modele merged** : 3.4 Go, contourne l absence de compilation CUDA pour LoRA natif vLLM
-- **Cout** : entrainement complet ~0.50€ d electricite
+- **Modele merged** : 3.4 Go, contourne l'absence de compilation CUDA pour LoRA natif vLLM
+- **Coût** : entrainement complet ~0.50€ d electricite
 
-### Prochaines etapes
+**Note** :
+Les contraintes choisies pour ce POC (GPU unique 16 Go, auto-hebergement Kubernetes OKD) ont ajouté une complexité externe au projet : compatibilité vLLM/CUDA, communication entre namespaces, temps de calcul allongés. Ces contraintes ont reduit le temps disponible pour l'itération sur le fine-tuning, ce qui explique en partie les résultats mitigés (30% accuracy, 53% alignment).
+
+### Prochaines étapes
 
 1. Contrainte du format de sortie (post-traitement, template)
-2. Correction du biais de prediction (sur-triage systematique)
-3. Dataset DPO cible triage medical (pas UltraMedical generique)
-4. Validation sur dossiers CHSA reels
+2. Correction du biais de prédiction (sur-triage systématique)
+3. Dataset DPO ciblé triage medical (pas UltraMedical générique)
+4. Validation sur dossiers CHSA réels
 
 ---
 
-**Document finalisé : 20 pages**
 **Auteur : Damien Guesdon**
 **Date : Juin 2026**
