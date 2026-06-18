@@ -35,7 +35,7 @@ from pathlib import Path
 
 # Configuration
 BASE_MODEL = "Qwen/Qwen3-1.7B"
-ADAPTER_PATH = str(Path("/app/models/checkpoints/dpo_final").resolve()) if Path("/app/models/checkpoints/dpo_final").exists() else "/mnt/prod/models/checkpoints/dpo_a2_optimized/final"
+MERGED_PATH = "/mnt/prod/models/merged_dpo_vllm"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 # Variables globales pour le modèle
@@ -84,19 +84,13 @@ async def load_model():
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
 
-        logger.info(f"Chargement du modèle de base {BASE_MODEL}")
-        base_model = AutoModelForCausalLM.from_pretrained(
-            BASE_MODEL,
+        logger.info(f"Chargement du modèle merged depuis {MERGED_PATH}")
+        model = AutoModelForCausalLM.from_pretrained(
+            MERGED_PATH,
             torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
             device_map="auto" if torch.cuda.is_available() else None,
             trust_remote_code=True,
         )
-
-        logger.info(f"Chargement de l'adaptateur LoRA depuis {ADAPTER_PATH}")
-        model = PeftModel.from_pretrained(base_model, ADAPTER_PATH)
-
-        if not torch.cuda.is_available():
-            model = model.to("cpu")
 
         model.eval()
 
