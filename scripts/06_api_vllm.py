@@ -36,7 +36,7 @@ try:
 except ImportError:
     logger.warning("vLLM non installé - utiliser Docker (cf. README)")
 
-TRACE_LOG = Path("/app/logs/api_trace.jsonl")
+TRACE_LOG = Path("/app/logs/api_trace.jsonl") if Path("/app/logs").exists() else Path("/mnt/prod/logs/api_trace.jsonl")
 TRACE_LOG.parent.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(
@@ -282,4 +282,4 @@ if __name__ == "__main__":
         logger.error("vLLM requis. Installez: pip install vllm==0.8.5")
         logger.error("Ou utilisez Docker: docker build -t posologic . && docker run --gpus all posologic")
         exit(1)
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=8001, log_level="info")

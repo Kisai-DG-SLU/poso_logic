@@ -20,7 +20,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-TRACE_LOG = Path("/app/logs/api_trace.jsonl")
+TRACE_LOG = Path("/app/logs/api_trace.jsonl") if Path("/app/logs").exists() else Path("/mnt/prod/logs/api_trace.jsonl")
 TRACE_LOG.parent.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(

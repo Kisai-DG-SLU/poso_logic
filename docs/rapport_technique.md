@@ -1,9 +1,9 @@
-# Rapport Technique — Fine-Tuning LLM pour Agent de Triage Médical CHSA
+# Rapport Technique : Fine-Tuning LLM pour Agent de Triage Médical CHSA
 
 > **Version:** 1.0
 > **Date:** Juin 2026
 > **Auteur:** Damien Guesdon
-> **Projet:** PosoLogic — Projet 15 Formation IA/LLM Engineering
+> **Projet:** PosoLogic : Projet 15 Formation IA/LLM Engineering
 
 ---
 
@@ -16,35 +16,35 @@
 5. [Stratégie de Fine-Tuning](#5-stratégie-de-fine-tuning)
 6. [Optimisation GPU et Performance](#6-optimisation-gpu-et-performance)
 7. [Déploiement et Monitoring](#7-déploiement-et-monitoring)
-8. [Recommandations Stratégiques — Échelle 32B+](#8-recommandations-stratégiques---échelle-32b)
-9. [Conclusion et Perspectives](#9-conclusion-et-perspectives)
+8. [Recommandations Stratégiques : Échelle 32B+](#8-recommandations-stratégiques---échelle-32b)
+9. [Conclusion](#9-conclusion)
 
 ---
 
 ## 1. Résumé Exécutif
 
-Le projet PosoLogic a pour objectif de spécialiser un modèle de langage compact — **Qwen3-1.7B** — pour l'assistance au triage médical au Centre Hospitalier de Saint-Astier (CHSA). Le pipeline complet de post-training a été mis en œuvre : **Supervised Fine-Tuning (SFT)** sur des corpus médicaux bilingues, suivi d'un alignement par **Direct Preference Optimization (DPO)** pour garantir la sécurité clinique des recommandations.
+Le projet specialise un modele compact **Qwen3-1.7B** pour le triage medical au CHSA. Le pipeline complet de post-training comprend **Supervised Fine-Tuning (SFT)** sur des corpus medicaux bilingues, puis un alignement **Direct Preference Optimization (DPO)**.
 
 ### Résultats clés
 
 | Indicateur | SFT | DPO |
 |------------|-----|-----|
-| Loss d'entraînement finale | N/A (log non conservé) | 0.48 (vérifié sur 49 checkpoints) |
-| Perplexité (validation) | N/A | 1.61 (exp(loss)) |
-| Taux de réponse sécurisée | N/A | 100% (échantillon 5 cas) |
+| Loss d'entraînement finale | N/A | 2.93 (2460 points, 6.93>2.93) |
+| Taux de réponse sécurisée | N/A | 100% (5 cas) |
 | Exactitude de triage | N/A | 30% (30/100 cas) |
-| Latence d'inférence (transfomers) | — | ~7.4s/req |
-| Usage VRAM (inférence) | 3.4 Go | 3.4 Go |
-| Usage VRAM (entraînement LoRA) | 6.2 Go | 8.1 Go |
+| Latence inference (benchmark isole) | - | 0.35s/cas (vLLM) ou 7.38s (Transformers) |
+| Latence inference (GPU partage, reel) | - | ~8s (vLLM) ou ~14s (Transformers) |
+| Usage VRAM (inference) | 3.4 Go | 3.4 Go |
+| Usage VRAM (entrainement LoRA) | 6.2 Go | 8.1 Go |
 
-L'approche **LoRA** (r=16, alpha=32) a permis de fine-tuner le modèle sur un GPU NVIDIA A2 de 15 Go sans quantification, avec un coût d'entraînement total estimé à ~0.50€ (électricité). Le modèle final atteint un taux de réponse sécurisée de 100% sur l'échantillon testé. L'exactitude de triage (bon niveau de priorité) est mesurée à 30% sur un échantillon de 100 cas cliniques synthétiques, avec une forte variation selon le niveau de priorité (64.3% pour les urgences vitales, 0% pour les cas différables).
+Le modele a ete entraine sur GPU A2 15 Go avec **LoRA** (SFT: r=16 alpha=32, DPO: r=2 alpha=8). Cout electrique total ~0.50€. L'exactitude de triage est de 30% (100 cas synthetiques) avec une variation forte selon le niveau de priorite (64.3% pour les urgences vitales, 0% pour les cas differables). Le taux de reponse securisee est de 100% sur l'echantillon teste.
 
-### Choix technologiques justifiés
+### Choix techniques
 
-- **DPO plutôt que RLHF** : évite l'entraînement d'un modèle de reward séparé, réduit la complexité et le risque de reward hacking dans un domaine sensible
-- **LoRA plutôt que full fine-tuning** : adapté aux contraintes GPU (15 Go), temps d'entraînement divisé par 4, stockage des adaptateurs (12 Mo vs 3.4 Go)
-- **vLLM pour l'inférence** : throughput ~4.5x supérieur à HuggingFace standard, batching automatique (déploiement Docker)
-- **Presidio pour l'anonymisation** : solution Microsoft éprouvée, 14 entités détectées, conforme RGPD
+- **DPO** : pas de modele de reward separe, une seule phase d entrainement contre 3 pour RLHF
+- **LoRA** : seule option realiste sur GPU A2 15 Go (poids 12 Mo vs 3.4 Go)
+- **vLLM** : gain 21x sur la latence en benchmark dedie (0.35s vs 7.38s)
+- **Presidio** : detection de 14 types d entites PHI, anonymisation automatique du pipeline
 
 ---
 
@@ -68,17 +68,17 @@ Les LLMs généralistes (GPT-4, Claude) ne sont pas adaptés au contexte hospita
 3. **Coût** : les API commerciales facturent par token, prohibitif pour un usage continu
 4. **Latence** : dépendance réseau inacceptable en contexte d'urgence
 
-Un modèle compact (1.7B paramètres) spécialisé par fine-tuning permet une exécution **locale, sécurisée et rapide** (0.35s par requête avec vLLM 0.8.5, 21× plus rapide que Transformers).
+Un modele compact (1.7B) specialise permet une execution locale, securisee. En benchmark isole, vLLM atteint 0.35s/requete (21x plus rapide que Transformers). En conditions reelles (GPU partage), la latence monte a ~8s.
 
 ### 2.3 Objectifs du Projet
 
-| Objectif | Critère de succès |
-|----------|-------------------|
-| Spécialiser Qwen3-1.7B au triage médical | Accuracy > 90% sur le dataset de test |
-| Garantir la sécurité clinique | Taux de réponse dangereuse < 1% |
-| Anonymiser les données (RGPD) | 100% des entités PHI détectées et masquées |
-| Déployer une API performante | Latence 0.35s, throughput 2.86 req/s (vLLM A2) |
-| Documenter pour passage à l'échelle | Rapport technique complet + roadmap 32B+ |
+| Objectif | Etat |
+|----------|------|
+| Specialiser Qwen3-1.7B au triage medical | Accuracy 30% (biais de sur-triage, a ameliorer) |
+| Securite clinique | 100% de reponses securisees sur echantillon |
+| Anonymisation RGPD | Presidio integre, 14 types d entites |
+| API performante | vLLM operationnel, gain 21x en benchmark dedie |
+| Documentation | Rapport technique + roadmap 32B+ |
 
 ---
 
@@ -86,17 +86,17 @@ Un modèle compact (1.7B paramètres) spécialisé par fine-tuning permet une ex
 
 ### 3.1 Stack Technologique
 
-| Composant | Technologie | Version | Justification |
-|-----------|-------------|---------|---------------|
-| Modèle de base | Qwen3-1.7B | - | Compact, bilingue EN/FR, performances SOTA pour sa taille |
-| Fine-Tuning | LoRA (PEFT) | PEFT 0.19+ | Optimisation mémoire, rapidité d'entraînement |
-| Alignement | DPO | TRL 0.11.4 | Préférence optimization sans reward model |
-| Inférence | vLLM | 0.8.5 | PagedAttention, continuous batching, merged model |
-| Inférence (fallback) | Transformers + PEFT | 4.51.0 | Développement sans dépendance vLLM |
-| Anonymisation | Microsoft Presidio | 2.2 | Détection 14 types d'entités, pseudonymisation |
-| Environnement | pixi | 0.67 | Reproductibilité, lock file, pas de dépendances système |
-| CI/CD | GitHub Actions | - | Pipeline multi-plateforme, tests automatisés |
-| API | FastAPI + uvicorn | - | Async, validation Pydantic, OpenAPI auto |
+| Composant | Technologie | Version |
+|-----------|-------------|---------|
+| Modele de base | Qwen3-1.7B | - |
+| Fine-Tuning | LoRA (PEFT) | PEFT 0.19+ |
+| Alignment | DPO | TRL 0.11.4 |
+| Inference | vLLM | 0.8.5 |
+| Fallback inference | Transformers | 4.51.0 |
+| Anonymisation | Microsoft Presidio | 2.2 |
+| Environnement | pixi | 0.67 |
+| CI/CD | GitHub Actions | - |
+| API | FastAPI + uvicorn | - |
 
 ### 3.2 Architecture Système
 
@@ -170,7 +170,7 @@ FrenchMedMCQA ──────────────────────
 | UltraMedical-Preference | EN | 109 353 paires | DPO | v1.0 | 2024 |
 | FrenchMedMCQA | FR | 2 500 QCM | Évaluation FR | v1.0 | 2023 |
 
-### 4.2 Conformité RGPD — Anonymisation Presidio
+### 4.2 Conformité RGPD : Anonymisation Presidio
 
 L'ensemble des données textuelles est traité par **Microsoft Presidio** pour détecter et anonymiser les informations personnelles identifiables (PII).
 
@@ -186,22 +186,22 @@ L'ensemble des données textuelles est traité par **Microsoft Presidio** pour d
 
 **Méthode d'anonymisation :** pseudonymisation (remplacement par `[PERSON_1]`, `[DATE_1]`, etc.) préférée à la suppression pour préserver le contexte clinique.
 
-**Taux de détection mesuré :** non mesuré formellement — l'anonymisation est appliquée systématiquement sur toutes les entrées.
+**Taux de détection mesuré :** non mesuré formellement : l'anonymisation est appliquée systématiquement sur toutes les entrées.
 
 ### 4.3 Schéma des Métadonnées
 
 ```json
 {
-    "instruction": "str — Question/instruction pour le modèle",
-    "response": "str — Réponse attendue du modèle",
-    "source": "str — Source du dataset (frenchmedmcqa, medquad, ultramedical)",
-    "language": "str — Langue (fr, en)",
-    "symptoms": ["list — Symptômes décrits"],
-    "antecedents": ["list — Antécédents médicaux"],
-    "constantes": ["list — Constantes vitales (PA, FC, SpO2, T°)"],
-    "priority_level": "str — Niveau de priorité (max, high, medium, low)",
-    "confidence_score": "float — Score de confiance (0-1)",
-    "category": "str — Catégorie médicale (cardiologie, neurologie, etc.)"
+    "instruction": "str : Question/instruction pour le modèle",
+    "response": "str : Réponse attendue du modèle",
+    "source": "str : Source du dataset (frenchmedmcqa, medquad, ultramedical)",
+    "language": "str : Langue (fr, en)",
+    "symptoms": ["list : Symptômes décrits"],
+    "antecedents": ["list : Antécédents médicaux"],
+    "constantes": ["list : Constantes vitales (PA, FC, SpO2, T°)"],
+    "priority_level": "str : Niveau de priorité (max, high, medium, low)",
+    "confidence_score": "float : Score de confiance (0-1)",
+    "category": "str : Catégorie médicale (cardiologie, neurologie, etc.)"
 }
 ```
 
@@ -255,35 +255,25 @@ Le SFT constitue la première phase : le modèle apprend à reproduire le format
 
 Le DPO aligne le modèle sur les préférences cliniques sans nécessiter de reward model séparé. Contrairement au RLHF, le DPO optimise directement la politique du modèle à partir de paires (chosen, rejected).
 
-**Pourquoi DPO plutôt que RLHF pour le domaine médical ?**
+**Configuration DPO finale :**
 
-1. **Sécurité** : pas de reward hacking possible (le modèle ne peut pas apprendre à tromper un reward model)
-2. **Simplicité** : une seule phase d'entraînement au lieu de 3 (SFT → Reward Model → PPO)
-3. **Stabilité** : pas d'oscillations de politique comme en PPO
-4. **Données** : les préférences médicales sont plus faciles à exprimer sous forme de paires que de scores absolus
-5. **Coût** : temps d'entraînement réduit de 60% par rapport à un pipeline RLHF complet
+| Hyperparametre | Valeur |
+|----------------|--------|
+| `beta` | 0.1 |
+| `learning_rate` | 1e-6 |
+| `num_epochs` | 1 |
+| `batch_size` (effectif) | 8 (1 x 8 accumulation) |
+| `max_seq_length` | 128 |
+| `lora_r` | 2 |
+| `lora_alpha` | 8 |
+| `target_modules` | q_proj, v_proj |
+| `dataset` | UltraMedical-Preference (196.8k) |
 
-**Configuration DPO finale (dpo_a2_optimized) :**
-
-| Hyperparamètre | Valeur | Justification |
-|----------------|--------|---------------|
-| `beta` | 0.1 | Force de la pénalité KL (standard DPO) |
-| `learning_rate` | 1e-5 | Plus faible que SFT (affinage) |
-| `num_epochs` | 2 | Évite overfitting sur préférences |
-| `batch_size` (effectif) | 8 (2 × 4 accumulation) | Contrainte VRAM |
-| `max_seq_length` | 2048 | Inclut prompt + chosen + rejected |
-| `lora_r` | 16 | Identique SFT |
-| `lora_alpha` | 32 | Identique SFT |
-| `target_modules` | q_proj, k_proj, v_proj, o_proj | Modules d'attention uniquement (suffisant pour DPO) |
-| `logging_steps` | 25 | Granularité fine pour suivi loss |
-| `save_steps` | 200 | Checkpoints fréquents |
-
-**Résultats DPO (vérifiés sur 49 checkpoints, steps 500 → 24500) :**
-- Loss finale : 0.48 (courbe descendante de 0.56 → 0.48)
-- Perplexité : 1.61 (exp(loss))
-- Taux de réponse sécurisée sur échantillon : 100% (5/5 cas sûrs)
-- Exactitude triage : 30% (30/100 cas corrects)
-- Temps d'entraînement : ~45h sur A2
+**Resultats DPO :**
+- Loss finale : 2.93 (courbe descendante de 6.93 a 2.93 sur 2460 points, voir dashboard)
+- Taux de reponse securisee : 100% (5/5 cas)
+- Exactitude triage : 30% (30/100 cas)
+- Temps d entrainement : ~45h sur A2
 
 **Évaluation UltraMedical-Preference (100 prompts test set, vLLM) :**
 
@@ -294,15 +284,15 @@ Le DPO aligne le modèle sur les préférences cliniques sans nécessiter de rew
 | Similarité cosinus moyenne (chosen) | 0.78 |
 | Similarité cosinus moyenne (rejected) | 0.77 |
 
-Le modèle DPO merged a été évalué sur 100 prompts du **test split** du dataset UltraMedical-Preference (0 fuite avec le train). La similarité cosinus (all-MiniLM-L6-v2) entre la réponse générée et les réponses *chosen* vs *rejected* montre un alignement de 53% — quasi aléatoire. Cela suggère que le DPO n'a pas significativement déplacé les préférences du modèle sur ce métrique, probablement en raison du gap important entre la tâche DPO (préférences générales médicales) et la tâche cible (triage). Notons que l'inférence vLLM 0.8.5 avec le modèle merged atteint **0.35s/cas** — un gain de 21× vs transformers (7.38s).
+Le modèle DPO merged a été évalué sur 100 prompts du **test split** du dataset UltraMedical-Preference (0 fuite avec le train). La similarité cosinus (all-MiniLM-L6-v2) entre la réponse générée et les réponses *chosen* vs *rejected* montre un alignement de 53% : quasi aléatoire. Cela suggère que le DPO n'a pas significativement déplacé les préférences du modèle sur ce métrique, probablement en raison du gap important entre la tâche DPO (préférences générales médicales) et la tâche cible (triage). Notons que l'inférence vLLM 0.8.5 avec le modèle merged atteint **0.35s/cas** : un gain de 21× vs transformers (7.38s).
 
-**Analyse détaillée — Évaluation sur 100 cas cliniques synthétiques :**
+**Analyse détaillée : Évaluation sur 100 cas cliniques synthétiques :**
 
-| Métrique | Transformers | vLLM 0.8.5 |
-|----------|-------------|-------------|
-| Accuracy globale | 30.0% (30/100) | 30.0% (30/100) |
-| Latence moyenne | 7.38s/cas | **0.35s/cas** |
-| Débit (req/s) | ~0.14 | **~2.86** |
+| Metrique | Transformers (benchmark isole) | vLLM (benchmark isole) | Reel (GPU partage) |
+|----------|-------------------------------|----------------------|-------------------|
+| Accuracy globale | 30.0% | 30.0% | 30.0% |
+| Latence moyenne | 7.38s/cas | **0.35s/cas** | ~8s (vLLM) / ~14s (T) |
+| Debit (req/s) | ~0.14 | ~2.86 | ~0.12 / ~0.07 |
 
 **Résultats par niveau de priorité :**
 
@@ -313,24 +303,19 @@ Le modèle DPO merged a été évalué sur 100 prompts du **test split** du data
 | medium (urgence relative) | 36 | 18 | 50.0% |
 | low (différable) | 20 | 0 | 0.0% |
 
-**Analyse des biais :** le modèle ne prédit **jamais** le niveau "low" — il biase systématiquement vers "medium" (71% des prédictions). Les cas "high" sont très souvent sur-classés en "max" (63% des cas high sont prédits max). La matrice de confusion révèle que le modèle manque de discrimination fine entre les niveaux intermédiaires, probablement car le dataset DPO ne contient pas assez d'exemples contrastés entre "high" et "max" d'une part, et "low" vs "medium" d'autre part. Le raisonnement clinique généré est pertinent, mais le format de sortie n'est pas suffisamment contraint pour produire des niveaux de priorité normalisés — un post-traitement ou un prompt template plus strict est nécessaire.
+**Analyse des biais :** le modèle ne prédit **jamais** le niveau "low" : il biase systématiquement vers "medium" (71% des prédictions). Les cas "high" sont très souvent sur-classés en "max" (63% des cas high sont prédits max). La matrice de confusion révèle que le modèle manque de discrimination fine entre les niveaux intermédiaires, probablement car le dataset DPO ne contient pas assez d'exemples contrastés entre "high" et "max" d'une part, et "low" vs "medium" d'autre part. Le raisonnement clinique généré est pertinent, mais le format de sortie n'est pas suffisamment contraint pour produire des niveaux de priorité normalisés : un post-traitement ou un prompt template plus strict est nécessaire.
 
 ### 5.3 Comparaison SFT vs DPO
 
-| Critère | SFT | DPO |
+| Critere | SFT | DPO |
 |---------|-----|-----|
-| Objectif | Reproduction d'exemples | Alignement sur préférences |
-| Données | (instruction, réponse) | (prompt, chosen, rejected) |
-| Complexité | + (simple) | ++ (modéré) |
-| Qualité factuelle | Bonne | Bonne |
-| Sécurité clinique | Non mesurée | 100% (5 cas) |
-| Exactitude triage | Non mesurée | 30% (30/100) |
-| Alignement préférences (UltraMedical) | — | 53% (quasi aléatoire) |
-| Perplexité | N/A | 1.61 |
-| Latence inférence | — | 0.35s/cas (vLLM 0.8.5) |
-| Coût entraînement | ~0.20€ | ~0.30€ |
-
-**Conclusion :** le DPO apporte un gain qualitatif notable en sécurité pour un surcoût modeste, mais l'alignement sur les préférences UltraMedical reste quasi aléatoire (53%). Le gain de performance vLLM (21×) est le facteur clé pour le déploiement.
+| Objectif | Reproduction d exemples | Alignment preferences |
+| Donnees | (instruction, reponse) | (prompt, chosen, rejected) |
+| Securite clinique | Non mesuree | 100% (5 cas) |
+| Exactitude triage | Non mesuree | 30% (30/100) |
+| Alignment UltraMedical | - | 53% (quasi aleatoire) |
+| Latence inference | - | 0.35s (benchmark) / ~8s (reel) |
+| Cout entrainement | ~0.20€ | ~0.30€ |
 
 ### 5.4 Tableau des Hyperparamètres Finaux
 
@@ -344,13 +329,13 @@ Le modèle DPO merged a été évalué sur 100 prompts du **test split** du data
 | | lora_alpha | 32 | 16, 64 |
 | | lora_dropout | 0.05 | 0.0, 0.1 |
 | | warmup_ratio | 0.1 | 0.0, 0.2 |
-| **DPO** | learning_rate | 1e-5 | 5e-6, 5e-5 |
+| **DPO** | learning_rate | 1e-6 | 5e-6, 5e-5 |
 | | beta | 0.1 | 0.01, 0.5 |
-| | num_epochs | 2 | 1, 3 |
-| | batch_size | 2 × 4 grad_accum | 4, 8 |
-| | max_seq_length | 2048 | 1024, 4096 |
-| | lora_r | 16 | 8, 32 |
-| | lora_alpha | 32 | 16, 64 |
+| | num_epochs | 1 | 1, 2 |
+| | batch_size | 1 x 8 grad_accum | 2, 4 |
+| | max_seq_length | 128 | 256, 512 |
+| | lora_r | 2 | 8, 16 |
+| | lora_alpha | 8 | 16, 32 |
 
 ---
 
@@ -381,15 +366,16 @@ Le modèle DPO merged a été évalué sur 100 prompts du **test split** du data
 
 *Basé sur 0.20€/kWh, consommation système ~150W en charge GPU
 
-### 6.4 Benchmark Inférence vLLM (merged model)
+### 6.4 Benchmark Inference vLLM (merged model)
 
-| Configuration | Latence | Débit | VRAM | Notes |
+| Configuration | Latence | Debit | VRAM | Notes |
 |---------------|---------|-------|------|-------|
-| Transformers 4.51.0 (FP16) | 7.38s/cas | 0.14 req/s | 3.4 Go | Fallback dev |
-| vLLM 0.8.5 (merged, max_len=1024) | **0.35s/cas** | **2.86 req/s** | ~5 Go | GPU A2, mem_util=0.70 |
-| vLLM 0.8.5 (merged, max_len=2048) | 0.42s/cas | 2.38 req/s | ~7 Go | GPU A2, mem_util=0.85 |
+| Transformers 4.51.0 (FP16, isole) | 7.38s/cas | 0.14 req/s | 3.4 Go | Fallback dev |
+| vLLM 0.8.5 (merged, isole) | **0.35s/cas** | **2.86 req/s** | ~5 Go | GPU A2, mem_util=0.70 |
+| vLLM 0.8.5 (reel, GPU partage) | ~8s/cas | ~0.12 req/s | ~5 Go | 2 modeles charges |
+| Transformers (reel, GPU partage) | ~14s/cas | ~0.07 req/s | ~3.4 Go | Fallback en contention |
 
-**Gain vLLM vs Transformers : 21× sur la latence**, 20× sur le débit.
+**Gain vLLM vs Transformers : 21x sur la latence en benchmark isole**, ~1.7x en conditions reelles (GPU partage, 2 modeles charges simultanement).
 
 ### 6.5 Stratégie de Merge LoRA
 
@@ -431,7 +417,7 @@ llm = LLM(
 
 **Note :** vLLM 0.8.5 nécessite deux monkey-patches sur CUDA 12.4 (plateforme CUDA et tokenizer transformers 5.x), ainsi que `VLLM_USE_V1=0` pour éviter le crash du V1 engine. Voir `scripts/06_api_vllm.py` pour l'implémentation.
 
-### 7.2 API — Endpoints
+### 7.2 API : Endpoints
 
 | Endpoint | Méthode | Description |
 |----------|---------|-------------|
@@ -442,12 +428,12 @@ llm = LLM(
 
 ### 7.3 Métriques de Monitoring
 
-| Métrique | Valeur mesurée | Cible |
-|----------|----------------|-------|
-| Latence P50 (API transformers) | ~7.4s | < 100ms (vLLM) |
-| Latence P50 (API vLLM merged) | **0.35s** | < 100ms |
-| Débit (vLLM merged) | **2.86 req/s** | > 10 req/s (cible A2) |
-| Taux d'erreur | 0% (échantillon 5 req) | < 1% |
+| Metrique | Benchmark isole | Reel (GPU partage) |
+|----------|----------------|-------------------|
+| Latence vLLM | 0.35s | ~8s |
+| Latence Transformers | 7.38s | ~14s |
+| Debit vLLM | 2.86 req/s | ~0.12 req/s |
+| Debit Transformers | 0.14 req/s | ~0.07 req/s |
 
 ### 7.4 Traçabilité des Appels API
 
@@ -497,9 +483,35 @@ Le pipeline GitHub Actions (`.github/workflows/ci.yml`) exécute 4 jobs chaîné
 3. **verify-api** : compilation py_compile des scripts API, validation Dockerfile
 Temps total du pipeline : ~3 minutes.
 
+### 7.7 Dashboard de demonstration
+
+Une interface HTML/JS est disponible sur le port 8080 (dashboard.html). Fonctionnalites :
+
+- **Mode Simple** : appel a l API vLLM (port 8001), fallback Transformers (port 8000)
+- **Mode Comparaison** : deux colonnes cote a cote (vLLM vs Transformers) avec latence et reponse
+- **Courbe d apprentissage** : chargement et affichage des 2460 points de loss DPO
+- **Repartition des priorites** : histogramme des niveaux N1-N4 base sur l historique
+- **Persistance** : historique conserve dans localStorage (survit au rechargement)
+- **Health check** : verification des deux APIs en temps reel
+
+### 7.8 Tracking MLflow
+
+Les metriques d entrainement et d evaluation sont trackees dans MLflow (fichier, port 5050).
+
+Experience **PosoLogic : Evaluations** (4 runs) :
+
+| Run | Metriques principales | Artefacts visuels |
+|-----|---------------------|-------------------|
+| Entrainement DPO | loss: 2.93 (2460 pts), params: lora_r=2, beta=0.1, lr=1e-6 | Courbe de loss PNG |
+| Evaluation 100 cas | accuracy: 30%, latence: 7.38s (T) / 0.35s (vLLM) | Matrice de confusion PNG |
+| Evaluation UltraMedical | alignment: 53%, latence vLLM: 0.35s | Echantillon resultats, comparaison latence PNG |
+| Synthese des evaluations | Resumes textuels des resultats | - |
+
+Les artefacts visuels (matrice de confusion, courbe de loss, comparaison de latence benchmark et reel) sont disponibles dans l onglet Artifacts de chaque run.
+
 ---
 
-## 8. Recommandations Stratégiques — Échelle 32B+
+## 8. Recommandations Strategiques : Echelle 32B+
 
 ### 8.1 Analyse Coût/Bénéfice par Taille de Modèle
 
@@ -510,15 +522,15 @@ Temps total du pipeline : ~3 minutes.
 | Qwen3-32B | 64 Go | ~2 500€ (A100) | +85% | Production, CHU |
 | Qwen3-72B | 4×80 Go | ~5 000€ (4×A100) | +120% | Réseau hospitalier |
 
-### 8.2 Feuille de Route — Passage à l'Échelle
+### 8.2 Feuille de Route : Passage à l'Échelle
 
 ```
-Phase 1 — POC (ACTUEL)           Phase 2 — Pilote              Phase 3 — Production
+Phase 1 : POC (ACTUEL)           Phase 2 : Pilote              Phase 3 : Production
 Qwen3-1.7B + LoRA                Qwen3-7B + LoRA r=32         Qwen3-32B + LoRA r=64
 GPU A2 15 Go                     GPU A10 24 Go                 GPU A100 80 Go
-1 hôpital (CHSA)                 3 hôpitaux pilotes            Réseau régional
-Latence ~350ms (vLLM A2)         Latence < 100ms                Latence < 50ms
-└────────── 2 mois ──────────┘   └──────── 4 mois ─────────┘   └────── 6 mois ──────┘
+1 hopital (CHSA)                 3 hopitaux pilotes            Reseau regional
+Latence ~0.35s (benchmark)       Latence < 100ms               Latence < 50ms
++---------- 2 mois ----------+   +-------- 4 mois ---------+   +------ 6 mois ------+
 ```
 
 ### 8.3 Recommandations par Phase
@@ -540,41 +552,26 @@ Latence ~350ms (vLLM A2)         Latence < 100ms                Latence < 50ms
 - Redondance (2+ instances) pour haute disponibilité
 - certification DM (Dispositif Médical) selon règlement UE 2017/745
 
-### 8.4 Analyse des Risques
 
-| Risque | Probabilité | Impact | Mitigation |
-|--------|-------------|--------|------------|
-| Hallucination critique | Faible (0.8%) | Très élevé | DPO + seuil de confiance + veto humain |
-| Biais algorithmique | Moyen | Élevé | Audit régulier des décisions par niveau de priorité |
-| Dépendance GPU | Faible | Moyen | Fallback CPU avec ONNX quantifié |
-| Évolution réglementaire | Moyen | Élevé | Veille juridique, certification progressive |
 
 ---
 
-## 9. Conclusion et Perspectives
+## 9. Conclusion
 
-Le projet PosoLogic a démontré la faisabilité technique d'un assistant de triage médical basé sur un LLM compact (1.7B paramètres) spécialisé par fine-tuning. Les résultats obtenus sont encourageants :
+- **Performance** : 30% d exactitude de triage (100 cas), 100% de reponses securisees
+- **Infrastructure** : vLLM operationnel, benchmark 21x, reel ~1.7x (GPU partage)
+- **Modele merged** : 3.4 Go, contourne l absence de compilation CUDA pour LoRA natif vLLM
+- **Cout** : entrainement complet ~0.50€ d electricite
 
-- **Performance clinique** : 30% d'exactitude de triage sur échantillon de validation (100 cas synthétiques), taux de réponse sécurisée 100%
-- **Infrastructure** : inférence vLLM 0.8.5 en local (modèle merged, 0.35s/cas, 21× plus rapide que transformers), pipeline CI/CD automatisé
-- **Stratégie de déploiement** : fusion des poids LoRA DPO dans le modèle de base pour contourner les limitations de compilation CUDA (modèle merged 3.4 Go)
-- **Conformité RGPD** : anonymisation Presidio intégrée au pipeline
-- **Coût maîtrisé** : entraînement complet pour ~0.50€ d'électricité
+### Prochaines etapes
 
-### Prochaines étapes immédiates
-
-1. **Amélioration du parsing de priorité** : le modèle génère un raisonnement clinique mais ne structure pas ses réponses en niveaux de priorité normalisés — un post-traitement ou un prompt template plus contraint est nécessaire
-2. **Correction du biais de prédiction** : le modèle ne prédit jamais "low" et sur-prédit "medium" — un rééquilibrage du dataset DPO est requis
-3. **Validation clinique** : tester le modèle sur des dossiers réels anonymisés du CHSA
-4. **Évaluation humaine** : faire évaluer les sorties par 3 médecins urgentistes
-5. **Amélioration alignement DPO** : l'évaluation UltraMedical-Preference (53%) montre que le DPO n'a pas significativement déplacé les préférences — un dataset DPO ciblé triage médical est nécessaire
-
-### Vision à 12 mois
-
-Déploiement d'un assistant de triage validé cliniquement, intégré au SIH du CHSA, capable de réduire le temps de triage de 40% tout en maintenant un taux d'erreur inférieur à 1%. Cette solution pourra être étendue à d'autres établissements de santé, avec un modèle économique de type abonnement par lit d'urgence.
+1. Contrainte du format de sortie (post-traitement, template)
+2. Correction du biais de prediction (sur-triage systematique)
+3. Dataset DPO cible triage medical (pas UltraMedical generique)
+4. Validation sur dossiers CHSA reels
 
 ---
 
-**Document finalisé — 20 pages**
+**Document finalisé : 20 pages**
 **Auteur : Damien Guesdon**
 **Date : Juin 2026**
