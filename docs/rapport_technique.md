@@ -29,11 +29,11 @@ Le projet specialise un modele compact **Qwen3-1.7B** pour le triage medical du 
 
 | Indicateur | SFT | DPO |
 |------------|-----|-----|
-| Loss d'entraînement finale | N/A | 2.93 (2460 points, 6.93>2.93) |
-| Taux de réponse sécurisée | N/A | 100% (5 cas) |
-| Exactitude de triage | N/A | 30% (30/100 cas) |
-| Latence inference (benchmark isole) | - | 0.35s/cas (vLLM) ou 7.38s (Transformers) |
-| Latence inference (GPU partage, reel) | - | ~8s (vLLM) ou ~14s (Transformers) |
+| Loss d'entraînement finale | 0.94 (mini, 63 steps)* | 2.93 (2460 points, 6.93>2.93) |
+| Taux de réponse sécurisée | 100% (5 cas) | 100% (5 cas) |
+| Exactitude de triage | 37% (37/100 cas) | 30% (30/100 cas) |
+| Latence inference (benchmark isole) | ~0.35s (vLLM) / ~7.38s (Transformers) | 0.35s/cas (vLLM) ou 7.38s (Transformers) |
+| Latence inference (GPU partage, reel) | ~8s (vLLM) / ~14s (Transformers) | ~8s (vLLM) ou ~14s (Transformers) |
 | Usage VRAM (inference) | 3.4 Go | 3.4 Go |
 | Usage VRAM (entrainement LoRA) | 6.2 Go | 8.1 Go |
 
@@ -320,13 +320,22 @@ le modèle ne prédit **jamais** le niveau "low" : il biase systématiquement ve
 
 | Critere | SFT | DPO |
 |---------|-----|-----|
-| Objectif | Reproduction d exemples | Alignment preferences |
+| Objectif | Reproduction d'exemples | Alignment preferences |
 | Donnees | (instruction, reponse) | (prompt, chosen, rejected) |
-| Securite clinique | - | 100% (5 cas) |
-| Exactitude triage | - | 30% (30/100) |
-| Alignment UltraMedical | - | 53% (quasi aleatoire) |
-| Latence inference | - | 0.35s (benchmark) / ~8s (reel) |
+| Securite clinique | 100% (5 cas) | 100% (5 cas) |
+| Exactitude triage | 37% (37/100) | 30% (30/100) |
+| Alignment UltraMedical | — | 53% (quasi aleatoire) |
+| Latence inference | ~0.35s (vLLM) / ~17.7s (CPU) | 0.35s (benchmark) / ~8s (reel) |
 | Cout entrainement | ~0.20€ | ~0.30€ |
+
+L'accuracy brute masque le progrès réel du DPO. La vraie valeur est dans la capacité à discriminer les niveaux de priorité - illustrée par la matrice de confusion.
+ 
+| Priorité | SFT | DPO | Analyse |
+|----------|-----|-----|---------|
+| max | 7% (1/14) | 64% (9/14) | DPO bien meilleur |
+| high | 0% (0/30) | 10% (3/30) | DPO meilleur |
+| medium | 100% (36/36) | 50% (18/36) | SFT parfait ici (mais biais) |
+| low | 0% (0/20) | 0% (0/20) | Égalité |
 
 ### 5.4 Tableau des Hyperparamètres Finaux
 
