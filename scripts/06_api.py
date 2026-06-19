@@ -1,6 +1,12 @@
 """
-API FastAPI pour le POC de triage médical
-Étape 3 - Déploiement endpoint avec vLLM
+API FastAPI pour le POC de triage médical (version démo, sans vLLM)
+Étape 3 - Déploiement endpoint — version légère de démonstration
+
+Points clés :
+- Version minimale sans dépendance vLLM : parsing heuristique des symptômes
+- Endpoints : / (status), /health, /triage (règles), /generate (placeholder)
+- Port 8000 (vs 8001 pour la version vLLM)
+- Utilisée pour les tests rapides et la validation du format API
 """
 
 from fastapi import FastAPI, HTTPException

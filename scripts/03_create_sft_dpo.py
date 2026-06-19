@@ -1,5 +1,5 @@
 """
-Création des datasets SFT et DPO depuis les données brutes HuggingFace
+Création des datasets SFT et DPO depuis les données anonymisées
 Produit data/processed/sft_dataset et data/processed/dpo_dataset
 """
 
@@ -7,22 +7,26 @@ from datasets import Dataset, DatasetDict, load_from_disk
 from pathlib import Path
 import random
 
-RAW_DIR = Path("/mnt/prod/data/raw")
+# Répertoire contenant les datasets anonymisés (input) et cible des datasets SFT/DPO (output)
+PROCESSED_DIR = Path("/mnt/prod/data/processed")
 OUT_DIR = Path("/mnt/prod/data/processed")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
+# Nombre maximal d'exemples pour le dataset SFT (limitation mémoire / temps d'entraînement)
 N_SFT_MAX = 5000
+# Nombre de scénarios de triage synthétiques FR ajoutés au dataset DPO
 N_DPO_SYNTHETIC = 100
 
 
 def create_sft():
+    """Construit le dataset SFT : paires instruction/réponse à partir des données anonymisées"""
     print("Création dataset SFT...")
     sft_data = []
 
-    # MedQuAD (EN, question/answer)
-    p = RAW_DIR / "medquad"
+    # MedQuAD (EN, question/answer) — questions médicales générales
+    p = PROCESSED_DIR / "medquad_anon"
     if p.exists():
-        ds = load_from_disk(str(p))["train"]
+        ds = load_from_disk(str(p))
         print(f"  MedQuAD: {len(ds)}")
         for ex in ds:
             q, a = str(ex.get("question", "")), str(ex.get("answer", ""))
@@ -33,27 +37,24 @@ def create_sft():
                     "source": "medquad", "language": "en",
                 })
 
-    # UltraMedical (EN, conversations)
-    p = RAW_DIR / "ultramedical"
+    # UltraMedical (EN, human/gpt) — conversations médicales générales
+    p = PROCESSED_DIR / "ultramedical_anon"
     if p.exists():
-        ds = load_from_disk(str(p))["train"]
+        ds = load_from_disk(str(p))
         print(f"  UltraMedical: {len(ds)}")
         for ex in ds:
-            convs = ex.get("conversations", [])
-            if isinstance(convs, list) and len(convs) >= 2:
-                h = convs[0].get("value", "") if isinstance(convs[0], dict) else ""
-                g = convs[1].get("value", "") if isinstance(convs[1], dict) else ""
-                if h and g:
-                    sft_data.append({
-                        "instruction": f"You are a medical triage assistant. Question: {h[:1000]}",
-                        "response": g[:500],
-                        "source": "ultramedical", "language": "en",
-                    })
+            h, g = str(ex.get("human", "")), str(ex.get("gpt", ""))
+            if h and g:
+                sft_data.append({
+                    "instruction": f"You are a medical triage assistant. Question: {h[:1000]}",
+                    "response": g[:500],
+                    "source": "ultramedical", "language": "en",
+                })
 
-    # FrBMedQA (FR, question/answer)
-    p = RAW_DIR / "frbmedqa"
+    # FrBMedQA (FR, question/answer) — données médicales en français
+    p = PROCESSED_DIR / "frbmedqa_anon"
     if p.exists():
-        ds = load_from_disk(str(p))["train"]
+        ds = load_from_disk(str(p))
         print(f"  FrBMedQA: {len(ds)}")
         for ex in ds:
             q, a = str(ex.get("question", "")), str(ex.get("answer", ""))
@@ -65,8 +66,9 @@ def create_sft():
                 })
 
     print(f"  Total SFT brutes: {len(sft_data)}")
-    sft_data = sft_data[:N_SFT_MAX]
+    sft_data = sft_data[:N_SFT_MAX]  # Limite à 5000 exemples
 
+    # Split train/validation/test (80/10/10)
     ds = Dataset.from_list(sft_data)
     splits = ds.train_test_split(test_size=0.1, seed=42)
     val_test = splits["test"].train_test_split(test_size=0.5, seed=42)
@@ -80,30 +82,19 @@ def create_sft():
 
 
 def create_dpo():
+    """Construit le dataset DPO : paires (instruction, chosen, rejected) pour l'alignement par préférences"""
     print("Création dataset DPO...")
     dpo_data = []
 
-    # UltraMedical-Preference (EN)
-    p = RAW_DIR / "ultramedical_preference"
+    # UltraMedical-Preference (EN) — paires préférée/rejetée issues de feedback expert
+    p = PROCESSED_DIR / "ultramedical_preference_anon"
     if p.exists():
-        ds = load_from_disk(str(p))["train"]
+        ds = load_from_disk(str(p))
         print(f"  UltraMedical-Preference: {len(ds)}")
         for ex in ds:
             prompt = str(ex.get("prompt", "")) or ""
-            chosen_conv = ex.get("chosen", [])
-            rejected_conv = ex.get("rejected", [])
-            if isinstance(chosen_conv, list) and isinstance(rejected_conv, list):
-                chosen_text = " ".join(
-                    m.get("content", "") for m in chosen_conv
-                    if isinstance(m, dict) and m.get("role") == "assistant"
-                )
-                rejected_text = " ".join(
-                    m.get("content", "") for m in rejected_conv
-                    if isinstance(m, dict) and m.get("role") == "assistant"
-                )
-            else:
-                chosen_text = str(chosen_conv) if chosen_conv else ""
-                rejected_text = str(rejected_conv) if rejected_conv else ""
+            chosen_text = str(ex.get("chosen", ""))
+            rejected_text = str(ex.get("rejected", ""))
             if prompt and chosen_text and rejected_text and len(chosen_text) > 5:
                 dpo_data.append({
                     "instruction": prompt,
@@ -112,7 +103,7 @@ def create_dpo():
                     "source": "ultramedical_pref", "language": "en",
                 })
 
-    # Scénarios synthétiques FR (démonstration triage)
+    # Scénarios synthétiques FR (démonstration de triage médical pour le POC)
     scenarios = [
         ("douleur thoracique", "Appeler le 15 immédiatement. Urgence vitale possible.", "Donner un paracétamol et attendre."),
         ("difficulté respiratoire", "Appeler le 15. Monitorer la saturation O2.", "Prescrire des antibiotiques sans examen."),

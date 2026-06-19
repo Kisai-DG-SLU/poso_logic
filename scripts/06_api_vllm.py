@@ -2,6 +2,13 @@
 API FastAPI pour le modèle DPO fine-tuné - Déploiement vLLM haute performance
 Livrable 3 : Endpoint de démonstration API déployé (vLLM)
 Note : nécessite vLLM 0.8.5 installé (pip install vllm==0.8.5 ou Docker)
+
+Points clés :
+- Deux endpoints : /triage (structuré) et /generate (libre)
+- Tracing automatique de chaque requête dans api_trace.jsonl
+- Parsing heuristique de la priorité (max/high/medium/low) depuis la réponse texte
+- Fallback élégant si vLLM n'est pas installé (mode degraded)
+- Compatible déploiement conteneurisé (/app/logs) ou local (/mnt/prod/logs)
 """
 
 import json

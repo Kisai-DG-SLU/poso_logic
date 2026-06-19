@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Génère les courbes de loss et métriques à partir des checkpoints DPO."""
+"""Génère les courbes de loss et métriques à partir des checkpoints DPO.
+
+Points clés :
+- Parcourt tous les checkpoints DPO triés par step
+- Lit training_stats.json dans chaque checkpoint
+- Génère 3 graphiques : loss curve, reward accuracy, chosen/rejected ratios
+- Sauvegarde en PNG (150dpi) dans /mnt/prod/docs/figures/
+"""
 import json
 import sys
 from pathlib import Path

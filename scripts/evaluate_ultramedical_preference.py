@@ -1,7 +1,13 @@
 """
-Evaluation du modele DPO sur 100 prompts UltraMedical-Preference
-Utilise vLLM 0.8.5 avec modele merged sur GPU A2
-Compare similarite semantique avec chosen vs rejected
+Evaluation du modèle DPO sur 100 prompts UltraMedical-Preference
+Utilise vLLM 0.8.5 avec modèle merged sur GPU A2
+Compare similarité sémantique (cosinus) avec chosen vs rejected
+
+Points clés :
+- 100 prompts échantillonnés aléatoirement depuis le test set (0 overlap avec train)
+- Inférence via vLLM.chat() pour respecter le format conversationnel
+- Embeddings via SentenceTransformer (all-MiniLM-L6-v2) pour comparer la réponse générée aux réponses chosen et rejected
+- Métrique principale : alignment_pct — proportion de réponses plus proches de chosen que de rejected
 """
 
 import json

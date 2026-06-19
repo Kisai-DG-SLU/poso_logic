@@ -11,11 +11,13 @@ from datasets import load_from_disk
 from pathlib import Path
 import json
 
+# Répertoires : raw = données brutes téléchargées, processed = données anonymisées
 RAW_DIR = Path("/mnt/prod/data/raw")
 PROCESSED_DIR = Path("/mnt/prod/data/processed")
 
+
 def load_nlp_models():
-    """Charge les modèles spaCy pour FR et EN"""
+    """Charge les modèles spaCy pour l'analyse linguistique FR et EN (nécessaires à Presidio)"""
     print("Chargement modèles spaCy...")
     try:
         nlp_fr = spacy.load("fr_core_news_md")
@@ -38,7 +40,7 @@ def load_nlp_models():
     return nlp_fr, nlp_en
 
 def analyze_text(text, language="en"):
-    """Analyse le texte pour détecter les entités PII"""
+    """Analyse le texte avec Presidio pour détecter les entités personnelles (PII)"""
     analyzer = AnalyzerEngine()
     
     results = analyzer.analyze(
@@ -46,10 +48,11 @@ def analyze_text(text, language="en"):
         language=language,
         entities=["PERSON", "PHONE_NUMBER", "EMAIL_ADDRESS", "LOCATION", "DATE_TIME", "US_SSN", "CREDIT_CARD", "IP_ADDRESS"]
     )
-    return results
+    return results  # Liste des entités détectées avec leurs positions
+
 
 def anonymize_text(text, analyzer_results):
-    """Anonymise le texte avec les entités détectées"""
+    """Anonymise le texte en remplaçant les PII par des balises génériques"""
     anonymizer = AnonymizerEngine()
     
     result = anonymizer.anonymize(
@@ -67,20 +70,23 @@ def anonymize_text(text, analyzer_results):
             "DEFAULT": OperatorConfig("replace", {"new_value": "<ANONYMIZED>"})
         }
     )
-    return result.text
+    return result.text  # Texte nettoyé, plus de données personnelles
+
 
 def anonymize_dataset(dataset, language="en"):
-    """Anonymise un entire dataset"""
+    """Parcourt un dataset complet et anonymise chaque exemple un par un"""
     anonymized = []
     
     for i, example in enumerate(dataset):
         text = example.get("question", "") + " " + example.get("answer", "")
         
+        # Étape 1 : détection des PII
         analyzer_results = analyze_text(text, language=language)
+        # Étape 2 : remplacement par balises
         anonymized_text = anonymize_text(text, analyzer_results)
         
         example["text_anonymized"] = anonymized_text
-        example["pii_detected"] = len(analyzer_results) > 0
+        example["pii_detected"] = len(analyzer_results) > 0  # True si au moins une entité trouvée
         
         anonymized.append(example)
         
@@ -89,12 +95,14 @@ def anonymize_dataset(dataset, language="en"):
     
     return anonymized
 
+
 def process_all_datasets():
-    """Traite tous les datasets téléchargés"""
+    """Orchestrateur : charge chaque dataset brut, l'anonymise, sauvegarde la version nettoyée"""
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     
     nlp_fr, nlp_en = load_nlp_models()
     
+    # Liste des datasets à traiter avec leur langue
     datasets = [
         ("frenchmedmcqa", "fr"),
         ("mediqa_qa", "en"),
@@ -111,15 +119,17 @@ def process_all_datasets():
             print(f"\nTraitement {name}...")
             ds = load_from_disk(str(input_path))
             
+            # Anonymisation de chaque split (train, test)
             if "train" in ds:
                 ds["train"] = anonymize_dataset(ds["train"], language=lang)
             if "test" in ds:
                 ds["test"] = anonymize_dataset(ds["test"], language=lang)
             
             ds.save_to_disk(str(output_path))
-            print(f"  → Saves vers {output_path}")
+            print(f"  → Sauvegardé vers {output_path}")
         else:
             print(f"  → {name} non trouvé, à télécharger d'abord")
+
 
 if __name__ == "__main__":
     process_all_datasets()

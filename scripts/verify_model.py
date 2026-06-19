@@ -1,4 +1,10 @@
-"""Script de verification du chargement du modele pour le CI."""
+"""Script de vérification du chargement du modèle DPO (checkpoint LoRA + inférence).
+
+Points clés :
+- Vérification structurelle : présence de adapter_model.safetensors et adapter_config.json
+- Vérification fonctionnelle : chargement du modèle de base + adaptateur LoRA + inférence test
+- Idéal pour CI : exit 1 si un problème est détecté
+"""
 
 import os
 import sys

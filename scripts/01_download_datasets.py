@@ -10,14 +10,17 @@ import json
 import os
 from pathlib import Path
 
+# Répertoires de stockage
 DATA_DIR = Path("/mnt/prod/data")
-RAW_DIR = DATA_DIR / "raw"
-PROCESSED_DIR = DATA_DIR / "processed"
+RAW_DIR = DATA_DIR / "raw"          # Datasets bruts téléchargés depuis HuggingFace
+PROCESSED_DIR = DATA_DIR / "processed"  # Datasets anonymisés prêts pour l'entraînement
 
+# Fichier de registre des versions (SHA256) pour traçabilité
 CHECKSUMS_FILE = RAW_DIR / "datasets_checksums.json"
 
+
 def compute_sha256(filepath: Path) -> str:
-    """Calcule le hash SHA256 d'un fichier pour traçabilité"""
+    """Calcule le hash SHA256 d'un fichier pour tracer la version exacte du dataset"""
     sha256 = hashlib.sha256()
     with open(filepath, "rb") as f:
         for chunk in iter(lambda: f.read(65536), b""):
@@ -25,14 +28,14 @@ def compute_sha256(filepath: Path) -> str:
     return sha256.hexdigest()
 
 def save_checksums(checksums: dict):
-    """Sauvegarde les checksums dans datasets_checksums.json"""
+    """Sauvegarde les checksums dans le registre JSON (datasets_checksums.json)"""
     CHECKSUMS_FILE.parent.mkdir(parents=True, exist_ok=True)
     with open(CHECKSUMS_FILE, "w") as f:
         json.dump(checksums, f, indent=2)
     print(f"  → Checksums sauvegardés dans {CHECKSUMS_FILE}")
 
 def log_dataset_version(name: str, path: Path, metadata: dict):
-    """Enregistre la version et SHA256 d'un dataset"""
+    """Enregistre la version, le SHA256 et la date d'un dataset pour la traçabilité"""
     checksums = {}
     if CHECKSUMS_FILE.exists():
         with open(CHECKSUMS_FILE) as f:
@@ -48,7 +51,7 @@ def log_dataset_version(name: str, path: Path, metadata: dict):
     save_checksums(checksums)
 
 def get_dataset_metadata(ds, name: str, save_path: Path) -> dict:
-    """Extrait les métadonnées et calcule le SHA256 d'un dataset sauvegardé"""
+    """Extrait les métadonnées (taille, hash SHA256, splits) d'un dataset sauvegardé"""
     num_examples = len(ds.get("train", ds)) if isinstance(ds, dict) else len(ds)
     
     sha256 = ""
@@ -65,10 +68,12 @@ def get_dataset_metadata(ds, name: str, save_path: Path) -> dict:
         "splits": list(ds.keys()) if isinstance(ds, dict) else ["train"],
     }
 
+
 def download_frenchmedical():
-    """Télécharge alternatives médicales françaises"""
+    """Télécharge tous les datasets médicaux français depuis HuggingFace"""
     print("Téléchargement datasets médicaux français...")
     
+    # 5 sources françaises : questions médicales (MediQAl, FrenchMedMCQA, FrBMedQA)
     datasets_fr = {
         "mediqal_mcqu": ("ANR-MALADES/MediQAl", "mcqu"),
         "mediqal_mcqm": ("ANR-MALADES/MediQAl", "mcqm"),
@@ -81,6 +86,7 @@ def download_frenchmedical():
         try:
             save_path = RAW_DIR / local_name
             print(f"  → {hf_name} ({local_name})...")
+            # Téléchargement depuis HF (avec config si nécessaire)
             if config:
                 ds = load_dataset(hf_name, config)
             else:
@@ -93,8 +99,9 @@ def download_frenchmedical():
         except Exception as e:
             print(f"    → Erreur {local_name}: {e}")
 
+
 def download_medquad():
-    """Télécharge MedQuAD - dataset anglais"""
+    """Télécharge MedQuAD (anglais) — questions/réponses médicales depuis HF"""
     local_name = "medquad"
     print("Téléchargement MedQuAD...")
     ds = load_dataset("lavita/MedQuAD")
@@ -105,8 +112,9 @@ def download_medquad():
     print(f"  → {ds}, SHA256: {metadata['sha256'][:16]}...")
     return ds
 
+
 def download_ultramedical():
-    """Télécharge UltraMedical - dataset bilingue"""
+    """Télécharge UltraMedical (anglais) — corpus médical général pour SFT"""
     local_name = "ultramedical"
     print("Téléchargement UltraMedical...")
     ds = load_dataset("TsinghuaC3I/UltraMedical")
@@ -117,8 +125,9 @@ def download_ultramedical():
     print(f"  → {ds}, SHA256: {metadata['sha256'][:16]}...")
     return ds
 
+
 def download_ultramedical_preference():
-    """Télécharge UltraMedical-Preference - dataset DPO"""
+    """Télécharge UltraMedical-Preference (anglais) — paires préférée/rejetée pour DPO"""
     local_name = "ultramedical_preference"
     print("Téléchargement UltraMedical-Preference...")
     ds = load_dataset("TsinghuaC3I/UltraMedical-Preference")
@@ -129,8 +138,9 @@ def download_ultramedical_preference():
     print(f"  → {ds}, SHA256: {metadata['sha256'][:16]}...")
     return ds
 
+
 def download_all():
-    """Télécharge tous les datasets"""
+    """Orchestrateur : télécharge tous les datasets en séquence"""
     RAW_DIR.mkdir(parents=True, exist_ok=True)
     
     datasets = {
@@ -145,6 +155,7 @@ def download_all():
             func()
         except Exception as e:
             print(f"Erreur pour {name}: {e}")
+
 
 if __name__ == "__main__":
     download_all()
